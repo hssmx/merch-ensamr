@@ -1,495 +1,92 @@
-/* Phone-first editorial refinement.
-   Loaded after mobile.css so the handset experience keeps the desktop visual language
-   without inheriting the legacy single-column flattening. */
+/* Final mobile stability layer.
+   Keep this file intentionally small: mobile.css owns the responsive layout,
+   while this file only fixes conflicts inherited from desktop styles. */
 
-@media (max-width: 760px) {
-  html {
-    scroll-padding-top: 92px;
-  }
-
-  body {
-    overflow-x: hidden;
-  }
-
-  body :where(h1, h2, h3, a, button, strong, small, .eyebrow, .brand-lockup, .launch-kicker) {
+@media (max-width: 900px) {
+  /* Undo the legacy catch-all word breaking that can split labels and branding. */
+  a,
+  button,
+  strong,
+  span,
+  small,
+  h1,
+  h2,
+  h3 {
     overflow-wrap: normal;
     word-break: normal;
   }
 
-  /* Keep the desktop's top-band identity on phones, just condensed. */
-  .announcement {
-    display: flex !important;
-    height: 28px;
-    align-items: center;
-    padding: 0 14px !important;
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 7px !important;
-    letter-spacing: 0.16em !important;
+  p {
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
-  .shop-header {
-    min-height: 62px !important;
-    background: rgb(251 250 247 / 97%) !important;
-  }
-
-  .shop-header .header-main {
-    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
-    height: 62px !important;
-    min-height: 62px !important;
-    padding: 0 10px !important;
-  }
-
-  .mobile-menu,
-  .header-contact {
-    width: 40px !important;
-    height: 40px !important;
-  }
-
-  .brand-lockup {
-    gap: 5px !important;
-  }
-
-  .brand-lockup strong {
-    font-size: 24px !important;
-  }
-
-  .brand-lockup i {
-    padding: 4px 5px 3px !important;
-    font-size: 6.5px !important;
-  }
-
-  .nav-dialog {
-    width: calc(100vw - 20px) !important;
-    max-height: calc(100svh - 20px) !important;
-    padding: 30px 22px 24px !important;
-  }
-
-  /* Homepage hero: retain a cover-like rhythm instead of a generic stack. */
-  .launch-hero {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      'copy'
-      'visual'
-      'selector';
-    background: var(--lux-ivory);
+  /* The desktop hero pins the stats to the bottom. On phones they belong in flow. */
+  .launch-hero,
+  .launch-copy,
+  .launch-visual,
+  .launch-selector {
+    min-width: 0;
   }
 
   .launch-copy {
-    grid-area: copy;
-    padding: 30px 18px 24px !important;
-  }
-
-  .launch-kicker {
-    align-items: center;
-    font-size: 8px !important;
-    letter-spacing: 0.16em !important;
-  }
-
-  .launch-edition {
-    margin-top: 26px !important;
-  }
-
-  .launch-copy h1 {
-    max-width: 7.5ch;
-    margin: 12px 0 18px !important;
-    font-size: clamp(46px, 14.7vw, 64px) !important;
-    line-height: 0.88 !important;
-    letter-spacing: -0.05em !important;
-  }
-
-  .launch-intro {
-    max-width: 31rem !important;
-    font-size: 13px !important;
-    line-height: 1.58 !important;
-  }
-
-  .launch-actions {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.9fr) !important;
-    gap: 8px !important;
-    margin-top: 22px !important;
-  }
-
-  .launch-actions a {
-    min-height: 46px !important;
-    padding-inline: 14px !important;
-    font-size: 8px !important;
+    padding-bottom: 34px !important;
   }
 
   .launch-stats {
-    margin-top: 24px !important;
-    border-top: 1px solid var(--lux-line) !important;
-  }
-
-  .launch-stats span {
-    padding: 11px 6px 0 !important;
-    font-size: 7.5px !important;
-  }
-
-  .launch-stats span:first-child {
-    padding-left: 0 !important;
-  }
-
-  .launch-stats strong {
-    font-size: 9px !important;
-  }
-
-  .launch-visual {
-    grid-area: visual;
-    min-height: 410px !important;
-    margin: 0 12px !important;
-    overflow: hidden !important;
-    border: 1px solid var(--lux-line) !important;
-    background: #e8e2da !important;
-  }
-
-  .launch-visual > img {
-    width: min(122%, 520px) !important;
-    max-width: none !important;
-  }
-
-  .launch-ghost {
-    font-size: 41vw !important;
-  }
-
-  .launch-product {
-    right: 12px !important;
-    bottom: 12px !important;
-    left: 12px !important;
-    padding: 13px 14px !important;
-    background: rgb(251 250 247 / 92%) !important;
-    border: 1px solid rgb(13 12 12 / 10%) !important;
-    backdrop-filter: blur(10px);
-  }
-
-  .launch-product h2 {
-    font-size: 19px !important;
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    margin-top: 28px !important;
   }
 
   .launch-selector {
-    grid-area: selector;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) 44px !important;
-    margin-top: 10px !important;
-    border-top: 1px solid var(--lux-line) !important;
-    border-bottom: 1px solid var(--lux-line) !important;
+    overflow: hidden;
   }
 
   .launch-selector button {
-    min-height: 54px !important;
-    padding: 9px 6px !important;
-    font-size: 7px !important;
-    line-height: 1.15 !important;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
-  .launch-selector button span {
-    margin-bottom: 4px !important;
+  .launch-product {
+    color: var(--lux-paper);
   }
 
-  .launch-pause {
-    width: 44px !important;
+  .launch-product h2 {
+    color: #fff;
   }
 
-  /* Preserve information density: two-by-two rather than four tall rows. */
-  .service-strip {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    width: calc(100% - 24px) !important;
-    margin: 20px auto 66px !important;
-  }
-
-  .service-strip > div {
-    min-height: 128px !important;
-    padding: 20px 16px !important;
-    border-right: 1px solid var(--lux-line) !important;
-    border-bottom: 1px solid var(--lux-line) !important;
-  }
-
-  .service-strip > div:nth-child(even) {
-    border-right: 0 !important;
-  }
-
-  .service-strip > div:nth-last-child(-n + 2) {
-    border-bottom: 0 !important;
-  }
-
-  .service-strip h3 {
-    font-size: 10px !important;
-    line-height: 1.3 !important;
-  }
-
-  .service-strip p {
-    font-size: 10px !important;
-    line-height: 1.45 !important;
-  }
-
-  /* Product dossiers become a deliberate swipe rail, keeping the large editorial cards. */
-  .shop-section {
-    padding: 52px 0 72px !important;
-  }
-
-  .section-heading {
-    padding: 0 18px !important;
-    margin-bottom: 28px !important;
-  }
-
-  .section-heading h2 {
-    max-width: 9ch;
-    font-size: clamp(34px, 10.5vw, 44px) !important;
-  }
-
-  .dossier-grid {
-    display: grid !important;
-    grid-template-columns: none !important;
-    grid-auto-flow: column;
-    grid-auto-columns: min(82vw, 360px);
-    gap: 12px !important;
-    width: 100% !important;
-    padding: 0 18px 14px !important;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-padding-inline: 18px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .dossier-grid::-webkit-scrollbar,
-  .lookbook-rail::-webkit-scrollbar,
-  .home-story-contact::-webkit-scrollbar {
-    display: none;
-  }
-
+  /* Prevent grid/flex children from forcing the viewport wider than the phone. */
+  .service-strip > div,
   .dossier-card,
-  .dossier-card:nth-child(1),
-  .dossier-card:nth-child(2),
-  .dossier-card:nth-child(3) {
-    width: 100% !important;
-    margin: 0 !important;
-    scroll-snap-align: start;
+  .dossier-meta > span,
+  .lookbook-shot,
+  .service-suite-options,
+  .faq-list,
+  .contact-cards article,
+  .footer-grid > div {
+    min-width: 0;
   }
 
-  .dossier-visual {
-    aspect-ratio: 4 / 4.6 !important;
-  }
-
-  .dossier-number {
-    font-size: 34vw !important;
-  }
-
-  .dossier-front-proof {
-    width: 39% !important;
-  }
-
-  .dossier-meta {
-    flex-direction: row !important;
-    align-items: flex-start !important;
-    gap: 12px !important;
-  }
-
-  .dossier-meta strong {
-    font-size: 17px !important;
-  }
-
-  .dossier-spec {
-    text-align: right !important;
-  }
-
-  .brand-marquee {
-    font-size: clamp(54px, 17vw, 72px) !important;
-  }
-
-  /* Lookbook remains cinematic on a phone instead of becoming three full-width blocks. */
-  .lookbook-rail {
-    display: flex !important;
-    grid-template-columns: none !important;
-    gap: 10px !important;
-    padding: 0 12px 12px !important;
-    overflow-x: auto;
-    scroll-padding-inline: 12px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .lookbook-shot {
-    flex: 0 0 84vw;
-    min-height: 0 !important;
-    aspect-ratio: 4 / 5 !important;
-    scroll-snap-align: start;
-  }
-
-  .reviews-section {
-    padding: 58px 0 64px !important;
-  }
-
-  .reviews-heading,
-  .review-preview-note,
-  .review-contribute {
-    margin-inline: 18px !important;
-  }
-
-  .reviews-heading h2 {
-    font-size: clamp(38px, 11vw, 48px) !important;
-  }
-
-  .review-preview-rail {
-    padding-inline: 18px !important;
-  }
-
-  .custom-service-suite {
-    width: calc(100% - 24px) !important;
-    margin: 0 12px 68px !important;
-    border: 1px solid var(--lux-line-strong) !important;
-  }
-
-  .service-suite-art {
-    min-height: 360px !important;
-  }
-
-  .service-suite-options > header {
-    padding: 36px 18px 28px !important;
-  }
-
-  .service-suite-options article {
-    padding: 28px 18px !important;
-  }
-
-  .faq-section {
-    gap: 28px !important;
-    padding: 58px 18px !important;
-  }
-
-  /* Keep the two closing story panels as a swipeable diptych. */
-  .home-story-contact {
-    display: flex !important;
-    grid-template-columns: none !important;
-    gap: 0 !important;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .home-story-card,
-  .home-contact-card {
-    flex: 0 0 88vw;
-    min-width: 88vw;
-    min-height: 400px !important;
-    padding: 48px 20px !important;
-    scroll-snap-align: start;
-  }
-
-  .home-card-word {
-    font-size: 30vw !important;
-  }
-
-  .instagram-band {
-    gap: 22px !important;
-    padding: 38px 18px !important;
-  }
-
-  /* Collection and product pages */
-  .catalog-heading,
-  .bloxic-page-title {
-    padding: 30px 18px 36px !important;
-  }
-
-  .catalog-heading h1,
-  .bloxic-page-title h1,
-  .product-info h1 {
-    letter-spacing: -0.045em !important;
-  }
-
-  .product-page {
-    padding-inline: 14px !important;
-  }
-
-  .product-gallery {
-    margin-inline: -14px !important;
-  }
-
-  .order-button {
-    min-height: 56px !important;
-  }
-
-  /* Inner-page heroes keep the same oversized editorial headline treatment. */
-  .about-hero,
-  .contact-hero {
-    padding: 42px 18px 54px !important;
-  }
-
-  .about-hero h1,
-  .contact-hero h1 {
-    max-width: 8ch;
-    letter-spacing: -0.055em !important;
-  }
-
-  .about-manifesto,
-  .about-edition,
-  .contact-directory,
-  .contact-guide,
-  .contact-social,
-  .service-copy,
-  body main .print-copy {
-    padding-inline: 18px !important;
-  }
-
-  /* Footer keeps its desktop information architecture instead of collapsing immediately. */
-  .footer-monogram {
-    min-height: 220px !important;
-    padding: 38px 18px 34px !important;
-  }
-
-  .footer-monogram strong {
-    font-size: clamp(72px, 25vw, 104px) !important;
-  }
-
-  .footer-statement > div {
-    padding: 42px 18px !important;
-  }
-
-  .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 34px 18px !important;
-    padding: 42px 18px !important;
-  }
-
-  .footer-note {
-    grid-column: 1 / -1 !important;
-  }
-
-  .footer-bottom {
-    width: calc(100% - 36px) !important;
-    margin-inline: 18px !important;
+  .review-contribute,
+  .review-fields,
+  .review-contribute form {
+    min-width: 0;
   }
 }
 
-@media (max-width: 430px) {
-  .launch-copy h1 {
-    font-size: clamp(44px, 14.4vw, 58px) !important;
+@media (max-width: 480px) {
+  .launch-kicker {
+    gap: 8px;
+    font-size: 7px;
   }
 
-  .launch-visual {
-    min-height: 380px !important;
+  .launch-actions a {
+    padding-inline: 12px;
   }
 
-  .launch-actions {
-    grid-template-columns: 1fr 0.82fr !important;
-  }
-
-  .service-strip > div {
-    min-height: 120px !important;
-    padding: 18px 14px !important;
-  }
-
-  .dossier-grid {
-    grid-auto-columns: 85vw !important;
-  }
-
-  .dossier-meta {
-    flex-direction: row !important;
-  }
-
-  .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  .launch-selector button {
+    font-size: 7px !important;
   }
 }

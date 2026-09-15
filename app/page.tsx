@@ -4,96 +4,13 @@ import {
   ArrowRight,
   BadgeCheck,
   PenTool,
-  Quote,
   Shirt,
   MessageCircle,
 } from 'lucide-react';
 import FeaturedCollection from './featured-collection';
 import CollectionGrid from './collection-grid';
-import ReviewComposer from './review-composer';
+import { FeaturedReview } from './reviews-preview';
 
-const previewReviews = [
-  [
-    'MIND IN MOTION',
-    'The artwork feels bold without losing the clean black-shirt look.',
-  ],
-  [
-    'THINK BEYOND LIMITS',
-    'The deep red print gives the white T-shirt a strong identity.',
-  ],
-  [
-    'BE CREATIVE',
-    'The front mark is subtle and the back artwork carries the whole piece.',
-  ],
-  [
-    'MIND IN MOTION',
-    'A strong balance between a quiet front and a detailed statement back.',
-  ],
-  [
-    'BE CREATIVE',
-    'The red, white and black palette feels connected to ENSAM without looking basic.',
-  ],
-  [
-    'THINK BEYOND LIMITS',
-    'The oversized lettering makes this feel like a real graphic tee.',
-  ],
-  [
-    'MIND IN MOTION',
-    'The cream and violet details stand out beautifully against black.',
-  ],
-  [
-    'BE CREATIVE',
-    'Expressive, playful and still easy to style with everyday clothes.',
-  ],
-  [
-    'THINK BEYOND LIMITS',
-    'A clean front with a back print that gets noticed immediately.',
-  ],
-  [
-    'MIND IN MOTION',
-    'The technical visual language fits the engineering spirit perfectly.',
-  ],
-  [
-    'BE CREATIVE',
-    'The typography has energy and the small ENSAM front print keeps it wearable.',
-  ],
-  [
-    'THINK BEYOND LIMITS',
-    'Simple colors, confident scale and a message that reads instantly.',
-  ],
-  [
-    'MIND IN MOTION',
-    'It looks considered from every angle, especially the back composition.',
-  ],
-  [
-    'BE CREATIVE',
-    'A distinctive design that feels made for the creative side of the school.',
-  ],
-  [
-    'THINK BEYOND LIMITS',
-    'The contrast is sharp and the design has a strong campus identity.',
-  ],
-  [
-    'MIND IN MOTION',
-    'Detailed enough to explore up close and strong enough to read from a distance.',
-  ],
-  [
-    'BE CREATIVE',
-    'The asymmetric lettering gives the shirt a memorable personality.',
-  ],
-  [
-    'THINK BEYOND LIMITS',
-    'The design feels optimistic, direct and easy to wear.',
-  ],
-  [
-    'MIND IN MOTION',
-    'A polished first-release piece that does not feel like typical school merch.',
-  ],
-  [
-    'THE COLLECTION',
-    'Each piece has its own voice while still belonging to the same label.',
-  ],
-] as const;
 export default function Home() {
   return (
     <main id="main">
@@ -195,33 +112,22 @@ export default function Home() {
           </Link>
         </div>
       </section>
-      <section className="reviews-section" id="reviews">
-        <div className="reviews-heading">
-          <span className="eyebrow">REVIEW ARCHIVE · EDITION 001</span>
-          <h2>The review archive.</h2>
+
+      <section className="home-review-section" id="reviews">
+        <div className="home-review-copy">
+          <span className="eyebrow">REVIEWS · EDITION 001</span>
+          <h2>One note from the archive.</h2>
           <p>
-            This preview shows how verified feedback will appear after customers
-            receive their orders.
+            The homepage now keeps this intentionally simple: one rotating
+            preview review, with the full archive on its own page.
           </p>
+          <Link className="home-review-link" href="/reviews">
+            See all reviews <ArrowRight size={17} />
+          </Link>
         </div>
-        <div className="review-preview-note">
-          <Quote aria-hidden="true" />
-          <p>
-            <strong>Preview content.</strong> These are layout examples, not
-            customer claims. They will be replaced by verified reviews.
-          </p>
-        </div>
-        <div className="review-preview-rail">
-          {previewReviews.map(([design, text], index) => (
-            <article key={`${design}-${index}`}>
-              <span>{String(index + 1).padStart(2, '0')} / PREVIEW</span>
-              <p>“{text}”</p>
-              <small>{design} · NOT YET VERIFIED</small>
-            </article>
-          ))}
-        </div>
-        <ReviewComposer />
+        <FeaturedReview />
       </section>
+
       <section className="custom-service-suite">
         <div className="service-suite-art">
           <span className="service-suite-code">CUSTOM / 001</span>
