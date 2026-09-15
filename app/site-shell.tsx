@@ -164,7 +164,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-note">
           <span>STUDENT-LED · COMMUNITY-MADE</span>
-          <p>Created by the Media Committee and ADE ENSAMR for ENSAM Rabat.</p>
+          <p>Created by the Media Committee for ENSAM Rabat.</p>
         </div>
       </div>
       <div className="footer-bottom">
