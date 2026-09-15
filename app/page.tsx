@@ -136,11 +136,11 @@ export default function Home() {
         <div className="brand-marquee">
           <span>ENSAM RABAT</span>
           <strong> FIRST EDITION</strong>
-          <span className="committee-credit">MEDIA COMMITTEE × ADE ENSAMR</span>
+          <span className="committee-credit">MEDIA COMMITTEE</span>
           <span aria-hidden="true">ENSAM RABAT</span>
           <strong aria-hidden="true"> FIRST EDITION</strong>
           <span className="committee-credit" aria-hidden="true">
-            MEDIA COMMITTEE × ADE ENSAMR
+            MEDIA COMMITTEE
           </span>
         </div>
       </section>
@@ -318,8 +318,8 @@ export default function Home() {
           </p>
           <h2>Born inside ENSAM Rabat.</h2>
           <p>
-            A student-led collection by the Media Committee and ADE ENSAMR,
-            shaped around the ideas, energy and identity of our community.
+            A student-led collection by the Media Committee, shaped around the
+            ideas, energy and identity of our community.
           </p>
           <Link href="/about">
             Meet the project <ArrowRight size={17} />
