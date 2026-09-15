@@ -36,3 +36,9 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# local deployment packaging
+/site-package-stage/
+/site-deploy.tar.gz
+/prepare-site-build.cjs
+/receipt-preview.png

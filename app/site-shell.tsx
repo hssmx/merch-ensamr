@@ -116,37 +116,43 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="shop-footer">
+      <div className="footer-statement">
+        <Link
+          className="footer-monogram"
+          href="/"
+          aria-label="MERCH ENSAM-R home"
+        >
+          <strong>MERCH</strong>
+          <span>ENSAM-R</span>
+        </Link>
+        <div>
+          <span>THE LABEL FROM ENSAM RABAT</span>
+          <h2>
+            Wear the idea.
+            <br />
+            Carry the story.
+          </h2>
+          <Link href="/collection">
+            Explore the collection <ArrowUpRight size={18} />
+          </Link>
+        </div>
+      </div>
       <div className="footer-grid">
         <div>
-          <Link
-            className="shop-brand"
-            href="/"
-            aria-label="ENSAM merch shop home"
-          >
-            <Brand />
-          </Link>
-          <p>Created by the Media Committee and ADE ENSAMR for ENSAM Rabat.</p>
-        </div>
-        <div>
-          <h2>The shop</h2>
-          {navigation.map(([url, name]) => (
-            <Link key={url} href={url}>
-              {name}
-            </Link>
-          ))}
+          <h2>Explore</h2>
+          <Link href="/collection">Shop collection</Link>
           <Link href="/#reviews">Reviews</Link>
           <Link href="/#faq">FAQ</Link>
+          <Link href="/about">About us</Link>
         </div>
         <div>
-          <h2>Our originals</h2>
-          <Link href="/collection/mind-in-motion">Mind in Motion</Link>
-          <Link href="/collection/be-creative">Be creART(et métiers)ive</Link>
-          <Link href="/collection/think-beyond-limits">
-            Think Beyond Limits
-          </Link>
+          <h2>Create</h2>
+          <Link href="/design-studio">Print your design</Link>
+          <Link href="/made-for-you">Design services</Link>
+          <Link href="/contact">Contact our team</Link>
         </div>
         <div>
-          <h2>Stay connected</h2>
+          <h2>Follow</h2>
           <a
             href="https://www.instagram.com/merch.ensamr/"
             target="_blank"
@@ -154,17 +160,17 @@ export function SiteFooter() {
           >
             Instagram <ArrowUpRight size={14} />
           </a>
-          <p>
-            Ordering and payment are arranged
-            <br />
-            directly with our team on WhatsApp.
-          </p>
+          <Link href="/contact">WhatsApp ordering</Link>
+        </div>
+        <div className="footer-note">
+          <span>STUDENT-LED · COMMUNITY-MADE</span>
+          <p>Created by the Media Committee and ADE ENSAMR for ENSAM Rabat.</p>
         </div>
       </div>
       <div className="footer-bottom">
-        <span>MERCH ENSAM RABAT</span>
-        <span>MEDIA COMMITTEE × ADE ENSAMR</span>
-        <span>MAD · Morocco</span>
+        <span>© {new Date().getFullYear()} MERCH ENSAM-R</span>
+        <span>RABAT · MOROCCO</span>
+        <a href="#main">BACK TO TOP ↑</a>
       </div>
     </footer>
   );

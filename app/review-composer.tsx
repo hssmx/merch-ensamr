@@ -1,8 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ArrowUpRight, Check, Copy } from 'lucide-react';
-import { products } from './catalog';
+import { Check, MessageCircle } from 'lucide-react';
+import { products, whatsappUrl } from './catalog';
+import { shopConfig } from './shop-config';
 
 export default function ReviewComposer() {
   const [product, setProduct] = useState(products[0].name);
@@ -17,22 +18,23 @@ export default function ReviewComposer() {
     [product, rating, review, size],
   );
 
-  async function prepareReview(event: React.SyntheticEvent<HTMLFormElement>) {
+  function submitReview(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (review.trim().length < 10) {
       setStatus('Write at least 10 characters so your review is useful.');
       return;
     }
-    try {
-      await navigator.clipboard.writeText(message);
-      setStatus(
-        'Review copied. Open Instagram and paste it into our messages.',
-      );
-    } catch {
-      setStatus(
-        'Copy is unavailable here. Select your text and send it on Instagram.',
-      );
+    const destination = whatsappUrl(
+      shopConfig.whatsappContacts[0].phone,
+      message,
+    );
+    if (!destination) {
+      setStatus('Review submission is temporarily unavailable.');
+      return;
     }
+    const opened = window.open(destination, '_blank', 'noopener,noreferrer');
+    if (!opened) window.location.assign(destination);
+    setStatus('WhatsApp opened with your review ready to send.');
   }
 
   return (
@@ -45,7 +47,7 @@ export default function ReviewComposer() {
           verified customer notes in the archive above.
         </p>
       </div>
-      <form onSubmit={prepareReview}>
+      <form onSubmit={submitReview}>
         <div className="review-fields">
           <label>
             <span>Design</span>
@@ -104,15 +106,8 @@ export default function ReviewComposer() {
         </label>
         <div className="review-actions">
           <button type="submit">
-            <Copy size={16} /> Copy review
+            <MessageCircle size={16} /> Submit review on WhatsApp
           </button>
-          <a
-            href="https://www.instagram.com/merch.ensamr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open Instagram <ArrowUpRight size={16} />
-          </a>
         </div>
         <output className="review-status" aria-live="polite">
           {status && <Check size={15} aria-hidden="true" />} {status}

@@ -22,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import PhotoReel from './photo-reel';
 import { products, orderMessage, whatsappUrl, type Product } from './catalog';
 import { shopConfig } from './shop-config';
+import { downloadOrderReceipt } from './receipt-pdf';
 export default function ProductDetail({ product: p }: { product: Product }) {
   const [view, setView] = useState('back'),
     [size, setSize] = useState(''),
@@ -56,15 +57,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
     }
   }
   function download() {
-    const url = URL.createObjectURL(
-      new Blob([message], { type: 'text/plain;charset=utf-8' }),
-    );
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${p.slug}-order.txt`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setStatus('Order details downloaded. This does not place an order.');
+    downloadOrderReceipt({ product: p, size, quantity });
+    setStatus('Branded PDF downloaded. This does not confirm the order.');
   }
   return (
     <main id="main" className="product-page">
@@ -323,9 +317,13 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <Copy size={16} /> Copy details
             </button>
             <button className="secondary" onClick={download}>
-              <Download size={16} /> Download
+              <Download size={16} /> Download PDF receipt
             </button>
           </div>
+          <p className="receipt-status-note">
+            Marked UNCONFIRMED until our team accepts the order and payment
+            details.
+          </p>
           <output className="copy-status">
             {status && <Check size={15} />} {status}
           </output>
