@@ -1,0 +1,17 @@
+[2026-09-15T20:02:18.448Z] [debug] Notifying parent we're ready
+[2026-09-15T20:02:18.976Z] [debug] Received message from parent: {
+  cacheFile: 'C:\\Users\\Kunai\\Documents\\Codex\\2026-09-13\\i-w\\outputs\\merch-ensamr\\.vercel-cache\\com.vercel.cli\\package-updates\\vercel-latest.json',
+  distTag: 'latest',
+  name: 'vercel',
+  updateCheckInterval: 86400000
+}
+[2026-09-15T20:02:18.976Z] [debug] Disconnecting from parent
+[2026-09-15T20:02:18.977Z] [debug] Checking lock file: C:\Users\Kunai\Documents\Codex\2026-09-13\i-w\outputs\merch-ensamr\.vercel-cache\com.vercel.cli\package-updates\vercel-latest.lock
+[2026-09-15T20:02:18.979Z] [debug] Found lock file with pid: 13932
+[2026-09-15T20:02:18.979Z] [debug] Resetting lock file: Error: kill ESRCH
+[2026-09-15T20:02:18.980Z] [debug] Initializing lock file with pid 22172
+[2026-09-15T20:02:18.982Z] [debug] Fetching dist-tags for vercel
+[2026-09-15T20:02:19.448Z] [debug] Found dist tag "latest" with version "59.17.0"
+[2026-09-15T20:02:19.448Z] [debug] Writing cache file: C:\Users\Kunai\Documents\Codex\2026-09-13\i-w\outputs\merch-ensamr\.vercel-cache\com.vercel.cli\package-updates\vercel-latest.json
+[2026-09-15T20:02:19.449Z] [debug] Releasing lock file: C:\Users\Kunai\Documents\Codex\2026-09-13\i-w\outputs\merch-ensamr\.vercel-cache\com.vercel.cli\package-updates\vercel-latest.lock
+[2026-09-15T20:02:19.450Z] [debug] Worker finished successfully!
