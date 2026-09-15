@@ -1,0 +1,422 @@
+/* Shared storefront composition, inspired by Bloxic's product-led layout. */
+h1,
+h2 {
+  font-weight: 700;
+  letter-spacing: -1.5px;
+}
+.announcement {
+  display: none;
+}
+.shop-header {
+  display: grid;
+  grid-template-columns: 44px 190px 1fr 150px;
+  align-items: center;
+  gap: 20px;
+  padding: 0 5%;
+  min-height: 96px;
+}
+.header-main {
+  display: contents;
+}
+.header-left {
+  order: 0;
+}
+.mobile-menu {
+  display: inline-flex;
+}
+.header-instagram {
+  display: none;
+}
+.shop-brand {
+  flex-direction: row;
+  gap: 10px;
+  color: #181818;
+  order: 1;
+}
+.wordmark {
+  font-size: 37px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 0.9;
+}
+.brand-dot {
+  color: #df2033;
+}
+.wordmark small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 2.6px;
+  margin-top: 9px;
+}
+.desktop-navigation {
+  order: 2;
+  gap: 32px;
+  height: 96px;
+}
+.desktop-navigation a {
+  font-size: 14px;
+  font-weight: 600;
+}
+.desktop-navigation a[aria-current='page']:after {
+  bottom: 23px;
+}
+.header-contact {
+  order: 3;
+  color: #181818;
+  font-weight: 600;
+  font-size: 13px;
+}
+.header-contact svg {
+  color: #df2033;
+}
+.blox-campaign {
+  position: relative;
+  min-height: 650px;
+  background: #eeeef0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.blox-scene {
+  position: absolute;
+  inset: 0 0 0 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blox-scene img {
+  width: 100%;
+  height: 680px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transform: rotate(-7deg);
+  animation: reveal-shirt 0.45s ease-out;
+}
+.blox-panel {
+  position: relative;
+  margin: 100px 0 100px 8%;
+  width: min(510px, 43%);
+  padding: 48px 70px 48px 40px;
+  background: rgb(255 255 255 / 92%);
+  border-left: 4px solid #df2033;
+}
+.blox-panel .eyebrow {
+  color: #df2033;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  margin-bottom: 32px;
+}
+.blox-panel h1 {
+  font-size: clamp(38px, 3.8vw, 59px);
+  line-height: 1.04;
+  margin: 0 0 23px;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.blox-panel p {
+  color: #686868;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+.price-seal {
+  position: absolute;
+  top: -35px;
+  right: 24px;
+  width: 85px;
+  height: 85px;
+  border: 1px solid #df2033;
+  outline: 1px solid #df2033;
+  outline-offset: -6px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  color: #df2033;
+  transform: rotate(12deg);
+  line-height: 1.1;
+}
+.price-seal strong {
+  font-size: 28px;
+}
+.price-seal > span {
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+.blox-shop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.blox-shop-link:hover {
+  color: #df2033;
+}
+.panel-side {
+  writing-mode: vertical-rl;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #797979;
+}
+.campaign-navigation {
+  position: absolute;
+  bottom: 30px;
+  right: 5%;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.campaign-navigation > span {
+  font-size: 16px;
+  font-weight: 700;
+  margin-right: 18px;
+}
+.campaign-navigation i {
+  font-size: 12px;
+  color: #797979;
+  font-style: normal;
+}
+.campaign-navigation button {
+  width: 49px;
+  height: 49px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #181818;
+  border: 0;
+}
+.campaign-navigation button:last-child {
+  background: #df2033;
+}
+.campaign-navigation button:hover {
+  filter: brightness(0.85);
+}
+.service-strip {
+  max-width: 1440px;
+  margin: auto;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 35px 5%;
+}
+.service-strip > div {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  column-gap: 16px;
+  text-align: left;
+}
+.service-strip svg {
+  grid-row: 1 / 3;
+  width: 33px;
+  height: 33px;
+  color: #df2033;
+  align-self: center;
+}
+.service-strip h3 {
+  margin-bottom: 3px;
+}
+.service-strip p {
+  grid-column: 2;
+  margin: 0;
+}
+.section-heading > div {
+  border-left: 3px solid #df2033;
+  padding-left: 18px;
+}
+.section-heading .eyebrow {
+  color: #767676;
+  letter-spacing: 1px;
+}
+.section-heading h2 {
+  font-size: 34px;
+}
+.card-details {
+  text-align: left;
+  padding: 20px 0;
+}
+.card-details h3 {
+  font-size: 18px;
+}
+.card-details p {
+  color: #df2033;
+  font-weight: 700;
+  font-size: 16px;
+}
+.card-color {
+  justify-content: flex-start;
+}
+.card-category {
+  font-size: 10px;
+}
+.catalog-heading {
+  text-align: left;
+  padding-bottom: 48px;
+  background: #f4f4f4;
+}
+.catalog-heading > div {
+  border-left: 3px solid #df2033;
+  padding-left: 24px;
+}
+.catalog-heading h1 {
+  font-size: 48px;
+}
+.catalog-heading .eyebrow {
+  color: #df2033;
+}
+.custom-promo {
+  background: #f4f4f4;
+}
+.custom-promo h2 {
+  font-size: 44px;
+}
+.service-copy {
+  border-left: 4px solid #df2033;
+  background: #f5f5f5;
+}
+.service-copy .eyebrow,
+.product-info > .eyebrow {
+  color: #df2033;
+}
+.service-copy h1 {
+  font-weight: 700;
+}
+.shop-footer {
+  background: #171717;
+}
+.footer-grid p,
+.footer-grid > div > a:not(.shop-brand),
+.footer-bottom {
+  color: #bcbcbc;
+}
+.footer-bottom {
+  border-color: #383838;
+}
+:focus-visible {
+  outline-color: #df2033;
+}
+@keyframes reveal-shirt {
+  from {
+    opacity: 0.3;
+    transform: translateX(30px) rotate(-7deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(-7deg);
+  }
+}
+@media (max-width: 1100px) {
+  .shop-header {
+    grid-template-columns: 35px 160px 1fr;
+    gap: 12px;
+    padding: 0 4%;
+  }
+  .header-contact {
+    display: none;
+  }
+  .desktop-navigation {
+    gap: 22px;
+  }
+  .desktop-navigation a {
+    font-size: 12px;
+  }
+  .blox-panel {
+    margin-left: 5%;
+    padding-left: 28px;
+    width: 45%;
+  }
+}
+@media (max-width: 760px) {
+  .shop-header {
+    min-height: 78px;
+    grid-template-columns: 35px 1fr;
+  }
+  .shop-header .shop-brand {
+    justify-self: center;
+    margin-right: 47px;
+  }
+  .wordmark {
+    font-size: 31px;
+  }
+  .desktop-navigation {
+    display: none;
+  }
+  .blox-campaign {
+    min-height: 740px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 70px;
+  }
+  .blox-scene {
+    position: relative;
+    inset: auto;
+    height: 380px;
+    order: 0;
+  }
+  .blox-scene img {
+    height: 420px;
+    width: 100%;
+  }
+  .blox-panel {
+    margin: -15px 6% 0;
+    width: 88%;
+    padding: 26px 42px 28px 25px;
+    order: 1;
+  }
+  .blox-panel h1 {
+    font-size: 36px;
+    max-width: 95%;
+  }
+  .blox-panel .eyebrow {
+    margin-bottom: 17px;
+    font-size: 12px;
+  }
+  .blox-panel p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .price-seal {
+    width: 69px;
+    height: 69px;
+    right: 16px;
+    top: -44px;
+  }
+  .price-seal strong {
+    font-size: 23px;
+  }
+  .campaign-navigation {
+    bottom: 14px;
+    right: 6%;
+  }
+  .campaign-navigation button {
+    width: 38px;
+    height: 38px;
+  }
+  .service-strip {
+    padding: 28px 6%;
+  }
+  .section-heading h2 {
+    font-size: 28px;
+  }
+  .card-details h3 {
+    font-size: 15px;
+  }
+  .catalog-heading h1 {
+    font-size: 36px;
+  }
+  .custom-promo h2 {
+    font-size: 34px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .blox-scene img {
+    animation: none;
+  }
+}

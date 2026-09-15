@@ -1,0 +1,164 @@
+.bloxic-page-title {
+  position: relative;
+  padding: 70px 5%;
+  text-align: center;
+  background: #f6faff url('/bloxic/hero-vector-3.png') right center/190px
+    no-repeat;
+}
+.bloxic-page-title h1 {
+  margin: 0 0 12px;
+  font-size: 48px;
+}
+.bloxic-page-title nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  color: #797b79;
+  font-size: 13px;
+}
+.bloxic-page-title a {
+  color: #ed1d24;
+}
+.bloxic-page-title strong {
+  color: #121416;
+  font-weight: 500;
+}
+.print-your-design {
+  width: min(100% - 9vw, 1320px);
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(440px, 0.95fr);
+  margin: 72px auto;
+  background: #f6faff;
+}
+.print-visual {
+  position: relative;
+  min-height: 620px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #f7f7f7;
+}
+.print-visual:before {
+  content: '';
+  position: absolute;
+  inset: 7%;
+  border: 1px solid rgb(24 24 24 / 12%);
+}
+.print-visual img {
+  position: relative;
+  width: min(82%, 680px);
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.print-visual-note {
+  position: absolute;
+  left: 9%;
+  bottom: 8%;
+  padding: 10px 14px;
+  color: #fff;
+  background: #181818;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.print-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px clamp(40px, 7vw, 110px);
+  background: #f6faff;
+  border-left: 4px solid #df2033;
+}
+.print-copy .eyebrow {
+  margin-bottom: 24px;
+  color: #df2033;
+}
+.print-copy h2 {
+  margin: 0 0 24px;
+  color: #181818;
+  font-size: clamp(44px, 5vw, 72px);
+  line-height: 0.98;
+}
+.print-intro {
+  max-width: 590px;
+  margin: 0 0 34px;
+  color: #646464;
+  font-size: 16px;
+  line-height: 1.75;
+}
+.print-needs {
+  display: grid;
+  max-width: 620px;
+  border-top: 1px solid #dedede;
+}
+.print-needs > div {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 15px;
+  align-items: center;
+  padding: 17px 0;
+  border-bottom: 1px solid #dedede;
+  color: #777;
+  font-size: 13px;
+}
+.print-needs svg {
+  color: #df2033;
+}
+.print-needs span,
+.print-needs strong {
+  display: block;
+}
+.print-needs strong {
+  margin-bottom: 3px;
+  color: #181818;
+  font-size: 14px;
+}
+.print-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+.print-contact-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 30px 0 0;
+  color: #555;
+  font-size: 13px;
+  font-weight: 600;
+}
+.print-contact-note svg {
+  width: 18px;
+  color: #df2033;
+}
+@media (max-width: 900px) {
+  .print-your-design {
+    grid-template-columns: 1fr;
+  }
+  .print-visual {
+    min-height: 440px;
+  }
+  .print-visual img {
+    width: min(76%, 520px);
+  }
+  .print-copy {
+    padding: 58px 7%;
+    border-top: 4px solid #df2033;
+    border-left: 0;
+  }
+}
+@media (max-width: 560px) {
+  .print-visual {
+    min-height: 340px;
+  }
+  .print-copy h2 {
+    font-size: 43px;
+  }
+  .print-intro {
+    font-size: 15px;
+  }
+}
