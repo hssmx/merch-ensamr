@@ -8,7 +8,7 @@ export default function AboutPage() {
         <Link href="/" className="page-back">
           <ArrowLeft size={16} /> Home
         </Link>
-        <p className="about-kicker">MEDIA COMMITTEE × ADE ENSAMR</p>
+        <p className="about-kicker">MEDIA COMMITTEE</p>
         <h1>
           <span>Made here.</span>
           <span>
