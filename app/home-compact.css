@@ -1,0 +1,74 @@
+/* Keep the homepage custom-service module supportive rather than hero-sized. */
+.custom-service-suite {
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  margin-top: 76px;
+  margin-bottom: 76px;
+}
+
+.service-suite-art {
+  min-height: 480px;
+}
+
+.service-suite-word {
+  font-size: clamp(92px, 12vw, 176px);
+}
+
+.service-suite-options > header {
+  padding: 38px 44px 30px;
+}
+
+.service-suite-options header h2 {
+  max-width: 430px;
+  margin-top: 10px;
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.02;
+}
+
+.service-suite-options article {
+  min-height: 0;
+  padding: 30px 44px;
+}
+
+.service-suite-options article h3 {
+  margin: 5px 0 10px;
+  font-size: clamp(20px, 1.8vw, 26px);
+}
+
+.service-suite-options article p {
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .custom-service-suite {
+    margin-top: 44px !important;
+    margin-bottom: 52px !important;
+  }
+
+  .service-suite-art {
+    min-height: 300px !important;
+  }
+
+  .service-suite-word {
+    font-size: 23vw !important;
+  }
+
+  .service-suite-options > header {
+    padding: 28px 18px 22px !important;
+  }
+
+  .service-suite-options header h2 {
+    max-width: 12ch;
+    margin-top: 8px !important;
+    font-size: clamp(29px, 8.5vw, 36px) !important;
+    line-height: 1.02;
+  }
+
+  .service-suite-options article {
+    padding: 23px 18px !important;
+  }
+
+  .service-suite-options article h3 {
+    font-size: 20px !important;
+  }
+}
