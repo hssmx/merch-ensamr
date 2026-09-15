@@ -5,6 +5,7 @@ import './storefront.css';
 import './bloxic-port.css';
 import './premium.css';
 import './mobile.css';
+import './mobile-v2.css';
 export const metadata: Metadata = {
   title: 'The ENSAM Merch Shop | Original T-shirts & Custom Designs',
   icons: { icon: '/favicon.svg' },
