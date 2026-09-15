@@ -128,54 +128,24 @@ export default function Home() {
         <FeaturedReview />
       </section>
 
-      <section className="custom-service-suite">
-        <div className="service-suite-art">
-          <span className="service-suite-code">CUSTOM / 001</span>
-          <Image
-            src="/blank-tee.webp"
-            alt="Blank T-shirt ready for custom artwork"
-            width="1254"
-            height="1254"
-          />
-          <span className="service-suite-word" aria-hidden="true">
-            YOURS
-          </span>
+      <section className="custom-service-compact" aria-label="Custom T-shirt services">
+        <div className="custom-service-intro">
+          <span>ONE T-SHIRT · TWO SERVICES</span>
+          <h2>Make it yours.</h2>
+          <p>Bring the artwork, or just bring the idea.</p>
         </div>
-        <div className="service-suite-options">
-          <header>
-            <span className="eyebrow">ONE T-SHIRT · TWO SERVICES</span>
-            <h2>Start with what you have.</h2>
-          </header>
-          <article>
-            <span className="service-step">01</span>
-            <div>
-              <small>YOU HAVE THE ARTWORK</small>
-              <h3>We print your design.</h3>
-              <p>
-                Send your artwork, placement, color and size. We’ll confirm the
-                details and final price before printing.
-              </p>
-              <Link href="/design-studio">
-                Printing details <ArrowRight size={17} />
-              </Link>
-            </div>
-          </article>
-          <article>
-            <span className="service-step">02</span>
-            <div>
-              <small>YOU HAVE THE IDEA</small>
-              <h3>We create the design with you.</h3>
-              <p>
-                Share your direction with our creative team. A separate design
-                fee is agreed before the work begins.
-              </p>
-              <Link href="/made-for-you">
-                Design service <ArrowRight size={17} />
-              </Link>
-            </div>
-          </article>
-        </div>
+        <Link className="custom-service-choice" href="/design-studio">
+          <span>01 / ARTWORK READY</span>
+          <strong>Print your design</strong>
+          <ArrowRight size={18} />
+        </Link>
+        <Link className="custom-service-choice" href="/made-for-you">
+          <span>02 / NEED A DESIGN</span>
+          <strong>Create it with us</strong>
+          <ArrowRight size={18} />
+        </Link>
       </section>
+
       <section className="faq-section" id="faq">
         <div className="faq-intro">
           <span className="eyebrow">ORDER NOTES</span>
