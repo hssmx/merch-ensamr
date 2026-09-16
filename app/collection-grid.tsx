@@ -3,6 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { products } from './catalog';
 
 const cardAngles = [0, 1, 0] as const;
+const mindInMotionCardImage =
+  'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png';
 
 export default function CollectionGrid() {
   return (
@@ -16,11 +18,29 @@ export default function CollectionGrid() {
         >
           <span className="commerce-card-media">
             <span className="commerce-card-badge">DROP 001 · {p.number}</span>
-            <span
-              className={`commerce-card-wearer media-row-${productIndex} media-angle-${cardAngles[productIndex]}`}
-              role="img"
-              aria-label={`Model wearing ${p.name}`}
-            />
+            {p.slug === 'mind-in-motion' ? (
+              <img
+                src={mindInMotionCardImage}
+                alt={`Model wearing ${p.name}`}
+                loading="lazy"
+                decoding="async"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'center bottom',
+                  padding: '10px 8px 0',
+                }}
+              />
+            ) : (
+              <span
+                className={`commerce-card-wearer media-row-${productIndex} media-angle-${cardAngles[productIndex]}`}
+                role="img"
+                aria-label={`Model wearing ${p.name}`}
+              />
+            )}
           </span>
 
           <span className="commerce-card-body">
