@@ -1,14 +1,9 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Menu, ArrowUpRight, Camera, Phone } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
+import { useEffect, useRef, useState } from 'react';
+import { Menu, ArrowUpRight, Camera, Phone, X } from 'lucide-react';
+
 const navigation = [
   ['/collection', 'Shop collection'],
   ['/design-studio', 'Print your design'],
@@ -16,6 +11,7 @@ const navigation = [
   ['/about', 'About'],
   ['/contact', 'Contact'],
 ];
+
 function Brand() {
   return (
     <span className="brand-lockup">
@@ -24,21 +20,115 @@ function Brand() {
     </span>
   );
 }
+
+function isDarkBackground(element: Element | null) {
+  let node = element as HTMLElement | null;
+
+  while (node && node !== document.documentElement) {
+    const explicit = node.dataset.headerTheme;
+    if (explicit === 'dark') return true;
+    if (explicit === 'light') return false;
+
+    const background = getComputedStyle(node).backgroundColor;
+    const match = background.match(
+      /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\s*\)/,
+    );
+
+    if (match) {
+      const alpha = match[4] === undefined ? 1 : Number(match[4]);
+      if (alpha > 0.35) {
+        const [r, g, b] = [Number(match[1]), Number(match[2]), Number(match[3])];
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        return luminance < 0.42;
+      }
+    }
+
+    node = node.parentElement;
+  }
+
+  return false;
+}
+
 export function SiteHeader() {
   const path = usePathname();
+  const header = useRef<HTMLElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const lastY = useRef(0);
+  const travel = useRef(0);
   const [menu, setMenu] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
   useEffect(() => {
-    let last = window.scrollY;
-    const onScroll = () => {
-      const next = window.scrollY;
-      setHidden(next > 140 && next > last + 7);
-      if (next < last - 7) setHidden(false);
-      last = next;
+    let frame = 0;
+    lastY.current = window.scrollY;
+
+    const sync = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const diff = y - lastY.current;
+
+      setScrolled(y > 24);
+
+      if (y < 110) {
+        setHidden(false);
+        travel.current = 0;
+      } else if (Math.abs(diff) > 1) {
+        if (Math.sign(diff) !== Math.sign(travel.current)) travel.current = diff;
+        else travel.current += diff;
+
+        if (travel.current > 42 && y > 220) {
+          setHidden(true);
+          travel.current = 0;
+        } else if (travel.current < -18) {
+          setHidden(false);
+          travel.current = 0;
+        }
+      }
+
+      const headerBottom = header.current?.getBoundingClientRect().bottom ?? 0;
+      const sampleY = Math.min(window.innerHeight - 1, Math.max(1, headerBottom + 8));
+      const beneath = document.elementFromPoint(window.innerWidth / 2, sampleY);
+      setTheme(isDarkBackground(beneath) ? 'dark' : 'light');
+      lastY.current = y;
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(sync);
+    };
+
+    sync();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [path]);
+
+  useEffect(() => {
+    setMenu(false);
+  }, [path]);
+
+  useEffect(() => {
+    if (!menu) return;
+    setHidden(false);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const focusTimer = window.setTimeout(() => closeButton.current?.focus(), 20);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenu(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menu]);
+
   return (
     <>
       <a className="skip-link" href="#main">
@@ -47,12 +137,18 @@ export function SiteHeader() {
       <div className="announcement">
         FIRST EDITION · DESIGNED AT ENSAM RABAT · NEW DROPS IN PROGRESS
       </div>
-      <header className={`shop-header ${hidden ? 'header-hidden' : ''}`}>
+      <header
+        ref={header}
+        data-theme={theme}
+        className={`shop-header ${hidden ? 'header-hidden' : ''} ${scrolled ? 'header-scrolled' : ''}`}
+      >
         <div className="header-main">
           <div className="header-left">
             <button
               className="mobile-menu icon-button"
               aria-label="Open navigation"
+              aria-expanded={menu}
+              aria-controls="site-navigation-drawer"
               onClick={() => setMenu(true)}
             >
               <Menu size={23} />
@@ -94,28 +190,63 @@ export function SiteHeader() {
           ))}
         </nav>
       </header>
-      <Dialog open={menu} onOpenChange={setMenu}>
-        <DialogContent className="nav-dialog">
-          <DialogTitle>The ENSAM Merch Shop</DialogTitle>
-          <DialogDescription>
-            Collection, printing and design services.
-          </DialogDescription>
-          <nav aria-label="Mobile navigation">
-            {[['/', 'Home'], ...navigation].map(([url, name]) => (
-              <Link key={url} href={url} onClick={() => setMenu(false)}>
-                {name}
-                <ArrowUpRight size={20} />
-              </Link>
-            ))}
-          </nav>
-        </DialogContent>
-      </Dialog>
+
+      <div
+        className={`nav-drawer-backdrop ${menu ? 'open' : ''}`}
+        aria-hidden="true"
+        onClick={() => setMenu(false)}
+      />
+      <aside
+        id="site-navigation-drawer"
+        className={`nav-drawer ${menu ? 'open' : ''}`}
+        aria-hidden={!menu}
+        aria-label="Mobile navigation"
+      >
+        <div className="nav-drawer-top">
+          <Link href="/" className="nav-drawer-brand" onClick={() => setMenu(false)}>
+            <Brand />
+          </Link>
+          <button
+            ref={closeButton}
+            type="button"
+            className="nav-drawer-close"
+            aria-label="Close navigation"
+            onClick={() => setMenu(false)}
+          >
+            <X size={22} />
+          </button>
+        </div>
+        <div className="nav-drawer-copy">
+          <span>MERCH ENSAM-R · EDITION 001</span>
+          <p>Collection, printing and design services.</p>
+        </div>
+        <nav>
+          {[['/', 'Home'], ...navigation].map(([url, name], index) => (
+            <Link key={url} href={url} onClick={() => setMenu(false)}>
+              <small>{String(index + 1).padStart(2, '0')}</small>
+              <span>{name}</span>
+              <ArrowUpRight size={18} />
+            </Link>
+          ))}
+        </nav>
+        <div className="nav-drawer-foot">
+          <a
+            href="https://www.instagram.com/merch.ensamr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            @merch.ensamr <ArrowUpRight size={14} />
+          </a>
+          <span>RABAT · MOROCCO</span>
+        </div>
+      </aside>
     </>
   );
 }
+
 export function SiteFooter() {
   return (
-    <footer className="shop-footer">
+    <footer className="shop-footer" data-header-theme="dark">
       <div className="footer-statement">
         <Link
           className="footer-monogram"
