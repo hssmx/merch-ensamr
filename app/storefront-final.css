@@ -1,0 +1,289 @@
+/* Final direction: permanent adaptive header + poster-style collection cards. */
+
+/* Header is always present. The menu trigger belongs to desktop and mobile. */
+.shop-header,
+.shop-header.header-hidden {
+  transform: none !important;
+}
+
+.mobile-menu {
+  display: grid !important;
+  width: 42px !important;
+  height: 42px !important;
+  place-items: center;
+  padding: 0 !important;
+  color: currentColor !important;
+  background: transparent !important;
+  border: 1px solid currentColor !important;
+  border-radius: 999px !important;
+  opacity: 0.92;
+}
+
+.shop-header[data-theme='dark'] .mobile-menu {
+  color: var(--lux-paper) !important;
+  border-color: rgb(255 255 255 / 35%) !important;
+}
+
+.shop-header[data-theme='light'] .mobile-menu {
+  color: var(--lux-ink) !important;
+  border-color: rgb(13 12 12 / 25%) !important;
+}
+
+.header-left {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mobile-menu:hover {
+    opacity: 1;
+    transform: rotate(4deg);
+  }
+}
+
+/* Product cards: one poster, one message. No miniature proof card or technical clutter. */
+.dossier-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: clamp(14px, 1.6vw, 24px) !important;
+  align-items: stretch !important;
+}
+
+.dossier-card,
+.dossier-card:nth-child(1),
+.dossier-card:nth-child(2),
+.dossier-card:nth-child(3) {
+  position: relative;
+  grid-column: auto !important;
+  width: 100% !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  color: var(--lux-ink) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.dossier-visual {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  aspect-ratio: 4 / 5 !important;
+  border: 0 !important;
+  isolation: isolate;
+}
+
+.dossier-card:nth-child(1) .dossier-visual {
+  background: #e8e0d5 !important;
+}
+
+.dossier-card:nth-child(2) .dossier-visual {
+  background: #c8afb7 !important;
+}
+
+.dossier-card:nth-child(3) .dossier-visual {
+  background: #191817 !important;
+}
+
+.dossier-visual::before {
+  position: absolute;
+  inset: auto auto -0.08em 0.02em;
+  z-index: 0;
+  content: attr(data-card-number);
+  color: rgb(255 255 255 / 18%);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: clamp(96px, 11vw, 176px);
+  font-weight: 700;
+  line-height: 0.72;
+  letter-spacing: -0.08em;
+  pointer-events: none;
+}
+
+/* Existing number becomes the oversized poster numeral. */
+.dossier-number {
+  position: absolute !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: -0.08em !important;
+  left: 0.03em !important;
+  z-index: 0 !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  color: rgb(255 255 255 / 18%) !important;
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  font-family: 'Josefin Sans', sans-serif !important;
+  font-size: clamp(96px, 11vw, 176px) !important;
+  font-weight: 700 !important;
+  line-height: 0.72 !important;
+  letter-spacing: -0.08em !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+.dossier-back {
+  position: absolute !important;
+  inset: 7% !important;
+  z-index: 2 !important;
+  width: 86% !important;
+  height: 86% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 30px 34px rgb(0 0 0 / 15%));
+  opacity: 1;
+  transform: scale(1) rotate(0deg) !important;
+  transition:
+    opacity 260ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* The existing front-proof markup becomes a full-card alternate view. */
+.dossier-front-proof {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0;
+  pointer-events: none;
+  transform: none !important;
+  transition: opacity 260ms ease !important;
+}
+
+.dossier-front-proof img,
+.dossier-front {
+  position: absolute !important;
+  inset: 7% !important;
+  width: 86% !important;
+  height: 86% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 30px 34px rgb(0 0 0 / 15%));
+  transform: none !important;
+}
+
+.dossier-front-proof > span,
+.dossier-side,
+.dossier-side-back,
+.dossier-open {
+  display: none !important;
+}
+
+.dossier-meta {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 18px !important;
+  align-items: center !important;
+  padding: 14px 2px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.dossier-meta small,
+.dossier-spec small {
+  display: none !important;
+}
+
+.dossier-meta strong {
+  display: block !important;
+  color: var(--lux-ink) !important;
+  font-family: 'Josefin Sans', sans-serif !important;
+  font-size: clamp(18px, 1.4vw, 23px) !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+}
+
+.dossier-spec {
+  text-align: right !important;
+}
+
+.dossier-spec strong {
+  color: var(--lux-wine) !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dossier-card:hover,
+  .dossier-card:focus-visible {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .dossier-card:hover .dossier-back,
+  .dossier-card:focus-visible .dossier-back {
+    opacity: 0;
+    transform: scale(0.96) rotate(-1deg) !important;
+  }
+
+  .dossier-card:hover .dossier-front-proof,
+  .dossier-card:focus-visible .dossier-front-proof {
+    opacity: 1;
+  }
+
+  .dossier-card:hover .dossier-visual,
+  .dossier-card:focus-visible .dossier-visual {
+    outline: 1px solid rgb(121 22 37 / 34%);
+    outline-offset: 4px;
+  }
+}
+
+@media (max-width: 900px) {
+  .dossier-grid {
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+  }
+
+  .dossier-visual {
+    aspect-ratio: 5 / 6 !important;
+  }
+
+  .dossier-number {
+    font-size: clamp(110px, 36vw, 168px) !important;
+  }
+
+  .dossier-meta {
+    padding-top: 12px !important;
+  }
+
+  .dossier-meta strong {
+    font-size: 21px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .shop-header,
+  .shop-header.header-scrolled {
+    min-height: 68px !important;
+  }
+
+  .shop-header .header-main,
+  .shop-header.header-scrolled .header-main {
+    min-height: 68px !important;
+  }
+
+  .mobile-menu {
+    width: 39px !important;
+    height: 39px !important;
+  }
+
+  .dossier-grid {
+    gap: 30px !important;
+  }
+
+  .dossier-meta {
+    gap: 12px !important;
+  }
+}
