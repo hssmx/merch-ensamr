@@ -18,8 +18,8 @@ export const products: Product[] = [
     number: '01',
     description:
       'Black T-shirt with cream and violet artwork. A compact Mind in Motion print sits on the front, with the full composition across the back.',
-    front: '/collection/mind-in-motion-front.webp',
-    back: '/collection/mind-in-motion-back.webp',
+    front: '/collection/cutouts/mind-in-motion-front.svg',
+    back: '/collection/cutouts/mind-in-motion-back.svg',
     model: '/lookbook/mind-in-motion-models.webp',
   },
   {
@@ -30,8 +30,8 @@ export const products: Product[] = [
     number: '02',
     description:
       'Black T-shirt with a red and white ENSAM mark on the front and the Be creART(et métiers)ive artwork across the back.',
-    front: '/collection/be-creative-front.webp',
-    back: '/collection/be-creative-back.webp',
+    front: '/collection/cutouts/be-creative-front.svg',
+    back: '/collection/cutouts/be-creative-back.svg',
     model: '/lookbook/be-creative-models.webp',
   },
   {
@@ -42,8 +42,8 @@ export const products: Product[] = [
     number: '03',
     description:
       'White T-shirt with a compact ENSAM mark on the front and the deep-red Think Beyond Limits artwork across the back.',
-    front: '/collection/think-beyond-limits-front.webp',
-    back: '/collection/think-beyond-limits-back.webp',
+    front: '/collection/cutouts/think-beyond-limits-front.svg',
+    back: '/collection/cutouts/think-beyond-limits-back.svg',
     model: '/lookbook/think-beyond-limits-models.webp',
   },
 ];
