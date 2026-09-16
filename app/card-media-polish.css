@@ -1,0 +1,10 @@
+/* Product-card framing: slightly taller than the previous landscape crop so more of the worn product is visible without losing the tight merchandising focus. */
+.commerce-card-media {
+  aspect-ratio: 5 / 6 !important;
+}
+
+@media (max-width: 640px) {
+  .commerce-card-media {
+    aspect-ratio: 5 / 6 !important;
+  }
+}
