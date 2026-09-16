@@ -3,8 +3,12 @@ import { ArrowRight } from 'lucide-react';
 import { products } from './catalog';
 
 const cardAngles = [0, 1, 0] as const;
-const mindInMotionCardImage =
-  'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png';
+const cardImages: Record<string, string> = {
+  'mind-in-motion':
+    'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png',
+  'be-creative':
+    'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/57215826-a584-4e0b-aa8b-9de69d8d68d9.png',
+};
 
 export default function CollectionGrid() {
   return (
@@ -18,9 +22,9 @@ export default function CollectionGrid() {
         >
           <span className="commerce-card-media">
             <span className="commerce-card-badge">DROP 001 · {p.number}</span>
-            {p.slug === 'mind-in-motion' ? (
+            {cardImages[p.slug] ? (
               <img
-                src={mindInMotionCardImage}
+                src={cardImages[p.slug]}
                 alt={`Model wearing ${p.name}`}
                 loading="lazy"
                 decoding="async"
@@ -30,9 +34,9 @@ export default function CollectionGrid() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  objectPosition: 'center 27%',
+                  objectPosition: p.slug === 'be-creative' ? 'center 28%' : 'center 27%',
                   padding: 0,
-                  transform: 'scale(1.06)',
+                  transform: p.slug === 'be-creative' ? 'scale(1.03)' : 'scale(1.06)',
                   transformOrigin: 'center 35%',
                 }}
               />
