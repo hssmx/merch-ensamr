@@ -15,28 +15,64 @@ export default function Home() {
   return (
     <main id="main">
       <FeaturedCollection />
-      <section className="service-strip">
-        <div>
-          <Shirt />
-          <h3>Original ENSAMR releases</h3>
-          <p>Created for our community, with more on the way.</p>
+
+      <section className="service-strip service-ledger" aria-labelledby="service-ledger-title">
+        <div className="service-strip-intro">
+          <span>HOW THE SHOP WORKS</span>
+          <h2 id="service-ledger-title">From our drop to your order.</h2>
+          <p>
+            Original ENSAMR pieces, custom artwork, direct ordering and a final
+            quality check before anything is confirmed.
+          </p>
         </div>
-        <div>
-          <PenTool />
-          <h3>Print your artwork</h3>
-          <p>Send your design and preferred placement.</p>
-        </div>
-        <div>
-          <MessageCircle />
-          <h3>Order directly</h3>
-          <p>Confirmation and payment through WhatsApp.</p>
-        </div>
-        <div>
-          <BadgeCheck />
-          <h3>Made with care</h3>
-          <p>Every detail is reviewed before an order is confirmed.</p>
+
+        <div className="service-strip-grid">
+          <article className="service-note">
+            <div className="service-note-top">
+              <span className="service-note-index">01</span>
+              <span className="service-note-icon" aria-hidden="true"><Shirt /></span>
+            </div>
+            <div>
+              <h3>Original ENSAMR releases</h3>
+              <p>Created for our community, with more on the way.</p>
+            </div>
+          </article>
+
+          <article className="service-note">
+            <div className="service-note-top">
+              <span className="service-note-index">02</span>
+              <span className="service-note-icon" aria-hidden="true"><PenTool /></span>
+            </div>
+            <div>
+              <h3>Print your artwork</h3>
+              <p>Send your design and preferred placement.</p>
+            </div>
+          </article>
+
+          <article className="service-note">
+            <div className="service-note-top">
+              <span className="service-note-index">03</span>
+              <span className="service-note-icon" aria-hidden="true"><MessageCircle /></span>
+            </div>
+            <div>
+              <h3>Order directly</h3>
+              <p>Confirmation and payment through WhatsApp.</p>
+            </div>
+          </article>
+
+          <article className="service-note">
+            <div className="service-note-top">
+              <span className="service-note-index">04</span>
+              <span className="service-note-icon" aria-hidden="true"><BadgeCheck /></span>
+            </div>
+            <div>
+              <h3>Made with care</h3>
+              <p>Every detail is reviewed before an order is confirmed.</p>
+            </div>
+          </article>
         </div>
       </section>
+
       <section className="shop-section">
         <div className="section-heading">
           <div>
