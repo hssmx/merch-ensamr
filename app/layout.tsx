@@ -17,6 +17,7 @@ import './hero-panel-polish.css';
 import './hero-panel-alignment.css';
 import './card-media-polish.css';
 import './homepage-refresh.css';
+import './service-strip-polish.css';
 export const metadata: Metadata = {
   title: 'The ENSAM Merch Shop | Original T-shirts & Custom Designs',
   icons: { icon: '/favicon.svg' },
