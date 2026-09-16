@@ -8,6 +8,8 @@ const cardImages: Record<string, string> = {
     'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png',
   'be-creative':
     'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/57215826-a584-4e0b-aa8b-9de69d8d68d9.png',
+  'think-beyond-limits':
+    'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/119f56a5-586a-4954-bbc7-5f60c6e4e93d.png',
 };
 
 export default function CollectionGrid() {
@@ -34,9 +36,19 @@ export default function CollectionGrid() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  objectPosition: p.slug === 'be-creative' ? 'center 28%' : 'center 27%',
+                  objectPosition:
+                    p.slug === 'be-creative'
+                      ? 'center 28%'
+                      : p.slug === 'think-beyond-limits'
+                        ? 'center 26%'
+                        : 'center 27%',
                   padding: 0,
-                  transform: p.slug === 'be-creative' ? 'scale(1.03)' : 'scale(1.06)',
+                  transform:
+                    p.slug === 'be-creative'
+                      ? 'scale(1.03)'
+                      : p.slug === 'think-beyond-limits'
+                        ? 'scale(1.02)'
+                        : 'scale(1.06)',
                   transformOrigin: 'center 35%',
                 }}
               />
