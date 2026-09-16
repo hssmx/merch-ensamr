@@ -1,63 +1,49 @@
 'use client';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { MoveHorizontal, ZoomIn } from 'lucide-react';
+import { MoveHorizontal } from 'lucide-react';
 import type { Product } from './catalog';
+
+const views = [
+  { key: 'campaign', label: 'Campaign', position: '50% 50%' },
+  { key: 'front', label: 'Front worn', position: '26% 50%' },
+  { key: 'back', label: 'Back worn', position: '74% 50%' },
+] as const;
+
 export default function PhotoReel({
   product: p,
   hoverTurn = false,
-  onEnlarge,
 }: {
   product: Product;
   hoverTurn?: boolean;
   onEnlarge?: (view: string) => void;
 }) {
   const track = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ x: number; scroll: number; moved: boolean } | null>(
-    null,
-  );
-  const suppress = useRef(false);
+  const drag = useRef<{ x: number; scroll: number; moved: boolean } | null>(null);
   const [index, setIndex] = useState(0);
+
   function go(n: number) {
     const el = track.current;
-    if (el)
-      el.scrollTo({
-        left: n * el.clientWidth,
-        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
-          ? 'instant'
-          : 'smooth',
-      });
+    if (!el) return;
+    el.scrollTo({
+      left: n * el.clientWidth,
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    });
   }
+
   return (
-    <div
-      className={`photo-reel ${hoverTurn ? 'hover-turn' : ''}`}
-      onPointerEnter={(e) => {
-        if (hoverTurn && e.pointerType === 'mouse') go(1);
-      }}
-      onPointerLeave={(e) => {
-        if (hoverTurn && e.pointerType === 'mouse') go(0);
-      }}
-    >
+    <div className={`photo-reel wear-reel ${hoverTurn ? 'hover-turn' : ''}`}>
       <section
         ref={track}
-        className="reel-track"
+        className="reel-track wear-track"
         aria-roledescription="carousel"
-        aria-label={`${p.name} product photographs`}
+        aria-label={`${p.name} worn product photographs`}
         onScroll={(e) =>
-          setIndex(
-            Math.round(
-              e.currentTarget.scrollLeft / e.currentTarget.clientWidth,
-            ),
-          )
+          setIndex(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))
         }
         onPointerDown={(e) => {
-          if (e.pointerType !== 'mouse' || hoverTurn) return;
-          drag.current = {
-            x: e.clientX,
-            scroll: e.currentTarget.scrollLeft,
-            moved: false,
-          };
-          suppress.current = false;
+          if (e.pointerType !== 'mouse') return;
+          drag.current = { x: e.clientX, scroll: e.currentTarget.scrollLeft, moved: false };
         }}
         onPointerMove={(e) => {
           const d = drag.current;
@@ -65,7 +51,6 @@ export default function PhotoReel({
           const delta = e.clientX - d.x;
           if (Math.abs(delta) > 5) {
             d.moved = true;
-            suppress.current = true;
             e.currentTarget.setPointerCapture(e.pointerId);
             e.currentTarget.style.scrollSnapType = 'none';
             e.currentTarget.scrollLeft = d.scroll - delta;
@@ -76,68 +61,61 @@ export default function PhotoReel({
           if (!d) return;
           drag.current = null;
           e.currentTarget.style.scrollSnapType = '';
-          if (d.moved)
-            go(
-              e.currentTarget.scrollLeft > e.currentTarget.clientWidth / 2
-                ? 1
-                : 0,
-            );
+          if (d.moved) go(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth));
         }}
         onPointerCancel={(e) => {
           drag.current = null;
           e.currentTarget.style.scrollSnapType = '';
         }}
       >
-        {(['back', 'front'] as const).map((v) => (
-          <div
-            className="reel-frame"
-            key={v}
-          >
+        {views.map((view, viewIndex) => (
+          <div className={`reel-frame wear-frame wear-${view.key}`} key={view.key}>
             <Image
-              src={p[v]}
-              width="1500"
-              height="1500"
-              loading={hoverTurn ? 'lazy' : undefined}
+              src={p.model}
+              fill
+              sizes="(max-width: 900px) 100vw, 58vw"
+              priority={viewIndex === 0 && !hoverTurn}
+              loading={viewIndex === 0 && !hoverTurn ? undefined : 'lazy'}
               draggable={false}
-              alt={`${p.name}, ${v} view`}
+              alt={`${p.name}, ${view.label.toLowerCase()} view`}
+              style={{ objectPosition: view.position }}
             />
+            <span className="wear-view-label">{view.label}</span>
           </div>
         ))}
       </section>
-      <div className="reel-bottom">
+
+      <div className="wear-thumbnails" aria-label="Choose product photograph">
+        {views.map((view, viewIndex) => (
+          <button
+            key={view.key}
+            type="button"
+            className={index === viewIndex ? 'active' : ''}
+            onClick={() => go(viewIndex)}
+            aria-label={`Show ${view.label.toLowerCase()} of ${p.name}`}
+            aria-current={index === viewIndex ? 'true' : undefined}
+          >
+            <span className={`wear-thumb-image wear-${view.key}`}>
+              <Image
+                src={p.model}
+                fill
+                sizes="110px"
+                alt=""
+                aria-hidden="true"
+                style={{ objectPosition: view.position }}
+              />
+            </span>
+            <small>{view.label}</small>
+          </button>
+        ))}
+      </div>
+
+      <div className="reel-bottom wear-reel-bottom">
         <span className="reel-hint">
           <MoveHorizontal size={14} />
-          <span>
-            {hoverTurn
-              ? 'Hover to turn · swipe to explore'
-              : 'Drag or swipe to explore'}
-          </span>
+          <span>Swipe or use the thumbnails</span>
         </span>
-        <span className="reel-progress" aria-label={`Photo ${index + 1} of 2`}>
-          <button
-            type="button"
-            className={index === 0 ? 'active' : ''}
-            aria-label={`Show back view of ${p.name}`}
-            aria-current={index === 0 ? 'true' : undefined}
-            onClick={() => go(0)}
-          />
-          <button
-            type="button"
-            className={index === 1 ? 'active' : ''}
-            aria-label={`Show front view of ${p.name}`}
-            aria-current={index === 1 ? 'true' : undefined}
-            onClick={() => go(1)}
-          />
-        </span>
-        {onEnlarge && (
-          <button
-            className="reel-enlarge"
-            aria-label="Enlarge product photo"
-            onClick={() => onEnlarge(index ? 'front' : 'back')}
-          >
-            <ZoomIn size={18} />
-          </button>
-        )}
+        <span>{index + 1} / {views.length}</span>
       </div>
     </div>
   );
