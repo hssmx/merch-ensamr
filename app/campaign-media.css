@@ -1,5 +1,5 @@
 /* Dedicated generated campaign media.
-   Homepage hero, commerce/product media, and stripe lookbook intentionally use three separate sets. */
+   Homepage hero, commerce/product media, and stripe lookbook intentionally use separate sets. */
 
 /* Product selector axes for the dedicated 3x3 card/product campaign sheet.
    Columns = product. Rows = front / three-quarter / back. */
@@ -10,27 +10,53 @@
 .media-angle-1 { --product-y: 50%; }
 .media-angle-2 { --product-y: 100%; }
 
-/* HERO — Mind in Motion now uses two individual transparent model files directly.
-   The remaining designs keep their existing temporary hero media until their dedicated pairs are generated. */
-.media-row-1.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/0f85854d-1f56-4ce5-a778-8d5b030fbd83.png'); }
-.media-row-1.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/56b18f5e-a0ac-4206-9fb2-cb4f56c03e21.png'); }
-.media-row-1.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dfc3a8b1-a09c-4e98-b863-0688af94a0a2.png'); }
-.media-row-2.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/f63be067-1aa6-4156-8e87-17a4dfb1406e.png'); }
-.media-row-2.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5fd2177c-8840-4935-84c8-1ee7dffae6eb.png'); }
-.media-row-2.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/2253b0ec-7805-4559-9168-e1dcacaa0a93.png'); }
-
+/* HERO — every product now uses two individual, full-resolution model images. */
 .campaign-visual {
+  position: relative !important;
   isolation: isolate !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, #0b0a0b 0%, #151012 52%, #211116 100%) !important;
+}
+
+.campaign-visual::before {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  content: '';
+  pointer-events: none;
   background:
-    radial-gradient(circle at 62% 42%, rgb(129 35 55 / 24%), transparent 38%),
-    linear-gradient(135deg, #0e0d0e 0%, #181316 54%, #28161b 100%) !important;
+    radial-gradient(ellipse 48% 62% at 29% 43%, rgb(244 236 222 / 19%) 0%, rgb(244 236 222 / 8%) 30%, transparent 68%),
+    radial-gradient(ellipse 46% 64% at 73% 44%, rgb(128 25 43 / 38%) 0%, rgb(128 25 43 / 14%) 36%, transparent 72%),
+    radial-gradient(ellipse 72% 28% at 52% 93%, rgb(255 255 255 / 10%) 0%, transparent 66%);
+  filter: blur(3px);
+}
+
+.hero-mind-in-motion .campaign-visual::before {
+  background:
+    radial-gradient(ellipse 48% 63% at 28% 42%, rgb(236 226 208 / 18%) 0%, rgb(236 226 208 / 7%) 32%, transparent 68%),
+    radial-gradient(ellipse 48% 64% at 73% 44%, rgb(112 29 57 / 42%) 0%, rgb(112 29 57 / 13%) 38%, transparent 72%),
+    radial-gradient(ellipse 72% 27% at 50% 93%, rgb(255 255 255 / 9%) 0%, transparent 66%);
+}
+
+.hero-be-creative .campaign-visual::before {
+  background:
+    radial-gradient(ellipse 48% 62% at 29% 43%, rgb(246 232 221 / 17%) 0%, rgb(246 232 221 / 6%) 31%, transparent 68%),
+    radial-gradient(ellipse 49% 64% at 73% 43%, rgb(145 22 39 / 46%) 0%, rgb(145 22 39 / 15%) 38%, transparent 72%),
+    radial-gradient(ellipse 70% 27% at 52% 93%, rgb(255 255 255 / 9%) 0%, transparent 66%);
+}
+
+.hero-think-beyond-limits .campaign-visual::before {
+  background:
+    radial-gradient(ellipse 50% 64% at 29% 43%, rgb(115 22 39 / 48%) 0%, rgb(115 22 39 / 16%) 40%, transparent 72%),
+    radial-gradient(ellipse 47% 62% at 73% 43%, rgb(225 210 196 / 16%) 0%, rgb(225 210 196 / 6%) 32%, transparent 70%),
+    radial-gradient(ellipse 72% 27% at 51% 93%, rgb(255 255 255 / 10%) 0%, transparent 66%);
 }
 
 .campaign-triptych,
 .campaign-duo {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
 }
@@ -43,7 +69,7 @@
   max-height: 96%;
   object-fit: contain;
   object-position: center bottom;
-  filter: drop-shadow(0 28px 44px rgb(0 0 0 / 30%));
+  filter: drop-shadow(0 30px 48px rgb(0 0 0 / 34%));
   transform-origin: 50% 100%;
   animation: campaign-angle-in .58s cubic-bezier(.2,.75,.25,1) both;
 }
@@ -63,58 +89,117 @@
   animation-delay: 90ms;
 }
 
-.campaign-angle {
-  position: absolute;
-  display: block;
-  aspect-ratio: 3 / 2;
-  background-image: var(--hero-image) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: center !important;
-  border: 1px solid rgb(255 255 255 / 14%);
-  box-shadow: 0 28px 60px rgb(0 0 0 / 36%);
-  transform-origin: 50% 100%;
-  animation: campaign-angle-in .58s cubic-bezier(.2,.75,.25,1) both;
-}
-
-.campaign-angle-1 {
-  left: -4%;
-  bottom: 10%;
-  width: 48%;
-  transform: rotate(-4deg);
-}
-
-.campaign-angle-2 {
-  left: 23%;
-  top: 7%;
-  width: 56%;
-  z-index: 2;
-  transform: rotate(.8deg);
-  animation-delay: 70ms;
-}
-
-.campaign-angle-3 {
-  right: -4%;
-  bottom: 8%;
-  width: 48%;
-  transform: rotate(4deg);
-  animation-delay: 140ms;
-}
-
 @keyframes campaign-angle-in {
   from { opacity: 0; translate: 0 24px; scale: .97; }
   to { opacity: 1; translate: 0 0; scale: 1; }
 }
 
 .campaign-shade {
+  position: absolute !important;
+  inset: 0 !important;
   z-index: 3 !important;
   pointer-events: none;
   background:
-    linear-gradient(180deg, transparent 34%, rgb(0 0 0 / 54%) 100%),
-    linear-gradient(90deg, rgb(0 0 0 / 10%), transparent 58%) !important;
+    linear-gradient(180deg, transparent 44%, rgb(0 0 0 / 42%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 5%), transparent 56%) !important;
 }
-.campaign-visual .launch-ghost { z-index: 4 !important; }
-.campaign-visual .launch-product { z-index: 5 !important; }
+
+/* Featured product panel — action/price on the left, product name on the right. */
+.campaign-visual .launch-product {
+  z-index: 5 !important;
+  display: grid !important;
+  grid-template-columns: minmax(170px, .82fr) minmax(240px, 1.28fr) !important;
+  align-items: stretch !important;
+  padding: 0 !important;
+  overflow: hidden;
+  color: #fff !important;
+  background: rgb(12 10 11 / 78%) !important;
+  border: 1px solid rgb(255 255 255 / 16%) !important;
+  box-shadow: 0 20px 58px rgb(0 0 0 / 32%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.launch-product > .launch-product-action {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  min-height: 104px;
+  padding: 17px 19px !important;
+  border-top: 0 !important;
+  border-right: 1px solid rgb(255 255 255 / 14%);
+}
+
+.launch-product-action > span {
+  color: rgb(255 255 255 / 53%);
+  font-family: 'Outfit', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.launch-product-buy {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.launch-product-buy strong {
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .035em;
+  white-space: nowrap;
+}
+
+.launch-product-buy a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 13px;
+  color: #fff;
+  background: #791625;
+  border: 1px solid #9b2639;
+  font-family: 'Outfit', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.launch-product-buy a:hover {
+  background: #971f34;
+  border-color: #b52d45;
+  transform: translateY(-1px);
+}
+
+.campaign-visual .launch-product h2 {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0 !important;
+  padding: 18px 22px !important;
+  color: #fff !important;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(20px, 2.15vw, 31px) !important;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+  text-align: right;
+}
+
+/* With the numeric labels removed, keep the hero selector clean and name-led. */
+.launch-selector button:not(.launch-pause) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center !important;
+}
 
 /* CARDS + PRODUCT DETAIL — a second, separate 3x3 wearer campaign.
    This is deliberately NOT the homepage hero set and NOT the stripe lookbook. */
@@ -186,9 +271,13 @@
   .campaign-visual { min-height: 540px !important; }
   .campaign-model-1 { left: -8%; max-width: 67%; max-height: 92%; }
   .campaign-model-2 { right: -10%; max-width: 66%; max-height: 93%; }
-  .campaign-angle-1 { width: 58%; left: -17%; bottom: 13%; }
-  .campaign-angle-2 { width: 68%; left: 16%; top: 8%; }
-  .campaign-angle-3 { width: 58%; right: -17%; bottom: 11%; }
+
+  .campaign-visual .launch-product {
+    grid-template-columns: minmax(150px, .8fr) minmax(190px, 1.2fr) !important;
+  }
+  .launch-product > .launch-product-action { min-height: 96px; }
+  .campaign-visual .launch-product h2 { font-size: 21px !important; }
+
   .product-page .wear-frame { aspect-ratio: 3 / 2 !important; }
 }
 
@@ -196,14 +285,37 @@
   .campaign-visual { min-height: 455px !important; }
   .campaign-model-1 { left: -21%; bottom: -2%; max-width: 79%; max-height: 88%; }
   .campaign-model-2 { right: -24%; bottom: -2%; max-width: 78%; max-height: 89%; }
-  .campaign-angle-1 { width: 66%; left: -28%; bottom: 14%; transform: rotate(-4deg); }
-  .campaign-angle-2 { width: 79%; left: 10.5%; top: 8%; }
-  .campaign-angle-3 { width: 66%; right: -28%; bottom: 12%; transform: rotate(4deg); }
+
+  .campaign-visual .launch-product {
+    right: 12px !important;
+    bottom: 70px !important;
+    left: 12px !important;
+    grid-template-columns: .88fr 1.12fr !important;
+  }
+  .launch-product > .launch-product-action {
+    min-height: 86px;
+    padding: 13px 14px !important;
+  }
+  .campaign-visual .launch-product h2 {
+    padding: 14px !important;
+    font-size: 16px !important;
+  }
+  .launch-product-buy {
+    gap: 8px;
+  }
+  .launch-product-buy strong {
+    font-size: 11px;
+  }
+  .launch-product-buy a {
+    min-height: 34px;
+    padding: 0 10px;
+  }
+  .launch-product-buy a span { display: none; }
+
   .commerce-card-media { aspect-ratio: 3 / 2 !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .campaign-angle,
   .campaign-model { animation: none; }
   .commerce-card-wearer { transition: none; }
 }
