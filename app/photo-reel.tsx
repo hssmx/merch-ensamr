@@ -1,14 +1,19 @@
 'use client';
 import { useRef, useState } from 'react';
-import Image from 'next/image';
 import { MoveHorizontal } from 'lucide-react';
 import type { Product } from './catalog';
 
 const views = [
-  { key: 'campaign', label: 'Campaign', position: '50% 50%' },
-  { key: 'front', label: 'Front worn', position: '26% 50%' },
-  { key: 'back', label: 'Back worn', position: '74% 50%' },
+  { key: 'front', label: 'Front worn', angle: 0 },
+  { key: 'three-quarter', label: 'Three-quarter', angle: 1 },
+  { key: 'back', label: 'Back worn', angle: 2 },
 ] as const;
+
+const rowBySlug: Record<string, number> = {
+  'mind-in-motion': 0,
+  'be-creative': 1,
+  'think-beyond-limits': 2,
+};
 
 export default function PhotoReel({
   product: p,
@@ -21,6 +26,7 @@ export default function PhotoReel({
   const track = useRef<HTMLDivElement>(null);
   const drag = useRef<{ x: number; scroll: number; moved: boolean } | null>(null);
   const [index, setIndex] = useState(0);
+  const mediaRow = rowBySlug[p.slug] ?? 0;
 
   function go(n: number) {
     const el = track.current;
@@ -68,17 +74,12 @@ export default function PhotoReel({
           e.currentTarget.style.scrollSnapType = '';
         }}
       >
-        {views.map((view, viewIndex) => (
-          <div className={`reel-frame wear-frame wear-${view.key}`} key={view.key}>
-            <Image
-              src={p.model}
-              fill
-              sizes="(max-width: 900px) 100vw, 58vw"
-              priority={viewIndex === 0 && !hoverTurn}
-              loading={viewIndex === 0 && !hoverTurn ? undefined : 'lazy'}
-              draggable={false}
-              alt={`${p.name}, ${view.label.toLowerCase()} view`}
-              style={{ objectPosition: view.position }}
+        {views.map((view) => (
+          <div className="reel-frame wear-frame" key={view.key}>
+            <span
+              className={`product-wear-image media-row-${mediaRow} media-angle-${view.angle}`}
+              role="img"
+              aria-label={`${p.name}, ${view.label.toLowerCase()} view`}
             />
             <span className="wear-view-label">{view.label}</span>
           </div>
@@ -95,16 +96,10 @@ export default function PhotoReel({
             aria-label={`Show ${view.label.toLowerCase()} of ${p.name}`}
             aria-current={index === viewIndex ? 'true' : undefined}
           >
-            <span className={`wear-thumb-image wear-${view.key}`}>
-              <Image
-                src={p.model}
-                fill
-                sizes="110px"
-                alt=""
-                aria-hidden="true"
-                style={{ objectPosition: view.position }}
-              />
-            </span>
+            <span
+              className={`product-wear-thumb media-row-${mediaRow} media-angle-${view.angle}`}
+              aria-hidden="true"
+            />
             <small>{view.label}</small>
           </button>
         ))}
