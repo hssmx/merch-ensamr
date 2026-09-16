@@ -78,11 +78,6 @@ export default function FeaturedCollection() {
           </Link>
           <Link href="/about">Our story</Link>
         </div>
-        <div className="launch-stats" aria-label="Collection details">
-          <span><strong>DROP 001</strong> the opening release</span>
-          <span><strong>MORE</strong> drops in progress</span>
-          <span><strong>120</strong> MAD from</span>
-        </div>
       </div>
 
       <div className="launch-visual campaign-visual">
