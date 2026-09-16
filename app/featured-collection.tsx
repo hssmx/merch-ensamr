@@ -5,6 +5,16 @@ import { ArrowRight, Pause, Play } from 'lucide-react';
 import { products } from './catalog';
 
 const heroAngles = ['Front', 'Three-quarter', 'Back'] as const;
+const mindInMotionHero = [
+  {
+    label: 'Front',
+    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5dc29100-1984-4536-835b-777648d6138d.png',
+  },
+  {
+    label: 'Back',
+    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/44c838ca-bc37-4a19-a6ed-b9aba00dab36.png',
+  },
+] as const;
 
 export default function FeaturedCollection() {
   const [index, setIndex] = useState(0);
@@ -20,6 +30,7 @@ export default function FeaturedCollection() {
   }, [paused]);
 
   const p = products[index];
+  const isMindInMotion = p.slug === 'mind-in-motion';
 
   return (
     <section
@@ -59,16 +70,31 @@ export default function FeaturedCollection() {
         <div
           key={p.slug}
           className={`campaign-triptych media-row-${index}`}
-          aria-label={`Three worn angles of ${p.name}`}
+          aria-label={`${isMindInMotion ? 'Two' : 'Three'} worn views of ${p.name}`}
         >
-          {heroAngles.map((angle, angleIndex) => (
-            <span
-              key={angle}
-              className={`campaign-angle campaign-angle-${angleIndex + 1} media-angle-${angleIndex}`}
-              role="img"
-              aria-label={`${p.name}, ${angle.toLowerCase()} worn view`}
-            />
-          ))}
+          {isMindInMotion ? (
+            <div className="campaign-duo">
+              {mindInMotionHero.map((shot, shotIndex) => (
+                <img
+                  key={shot.label}
+                  className={`campaign-model campaign-model-${shotIndex + 1}`}
+                  src={shot.src}
+                  alt={`${p.name}, ${shot.label.toLowerCase()} worn view`}
+                  loading="eager"
+                  decoding="async"
+                />
+              ))}
+            </div>
+          ) : (
+            heroAngles.map((angle, angleIndex) => (
+              <span
+                key={angle}
+                className={`campaign-angle campaign-angle-${angleIndex + 1} media-angle-${angleIndex}`}
+                role="img"
+                aria-label={`${p.name}, ${angle.toLowerCase()} worn view`}
+              />
+            ))
+          )}
         </div>
         <div className="campaign-shade" aria-hidden="true" />
         <span className="launch-ghost" aria-hidden="true">0{index + 1}</span>
