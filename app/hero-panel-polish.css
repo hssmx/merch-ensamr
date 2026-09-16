@@ -2,6 +2,7 @@
    Loaded after campaign-media.css so older hero link rules cannot force the CTA back into a tiny square. */
 
 .campaign-visual .launch-product {
+  bottom: 22px !important;
   grid-template-columns: minmax(250px, .92fr) minmax(300px, 1.08fr) !important;
   background: linear-gradient(100deg, rgb(12 10 11 / 94%), rgb(14 11 12 / 84%)) !important;
   border: 1px solid rgb(255 255 255 / 18%) !important;
