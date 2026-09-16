@@ -1,0 +1,236 @@
+/* Dedicated wearer media. Hero, commerce cards/product detail, and stripe lookbook are intentionally separate sets. */
+
+.media-row-0 { --media-y: 0%; }
+.media-row-1 { --media-y: 50%; }
+.media-row-2 { --media-y: 100%; }
+.media-angle-0 { --media-x: 0%; }
+.media-angle-1 { --media-x: 50%; }
+.media-angle-2 { --media-x: 100%; }
+
+/* Homepage: three distinct angles for the currently featured T-shirt. */
+.campaign-visual {
+  isolation: isolate !important;
+  background:
+    radial-gradient(circle at 62% 42%, rgb(129 35 55 / 30%), transparent 38%),
+    linear-gradient(135deg, #0e0d0e 0%, #181316 54%, #28161b 100%) !important;
+}
+
+.campaign-triptych {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.campaign-angle {
+  position: absolute;
+  display: block;
+  width: 50%;
+  aspect-ratio: 4 / 3;
+  background-image: url('/campaign/hero-sprite.webp');
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  background-position: var(--media-x) var(--media-y);
+  filter: drop-shadow(0 28px 34px rgb(0 0 0 / 30%));
+  transform-origin: 50% 100%;
+  animation: campaign-angle-in .58s cubic-bezier(.2,.75,.25,1) both;
+}
+
+.campaign-angle-1 {
+  left: -4%;
+  bottom: 9%;
+  width: 49%;
+  transform: rotate(-2deg) scale(.98);
+}
+
+.campaign-angle-2 {
+  left: 25%;
+  top: 6%;
+  width: 56%;
+  z-index: 2;
+  transform: scale(1.04);
+  animation-delay: 70ms;
+}
+
+.campaign-angle-3 {
+  right: -5%;
+  bottom: 7%;
+  width: 49%;
+  transform: rotate(2deg) scale(.98);
+  animation-delay: 140ms;
+}
+
+@keyframes campaign-angle-in {
+  from { opacity: 0; translate: 0 24px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+.campaign-shade {
+  z-index: 3 !important;
+  background:
+    linear-gradient(180deg, transparent 35%, rgb(0 0 0 / 58%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 13%), transparent 54%) !important;
+}
+
+.campaign-visual .launch-ghost { z-index: 4 !important; }
+.campaign-visual .launch-product { z-index: 5 !important; }
+
+/* Cards: a second, dedicated wearer set. No flat product PNG is used here. */
+.commerce-card-media {
+  position: relative !important;
+  overflow: hidden !important;
+  aspect-ratio: 4 / 5 !important;
+  background:
+    radial-gradient(circle at 50% 28%, rgb(255 255 255 / 82%), transparent 32%),
+    #ebe6df !important;
+}
+
+.commerce-card:nth-child(2) .commerce-card-media {
+  background:
+    radial-gradient(circle at 50% 28%, rgb(255 255 255 / 74%), transparent 32%),
+    #e5d6d9 !important;
+}
+
+.commerce-card:nth-child(3) .commerce-card-media {
+  background:
+    radial-gradient(circle at 50% 28%, rgb(255 255 255 / 82%), transparent 32%),
+    #dfd9d0 !important;
+}
+
+.commerce-card-wearer {
+  position: absolute;
+  left: -16%;
+  right: -16%;
+  bottom: 3%;
+  display: block;
+  aspect-ratio: 4 / 3;
+  background-image: url('/campaign/product-sprite.webp');
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  background-position: var(--media-x) var(--media-y);
+  filter: drop-shadow(0 24px 30px rgb(30 22 22 / 18%));
+  transform: scale(1.08);
+  transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+
+.commerce-card:hover .commerce-card-wearer,
+.commerce-card:focus-visible .commerce-card-wearer {
+  transform: scale(1.13) translateY(-1.5%);
+}
+
+.commerce-card-badge {
+  z-index: 4 !important;
+}
+
+/* Product page: same product-wearer family as cards, but three separate angles. */
+.product-page .wear-track {
+  background: #e3ded7 !important;
+}
+
+.product-page .wear-frame {
+  position: relative !important;
+  aspect-ratio: 4 / 3 !important;
+  min-height: 0 !important;
+  background:
+    radial-gradient(circle at 50% 35%, #f8f5f0 0%, #e3ded7 58%, #d7d1c9 100%) !important;
+}
+
+.product-wear-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-image: url('/campaign/product-sprite.webp');
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  background-position: var(--media-x) var(--media-y);
+  filter: drop-shadow(0 24px 34px rgb(25 18 18 / 16%));
+}
+
+.product-wear-thumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background-color: #dfd9d1;
+  background-image: url('/campaign/product-sprite.webp');
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+  background-position: var(--media-x) var(--media-y);
+}
+
+.wear-thumbnails button.active .product-wear-thumb {
+  border-color: #791625 !important;
+}
+
+/* The stripe/lookbook continues to use /lookbook/*.webp, so it remains visually independent. */
+
+@media (max-width: 900px) {
+  .campaign-visual {
+    min-height: 560px !important;
+  }
+
+  .campaign-angle-1 {
+    width: 58%;
+    left: -15%;
+    bottom: 12%;
+  }
+
+  .campaign-angle-2 {
+    width: 70%;
+    left: 15%;
+    top: 5%;
+  }
+
+  .campaign-angle-3 {
+    width: 58%;
+    right: -15%;
+    bottom: 11%;
+  }
+
+  .product-page .wear-frame {
+    aspect-ratio: 4 / 3 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .campaign-visual {
+    min-height: 470px !important;
+  }
+
+  .campaign-angle-1 {
+    width: 66%;
+    left: -25%;
+    bottom: 12%;
+  }
+
+  .campaign-angle-2 {
+    width: 82%;
+    left: 9%;
+    top: 5%;
+  }
+
+  .campaign-angle-3 {
+    width: 66%;
+    right: -25%;
+    bottom: 11%;
+  }
+
+  .commerce-card-media {
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .commerce-card-wearer {
+    left: -23%;
+    right: -23%;
+    bottom: 1%;
+    transform: scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campaign-angle { animation: none; }
+  .commerce-card-wearer { transition: none; }
+}
