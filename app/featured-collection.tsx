@@ -4,27 +4,37 @@ import Link from 'next/link';
 import { ArrowRight, Pause, Play } from 'lucide-react';
 import { products } from './catalog';
 
-const heroAngles = ['Front', 'Three-quarter', 'Back'] as const;
-const mindInMotionHero = [
-  {
-    label: 'Front',
-    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5dc29100-1984-4536-835b-777648d6138d.png',
-  },
-  {
-    label: 'Back',
-    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/44c838ca-bc37-4a19-a6ed-b9aba00dab36.png',
-  },
-] as const;
-
-const beCreativeHero = [
-  {
-    label: 'Front',
-    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dd029bf6-745e-42b0-8d68-2133c157e1ab.png',
-  },
-  {
-    label: 'Back',
-    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/8e0860b6-1ff1-4d4d-9ffa-19e06e7e7cf8.png',
-  },
+const heroPairs = [
+  [
+    {
+      label: 'Front',
+      src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5dc29100-1984-4536-835b-777648d6138d.png',
+    },
+    {
+      label: 'Back',
+      src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/44c838ca-bc37-4a19-a6ed-b9aba00dab36.png',
+    },
+  ],
+  [
+    {
+      label: 'Front',
+      src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dd029bf6-745e-42b0-8d68-2133c157e1ab.png',
+    },
+    {
+      label: 'Back',
+      src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/8e0860b6-1ff1-4d4d-9ffa-19e06e7e7cf8.png',
+    },
+  ],
+  [
+    {
+      label: 'Front',
+      src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/04fa18a1-de68-4574-90be-618d8982b033.png',
+    },
+    {
+      label: 'Back',
+      src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/ef319207-2e14-412e-85e2-d147abb2e574.png',
+    },
+  ],
 ] as const;
 
 export default function FeaturedCollection() {
@@ -41,12 +51,7 @@ export default function FeaturedCollection() {
   }, [paused]);
 
   const p = products[index];
-  const heroPair =
-    p.slug === 'mind-in-motion'
-      ? mindInMotionHero
-      : p.slug === 'be-creative'
-        ? beCreativeHero
-        : null;
+  const heroPair = heroPairs[index];
 
   return (
     <section
@@ -86,43 +91,34 @@ export default function FeaturedCollection() {
         <div
           key={p.slug}
           className={`campaign-triptych media-row-${index}`}
-          aria-label={`${heroPair ? 'Two' : 'Three'} worn views of ${p.name}`}
+          aria-label={`Two worn views of ${p.name}`}
         >
-          {heroPair ? (
-            <div className="campaign-duo">
-              {heroPair.map((shot, shotIndex) => (
-                <img
-                  key={shot.label}
-                  className={`campaign-model campaign-model-${shotIndex + 1}`}
-                  src={shot.src}
-                  alt={`${p.name}, ${shot.label.toLowerCase()} worn view`}
-                  loading="eager"
-                  decoding="async"
-                />
-              ))}
-            </div>
-          ) : (
-            heroAngles.map((angle, angleIndex) => (
-              <span
-                key={angle}
-                className={`campaign-angle campaign-angle-${angleIndex + 1} media-angle-${angleIndex}`}
-                role="img"
-                aria-label={`${p.name}, ${angle.toLowerCase()} worn view`}
+          <div className="campaign-duo">
+            {heroPair.map((shot, shotIndex) => (
+              <img
+                key={shot.label}
+                className={`campaign-model campaign-model-${shotIndex + 1}`}
+                src={shot.src}
+                alt={`${p.name}, ${shot.label.toLowerCase()} worn view`}
+                loading="eager"
+                decoding="async"
               />
-            ))
-          )}
+            ))}
+          </div>
         </div>
         <div className="campaign-shade" aria-hidden="true" />
-        <span className="launch-ghost" aria-hidden="true">0{index + 1}</span>
         <div className="launch-product">
-          <span>FEATURED / 0{index + 1}</span>
-          <h2>{p.name}</h2>
-          <div>
-            <strong>{p.price} MAD</strong>
-            <Link href={`/collection/${p.slug}`} aria-label={`View ${p.name}`}>
-              <ArrowRight size={20} />
-            </Link>
+          <div className="launch-product-action">
+            <span>FEATURED T-SHIRT</span>
+            <div className="launch-product-buy">
+              <strong>{p.price} MAD</strong>
+              <Link href={`/collection/${p.slug}`} aria-label={`View ${p.name}`}>
+                <span>View</span>
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </div>
+          <h2>{p.name}</h2>
         </div>
       </div>
 
@@ -135,7 +131,6 @@ export default function FeaturedCollection() {
             aria-label={`Show ${product.name}`}
             aria-pressed={productIndex === index}
           >
-            <span>0{productIndex + 1}</span>
             {product.name}
           </button>
         ))}
