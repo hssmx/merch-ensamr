@@ -1,12 +1,13 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { products } from './catalog';
+
+const cardAngles = [0, 1, 0] as const;
 
 export default function CollectionGrid() {
   return (
     <div className="product-grid commerce-grid">
-      {products.map((p) => (
+      {products.map((p, productIndex) => (
         <Link
           className="commerce-card"
           href={`/collection/${p.slug}`}
@@ -15,21 +16,10 @@ export default function CollectionGrid() {
         >
           <span className="commerce-card-media">
             <span className="commerce-card-badge">DROP 001 · {p.number}</span>
-            <Image
-              className="commerce-card-shirt commerce-card-back"
-              src={p.back}
-              alt={`${p.name}, back view`}
-              width="1500"
-              height="1500"
-              loading="lazy"
-            />
-            <Image
-              className="commerce-card-shirt commerce-card-front"
-              src={p.front}
-              alt={`${p.name}, front view`}
-              width="1500"
-              height="1500"
-              loading="lazy"
+            <span
+              className={`commerce-card-wearer media-row-${productIndex} media-angle-${cardAngles[productIndex]}`}
+              role="img"
+              aria-label={`Model wearing ${p.name}`}
             />
           </span>
 
