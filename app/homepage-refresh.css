@@ -1,0 +1,478 @@
+/* Homepage refresh: service ledger, cleaned hero, and responsive parity after the wearer-media rollout.
+   This file is intentionally loaded last so it can retire older desktop/mobile assumptions. */
+
+/* --- Hero cleanup after removing the stats and selector rows. --- */
+.launch-copy {
+  padding-bottom: clamp(48px, 6vw, 88px) !important;
+}
+
+.launch-timer {
+  height: 2px !important;
+  opacity: .92;
+}
+
+/* --- Service ledger: replace the old four utility boxes with one editorial system. --- */
+.service-strip.service-ledger {
+  position: relative;
+  display: grid !important;
+  grid-template-columns: minmax(250px, .78fr) minmax(0, 2.22fr) !important;
+  width: min(91%, 1320px) !important;
+  max-width: 1320px !important;
+  margin: 72px auto 112px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  color: #f5efe8;
+  background: #0f0d0e !important;
+  border: 1px solid rgb(20 18 18 / 14%) !important;
+  box-shadow: 0 30px 80px rgb(18 14 15 / 11%);
+}
+
+.service-ledger > .service-strip-intro {
+  position: relative;
+  display: flex !important;
+  min-width: 0;
+  min-height: 340px !important;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 34px 32px 32px !important;
+  background:
+    linear-gradient(160deg, rgb(121 22 37 / 34%), transparent 58%),
+    #151112 !important;
+  border: 0 !important;
+  border-right: 1px solid rgb(255 255 255 / 12%) !important;
+}
+
+.service-strip-intro::after {
+  position: absolute;
+  right: -34px;
+  bottom: -58px;
+  content: 'R';
+  color: rgb(255 255 255 / 4%);
+  font-family: 'Anton', Impact, sans-serif;
+  font-size: 250px;
+  font-weight: 400;
+  line-height: .8;
+  pointer-events: none;
+}
+
+.service-strip-intro > span {
+  position: relative;
+  z-index: 1;
+  color: #d77486;
+  font-family: 'Outfit', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+.service-strip-intro h2 {
+  position: relative;
+  z-index: 1;
+  max-width: 290px;
+  margin: auto 0 20px;
+  color: #fff;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: clamp(31px, 3vw, 45px);
+  font-weight: 600;
+  line-height: .98;
+  letter-spacing: -.045em;
+}
+
+.service-strip-intro p {
+  position: relative;
+  z-index: 1;
+  max-width: 310px;
+  margin: 0;
+  color: rgb(245 239 232 / 62%);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.service-ledger > .service-strip-grid {
+  display: grid !important;
+  min-width: 0;
+  min-height: 340px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  padding: 0 !important;
+  background: #0f0d0e !important;
+  border: 0 !important;
+}
+
+.service-note {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 170px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 28px 30px 27px;
+  overflow: hidden;
+  background: #0f0d0e;
+  border-right: 1px solid rgb(255 255 255 / 10%);
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  transition: background .25s ease, transform .25s ease;
+}
+
+.service-note:nth-child(2n) {
+  border-right: 0;
+}
+
+.service-note:nth-child(n + 3) {
+  border-bottom: 0;
+}
+
+.service-note::after {
+  position: absolute;
+  right: 17px;
+  bottom: -12px;
+  content: attr(data-index);
+  color: rgb(255 255 255 / 3%);
+  font-family: 'Anton', Impact, sans-serif;
+  font-size: 116px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.service-note-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.service-note-index {
+  color: rgb(245 239 232 / 38%);
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+.service-note-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  color: #f5efe8;
+  background: rgb(255 255 255 / 5%);
+  border: 1px solid rgb(255 255 255 / 12%);
+  place-items: center;
+}
+
+.service-note-icon svg,
+.service-strip .service-note-icon svg {
+  width: 19px !important;
+  height: 19px !important;
+  color: currentColor !important;
+  stroke-width: 1.5;
+}
+
+.service-note h3 {
+  position: relative;
+  z-index: 1;
+  max-width: 270px;
+  margin: 0 0 8px;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: .025em;
+  text-transform: uppercase;
+}
+
+.service-note p {
+  position: relative;
+  z-index: 1;
+  max-width: 300px;
+  margin: 0;
+  color: rgb(245 239 232 / 56%);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-note:hover {
+    background: #171314;
+  }
+
+  .service-note:hover .service-note-icon {
+    color: #fff;
+    background: #791625;
+    border-color: #9f2c40;
+  }
+}
+
+/* --- Tablet / mobile parity for the wearer-based storefront. --- */
+@media (max-width: 900px) {
+  .launch-hero {
+    display: flex !important;
+    min-height: 0 !important;
+    flex-direction: column;
+  }
+
+  .launch-copy {
+    min-height: auto !important;
+    padding: 38px 20px 34px !important;
+  }
+
+  .launch-edition {
+    margin: 28px 0 12px !important;
+  }
+
+  .launch-copy h1 {
+    margin-top: 0 !important;
+  }
+
+  .campaign-visual,
+  .launch-visual {
+    min-height: 565px !important;
+  }
+
+  .campaign-model-1 {
+    left: -8% !important;
+    bottom: -1% !important;
+    max-width: 69% !important;
+    max-height: 94% !important;
+  }
+
+  .campaign-model-2 {
+    right: -10% !important;
+    bottom: -1% !important;
+    max-width: 68% !important;
+    max-height: 94% !important;
+  }
+
+  .campaign-visual .launch-product {
+    right: 16px !important;
+    bottom: 18px !important;
+    left: 16px !important;
+    width: auto !important;
+  }
+
+  .launch-timer {
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: 100% !important;
+    height: 2px !important;
+  }
+
+  .service-strip.service-ledger {
+    grid-template-columns: 1fr !important;
+    width: calc(100% - 32px) !important;
+    margin: 30px auto 76px !important;
+  }
+
+  .service-ledger > .service-strip-intro {
+    min-height: 240px !important;
+    padding: 30px 28px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgb(255 255 255 / 12%) !important;
+  }
+
+  .service-strip-intro h2 {
+    max-width: 470px;
+    margin-top: 54px;
+  }
+
+  .service-strip-intro p {
+    max-width: 520px;
+  }
+
+  .service-ledger > .service-strip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    min-height: 0 !important;
+  }
+
+  .service-note {
+    min-height: 185px;
+  }
+
+  /* Old mobile CSS forced every product to one huge column at tablet widths. */
+  .commerce-grid,
+  .product-grid.commerce-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 24px 18px !important;
+  }
+
+  .commerce-card-media {
+    aspect-ratio: 5 / 6 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .launch-copy {
+    padding: 32px 18px 30px !important;
+  }
+
+  .launch-kicker {
+    gap: 10px;
+    font-size: 7px !important;
+    letter-spacing: .17em !important;
+  }
+
+  .launch-edition {
+    margin: 24px 0 10px !important;
+    font-size: 8px !important;
+  }
+
+  .launch-copy h1 {
+    font-size: clamp(49px, 16vw, 68px) !important;
+    line-height: .9 !important;
+  }
+
+  .launch-intro {
+    margin: 24px 0 22px !important;
+    font-size: 13px !important;
+  }
+
+  .campaign-visual,
+  .launch-visual {
+    min-height: 535px !important;
+  }
+
+  .campaign-model-1 {
+    left: -20% !important;
+    bottom: 0 !important;
+    max-width: 82% !important;
+    max-height: 91% !important;
+  }
+
+  .campaign-model-2 {
+    right: -23% !important;
+    bottom: 0 !important;
+    max-width: 81% !important;
+    max-height: 92% !important;
+  }
+
+  /* Turn the desktop split purchase panel into a compact two-row mobile card. */
+  .campaign-visual .launch-product {
+    right: 12px !important;
+    bottom: 14px !important;
+    left: 12px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .campaign-visual .launch-product h2 {
+    order: -1;
+    justify-content: flex-start !important;
+    padding: 13px 13px 10px !important;
+    font-size: 18px !important;
+    text-align: left !important;
+  }
+
+  .campaign-visual .launch-product > .launch-product-action {
+    min-height: 0 !important;
+    padding: 10px 12px 12px !important;
+    background: transparent !important;
+    border-top: 1px solid rgb(255 255 255 / 12%) !important;
+    border-right: 0 !important;
+  }
+
+  .campaign-visual .launch-product-action > span {
+    display: none !important;
+  }
+
+  .campaign-visual .launch-product-buy {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .campaign-visual .launch-product-buy strong {
+    min-height: 40px !important;
+    padding: 0 11px !important;
+    font-size: 13px !important;
+  }
+
+  .campaign-visual .launch-product .launch-product-buy a {
+    width: 100% !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 12px !important;
+    justify-content: space-between !important;
+  }
+
+  .campaign-visual .launch-product .launch-product-buy a span {
+    display: inline !important;
+  }
+
+  .service-strip.service-ledger {
+    width: calc(100% - 24px) !important;
+    margin-top: 22px !important;
+    margin-bottom: 64px !important;
+  }
+
+  .service-ledger > .service-strip-intro {
+    min-height: 225px !important;
+    padding: 26px 22px !important;
+  }
+
+  .service-strip-intro h2 {
+    margin: 46px 0 16px;
+    font-size: 36px;
+  }
+
+  .service-strip-intro p {
+    font-size: 12px;
+  }
+
+  .service-ledger > .service-strip-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .service-note {
+    min-height: 0 !important;
+    gap: 24px;
+    padding: 23px 22px 22px;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgb(255 255 255 / 10%) !important;
+  }
+
+  .service-note:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .service-note-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .service-note h3 {
+    font-size: 13px;
+  }
+
+  .commerce-grid,
+  .product-grid.commerce-grid {
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+  }
+
+  .commerce-card {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .commerce-card-media {
+    aspect-ratio: 5 / 6 !important;
+  }
+
+  .commerce-card-body {
+    padding: 16px 15px 12px !important;
+  }
+
+  .commerce-card-cta {
+    min-height: 48px !important;
+    margin: 0 15px 15px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-note {
+    transition: none;
+  }
+}
