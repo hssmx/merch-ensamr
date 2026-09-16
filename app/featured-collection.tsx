@@ -19,6 +19,7 @@ export default function FeaturedCollection() {
   return (
     <section
       className={`launch-hero hero-${p.slug}`}
+      data-header-theme="dark"
       aria-label="Featured T-shirts"
       aria-roledescription="carousel"
     >
@@ -43,29 +44,23 @@ export default function FeaturedCollection() {
           <Link href="/about">Our story</Link>
         </div>
         <div className="launch-stats" aria-label="Collection details">
-          <span>
-            <strong>DROP 001</strong> the opening release
-          </span>
-          <span>
-            <strong>MORE</strong> drops in progress
-          </span>
-          <span>
-            <strong>120</strong> MAD from
-          </span>
+          <span><strong>DROP 001</strong> the opening release</span>
+          <span><strong>MORE</strong> drops in progress</span>
+          <span><strong>120</strong> MAD from</span>
         </div>
       </div>
-      <div className="launch-visual">
-        <span className="launch-ghost" aria-hidden="true">
-          0{index + 1}
-        </span>
+      <div className="launch-visual campaign-visual">
         <Image
           key={p.slug}
-          src={p.back}
-          width="1500"
-          height="1500"
+          className="launch-model-photo"
+          src={p.model}
+          fill
           priority
-          alt={`${p.name} back design`}
+          sizes="(max-width: 900px) 100vw, 55vw"
+          alt={`Models wearing ${p.name}`}
         />
+        <div className="campaign-shade" aria-hidden="true" />
+        <span className="launch-ghost" aria-hidden="true">0{index + 1}</span>
         <div className="launch-product">
           <span>FEATURED / 0{index + 1}</span>
           <h2>{p.name}</h2>
@@ -93,19 +88,13 @@ export default function FeaturedCollection() {
         <button
           className="launch-pause"
           onClick={() => setPaused((value) => !value)}
-          aria-label={
-            paused ? 'Resume featured T-shirts' : 'Pause featured T-shirts'
-          }
+          aria-label={paused ? 'Resume featured T-shirts' : 'Pause featured T-shirts'}
           aria-pressed={paused}
         >
           {paused ? <Play /> : <Pause />}
         </button>
       </div>
-      <i
-        key={p.slug}
-        className={`launch-timer ${paused ? 'paused' : ''}`}
-        aria-hidden="true"
-      />
+      <i key={p.slug} className={`launch-timer ${paused ? 'paused' : ''}`} aria-hidden="true" />
     </section>
   );
 }
