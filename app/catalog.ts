@@ -6,6 +6,7 @@ export type Product = {
   description: string;
   front: string;
   back: string;
+  model: string;
   number: string;
 };
 export const products: Product[] = [
@@ -19,6 +20,7 @@ export const products: Product[] = [
       'Black T-shirt with cream and violet artwork. A compact Mind in Motion print sits on the front, with the full composition across the back.',
     front: '/collection/mind-in-motion-front.webp',
     back: '/collection/mind-in-motion-back.webp',
+    model: '/lookbook/mind-in-motion-models.webp',
   },
   {
     slug: 'be-creative',
@@ -30,6 +32,7 @@ export const products: Product[] = [
       'Black T-shirt with a red and white ENSAM mark on the front and the Be creART(et métiers)ive artwork across the back.',
     front: '/collection/be-creative-front.webp',
     back: '/collection/be-creative-back.webp',
+    model: '/lookbook/be-creative-models.webp',
   },
   {
     slug: 'think-beyond-limits',
@@ -41,6 +44,7 @@ export const products: Product[] = [
       'White T-shirt with a compact ENSAM mark on the front and the deep-red Think Beyond Limits artwork across the back.',
     front: '/collection/think-beyond-limits-front.webp',
     back: '/collection/think-beyond-limits-back.webp',
+    model: '/lookbook/think-beyond-limits-models.webp',
   },
 ];
 export function orderMessage(product: Product, size: string, quantity: number) {
