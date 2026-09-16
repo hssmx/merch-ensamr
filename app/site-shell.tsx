@@ -53,45 +53,21 @@ export function SiteHeader() {
   const path = usePathname();
   const header = useRef<HTMLElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
-  const lastY = useRef(0);
-  const travel = useRef(0);
   const [menu, setMenu] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     let frame = 0;
-    lastY.current = window.scrollY;
 
     const sync = () => {
       frame = 0;
-      const y = window.scrollY;
-      const diff = y - lastY.current;
-
-      setScrolled(y > 24);
-
-      if (y < 110) {
-        setHidden(false);
-        travel.current = 0;
-      } else if (Math.abs(diff) > 1) {
-        if (Math.sign(diff) !== Math.sign(travel.current)) travel.current = diff;
-        else travel.current += diff;
-
-        if (travel.current > 42 && y > 220) {
-          setHidden(true);
-          travel.current = 0;
-        } else if (travel.current < -18) {
-          setHidden(false);
-          travel.current = 0;
-        }
-      }
+      setScrolled(window.scrollY > 24);
 
       const headerBottom = header.current?.getBoundingClientRect().bottom ?? 0;
       const sampleY = Math.min(window.innerHeight - 1, Math.max(1, headerBottom + 8));
       const beneath = document.elementFromPoint(window.innerWidth / 2, sampleY);
       setTheme(isDarkBackground(beneath) ? 'dark' : 'light');
-      lastY.current = y;
     };
 
     const schedule = () => {
@@ -114,7 +90,6 @@ export function SiteHeader() {
 
   useEffect(() => {
     if (!menu) return;
-    setHidden(false);
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const focusTimer = window.setTimeout(() => closeButton.current?.focus(), 20);
@@ -140,7 +115,7 @@ export function SiteHeader() {
       <header
         ref={header}
         data-theme={theme}
-        className={`shop-header ${hidden ? 'header-hidden' : ''} ${scrolled ? 'header-scrolled' : ''}`}
+        className={`shop-header ${scrolled ? 'header-scrolled' : ''}`}
       >
         <div className="header-main">
           <div className="header-left">
@@ -200,7 +175,7 @@ export function SiteHeader() {
         id="site-navigation-drawer"
         className={`nav-drawer ${menu ? 'open' : ''}`}
         aria-hidden={!menu}
-        aria-label="Mobile navigation"
+        aria-label="Site navigation"
       >
         <div className="nav-drawer-top">
           <Link href="/" className="nav-drawer-brand" onClick={() => setMenu(false)}>
