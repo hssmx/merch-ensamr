@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Pause, Play } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { products } from './catalog';
 
 const heroPairs = [
@@ -39,16 +39,14 @@ const heroPairs = [
 
 export default function FeaturedCollection() {
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (paused) return;
     const timer = window.setInterval(
       () => setIndex((i) => (i + 1) % products.length),
       6000,
     );
     return () => window.clearInterval(timer);
-  }, [paused]);
+  }, []);
 
   const p = products[index];
   const heroPair = heroPairs[index];
@@ -122,28 +120,7 @@ export default function FeaturedCollection() {
         </div>
       </div>
 
-      <div className="launch-selector" aria-label="Choose featured design">
-        {products.map((product, productIndex) => (
-          <button
-            key={product.slug}
-            className={productIndex === index ? 'active' : ''}
-            onClick={() => setIndex(productIndex)}
-            aria-label={`Show ${product.name}`}
-            aria-pressed={productIndex === index}
-          >
-            {product.name}
-          </button>
-        ))}
-        <button
-          className="launch-pause"
-          onClick={() => setPaused((value) => !value)}
-          aria-label={paused ? 'Resume featured T-shirts' : 'Pause featured T-shirts'}
-          aria-pressed={paused}
-        >
-          {paused ? <Play /> : <Pause />}
-        </button>
-      </div>
-      <i key={p.slug} className={`launch-timer ${paused ? 'paused' : ''}`} aria-hidden="true" />
+      <i key={p.slug} className="launch-timer" aria-hidden="true" />
     </section>
   );
 }
