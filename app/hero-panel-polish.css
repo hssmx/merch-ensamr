@@ -1,0 +1,157 @@
+/* Final hero purchase-panel polish.
+   Loaded after campaign-media.css so older hero link rules cannot force the CTA back into a tiny square. */
+
+.campaign-visual .launch-product {
+  grid-template-columns: minmax(250px, .92fr) minmax(300px, 1.08fr) !important;
+  background: linear-gradient(100deg, rgb(12 10 11 / 94%), rgb(14 11 12 / 84%)) !important;
+  border: 1px solid rgb(255 255 255 / 18%) !important;
+  box-shadow: 0 22px 64px rgb(0 0 0 / 38%) !important;
+}
+
+.campaign-visual .launch-product > .launch-product-action {
+  min-height: 112px !important;
+  padding: 17px 18px 16px !important;
+  background: linear-gradient(135deg, rgb(121 22 37 / 24%), transparent 72%);
+  border-right: 1px solid rgb(255 255 255 / 14%) !important;
+}
+
+.campaign-visual .launch-product-action > span {
+  color: rgb(255 255 255 / 58%) !important;
+  font-size: 8px !important;
+  font-weight: 650 !important;
+  letter-spacing: .2em !important;
+}
+
+.campaign-visual .launch-product-buy {
+  display: grid !important;
+  grid-template-columns: auto minmax(112px, 1fr);
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100%;
+}
+
+.campaign-visual .launch-product-buy strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 13px;
+  color: #fff !important;
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 13%);
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: .01em !important;
+  white-space: nowrap;
+}
+
+/* Specific + !important on purpose: older storefront rules set this anchor to 38x38 white. */
+.campaign-visual .launch-product .launch-product-buy a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  place-items: initial !important;
+  gap: 14px !important;
+  width: 100% !important;
+  height: 44px !important;
+  min-width: 0 !important;
+  min-height: 44px !important;
+  padding: 0 14px !important;
+  color: #fff !important;
+  background: #791625 !important;
+  border: 1px solid #a42c40 !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  box-shadow: inset 0 1px rgb(255 255 255 / 8%);
+  transition: background .2s ease, border-color .2s ease, transform .2s ease !important;
+}
+
+.campaign-visual .launch-product .launch-product-buy a span {
+  display: inline !important;
+}
+
+.campaign-visual .launch-product .launch-product-buy a svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  transition: transform .2s ease;
+}
+
+.campaign-visual .launch-product .launch-product-buy a:hover,
+.campaign-visual .launch-product .launch-product-buy a:focus-visible {
+  color: #fff !important;
+  background: #951e33 !important;
+  border-color: #c13a51 !important;
+  transform: translateY(-1px);
+}
+
+.campaign-visual .launch-product .launch-product-buy a:hover svg,
+.campaign-visual .launch-product .launch-product-buy a:focus-visible svg {
+  transform: translateX(3px);
+}
+
+.campaign-visual .launch-product h2 {
+  min-width: 0;
+  padding: 20px 24px !important;
+  font-size: clamp(21px, 2.05vw, 30px) !important;
+  line-height: 1.08 !important;
+}
+
+@media (max-width: 1100px) {
+  .campaign-visual .launch-product {
+    grid-template-columns: minmax(220px, .95fr) minmax(250px, 1.05fr) !important;
+  }
+
+  .campaign-visual .launch-product-buy {
+    grid-template-columns: auto minmax(100px, 1fr);
+    gap: 9px !important;
+  }
+
+  .campaign-visual .launch-product-buy strong {
+    padding-inline: 10px;
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .campaign-visual .launch-product {
+    grid-template-columns: 1fr 1.05fr !important;
+  }
+
+  .campaign-visual .launch-product > .launch-product-action {
+    min-height: 92px !important;
+    padding: 12px !important;
+  }
+
+  .campaign-visual .launch-product-buy {
+    grid-template-columns: auto 42px;
+    gap: 7px !important;
+  }
+
+  .campaign-visual .launch-product-buy strong {
+    min-height: 38px;
+    padding-inline: 9px;
+    font-size: 12px !important;
+  }
+
+  .campaign-visual .launch-product .launch-product-buy a {
+    width: 42px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  .campaign-visual .launch-product .launch-product-buy a span {
+    display: none !important;
+  }
+
+  .campaign-visual .launch-product h2 {
+    padding: 14px !important;
+    font-size: 16px !important;
+  }
+}
