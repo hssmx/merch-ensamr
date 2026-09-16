@@ -1,57 +1,49 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { products } from './catalog';
 
 export default function CollectionGrid() {
   return (
-    <div className="product-grid dossier-grid">
+    <div className="product-grid commerce-grid">
       {products.map((p) => (
         <Link
-          className="dossier-card"
+          className="commerce-card"
           href={`/collection/${p.slug}`}
           key={p.slug}
           aria-label={`Explore ${p.name}, ${p.price} MAD`}
         >
-          <span className="dossier-visual">
-            <span className="dossier-number" aria-hidden="true">
-              {p.number}
-            </span>
+          <span className="commerce-card-media">
+            <span className="commerce-card-badge">DROP 001 · {p.number}</span>
             <Image
-              className="dossier-back"
+              className="commerce-card-shirt commerce-card-back"
               src={p.back}
               alt={`${p.name}, back view`}
               width="1500"
               height="1500"
               loading="lazy"
             />
-            <span className="dossier-front-proof">
-              <Image
-                className="dossier-front"
-                src={p.front}
-                alt={`${p.name}, front view`}
-                width="1500"
-                height="1500"
-                loading="lazy"
-              />
-              <span>FRONT PROOF / 02</span>
-            </span>
-            <span className="dossier-side dossier-side-back">
-              BACK PRINT / 01
-            </span>
-            <span className="dossier-open" aria-hidden="true">
-              <ArrowUpRight />
-            </span>
+            <Image
+              className="commerce-card-shirt commerce-card-front"
+              src={p.front}
+              alt={`${p.name}, front view`}
+              width="1500"
+              height="1500"
+              loading="lazy"
+            />
           </span>
-          <span className="dossier-meta">
-            <span>
-              <small>ENSAM ORIGINAL · DROP 001</small>
+
+          <span className="commerce-card-body">
+            <span className="commerce-card-copy">
+              <small>{p.color} · FRONT & BACK PRINT</small>
               <strong>{p.name}</strong>
             </span>
-            <span className="dossier-spec">
-              <small>{p.color} · FRONT & BACK PRINT</small>
-              <strong>{p.price} MAD</strong>
-            </span>
+            <span className="commerce-card-price">{p.price} MAD</span>
+          </span>
+
+          <span className="commerce-card-cta">
+            <span>View T-shirt</span>
+            <ArrowRight size={18} />
           </span>
         </Link>
       ))}
