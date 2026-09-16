@@ -1,23 +1,30 @@
-/* Reliable wearer-media layer. The stripe/lookbook keeps its existing image elements untouched. */
+/* Dedicated generated campaign media.
+   Homepage hero, commerce/product media, and stripe lookbook intentionally use three separate sets. */
 
-.media-row-0 {
-  --media-image: url('/lookbook/mind-in-motion-models.webp');
-}
-.media-row-1 {
-  --media-image: url('/lookbook/be-creative-models.webp');
-}
-.media-row-2 {
-  --media-image: url('/lookbook/think-beyond-limits-models.webp');
-}
-.media-angle-0 { --media-x: 20%; }
-.media-angle-1 { --media-x: 50%; }
-.media-angle-2 { --media-x: 80%; }
+/* Product selector axes for the dedicated 3x3 card/product campaign sheet.
+   Columns = product. Rows = front / three-quarter / back. */
+.media-row-0 { --product-x: 0%; }
+.media-row-1 { --product-x: 50%; }
+.media-row-2 { --product-x: 100%; }
+.media-angle-0 { --product-y: 0%; }
+.media-angle-1 { --product-y: 50%; }
+.media-angle-2 { --product-y: 100%; }
 
-/* Homepage: three cropped wearer views for the selected T-shirt. */
+/* HERO — nine purpose-built photographs, three unique angles per T-shirt. */
+.media-row-0.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/13e1bc97-5287-4ee5-a49c-d124708d3c38.png'); }
+.media-row-0.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/ffd3c471-d3a7-4545-9ef0-065623e1c2f3.png'); }
+.media-row-0.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/a229507e-de51-4810-bc72-c6b084ec71e6.png'); }
+.media-row-1.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/0f85854d-1f56-4ce5-a778-8d5b030fbd83.png'); }
+.media-row-1.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/56b18f5e-a0ac-4206-9fb2-cb4f56c03e21.png'); }
+.media-row-1.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dfc3a8b1-a09c-4e98-b863-0688af94a0a2.png'); }
+.media-row-2.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/f63be067-1aa6-4156-8e87-17a4dfb1406e.png'); }
+.media-row-2.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5fd2177c-8840-4935-84c8-1ee7dffae6eb.png'); }
+.media-row-2.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/2253b0ec-7805-4559-9168-e1dcacaa0a93.png'); }
+
 .campaign-visual {
   isolation: isolate !important;
   background:
-    radial-gradient(circle at 62% 42%, rgb(129 35 55 / 30%), transparent 38%),
+    radial-gradient(circle at 62% 42%, rgb(129 35 55 / 24%), transparent 38%),
     linear-gradient(135deg, #0e0d0e 0%, #181316 54%, #28161b 100%) !important;
 }
 
@@ -32,62 +39,75 @@
 .campaign-angle {
   position: absolute;
   display: block;
-  width: 50%;
-  aspect-ratio: 4 / 3;
-  background-image: var(--media-image) !important;
+  aspect-ratio: 3 / 2;
+  background-image: var(--hero-image) !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  background-position: var(--media-x) 50% !important;
-  filter: drop-shadow(0 28px 34px rgb(0 0 0 / 30%));
+  background-position: center !important;
+  border: 1px solid rgb(255 255 255 / 14%);
+  box-shadow: 0 28px 60px rgb(0 0 0 / 36%);
   transform-origin: 50% 100%;
   animation: campaign-angle-in .58s cubic-bezier(.2,.75,.25,1) both;
 }
 
 .campaign-angle-1 {
   left: -4%;
-  bottom: 9%;
-  width: 49%;
-  transform: rotate(-2deg) scale(.98);
+  bottom: 10%;
+  width: 48%;
+  transform: rotate(-4deg);
 }
+
 .campaign-angle-2 {
-  left: 25%;
-  top: 6%;
+  left: 23%;
+  top: 7%;
   width: 56%;
   z-index: 2;
-  transform: scale(1.04);
+  transform: rotate(.8deg);
   animation-delay: 70ms;
 }
+
 .campaign-angle-3 {
-  right: -5%;
-  bottom: 7%;
-  width: 49%;
-  transform: rotate(2deg) scale(.98);
+  right: -4%;
+  bottom: 8%;
+  width: 48%;
+  transform: rotate(4deg);
   animation-delay: 140ms;
 }
 
 @keyframes campaign-angle-in {
-  from { opacity: 0; translate: 0 24px; }
-  to { opacity: 1; translate: 0 0; }
+  from { opacity: 0; translate: 0 24px; scale: .97; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
 }
 
 .campaign-shade {
   z-index: 3 !important;
+  pointer-events: none;
   background:
-    linear-gradient(180deg, transparent 35%, rgb(0 0 0 / 58%) 100%),
-    linear-gradient(90deg, rgb(0 0 0 / 13%), transparent 54%) !important;
+    linear-gradient(180deg, transparent 34%, rgb(0 0 0 / 54%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 10%), transparent 58%) !important;
 }
 .campaign-visual .launch-ghost { z-index: 4 !important; }
 .campaign-visual .launch-product { z-index: 5 !important; }
 
-/* Cards: always render a wearer photo instead of an isolated shirt. */
+/* CARDS + PRODUCT DETAIL — a second, separate 3x3 wearer campaign.
+   This is deliberately NOT the homepage hero set and NOT the stripe lookbook. */
 .commerce-card-media {
   position: relative !important;
   overflow: hidden !important;
-  aspect-ratio: 4 / 5 !important;
-  background: #ebe6df !important;
+  aspect-ratio: 3 / 2 !important;
+  background: #e8e2dc !important;
 }
 .commerce-card:nth-child(2) .commerce-card-media { background: #e5d6d9 !important; }
-.commerce-card:nth-child(3) .commerce-card-media { background: #dfd9d0 !important; }
+.commerce-card:nth-child(3) .commerce-card-media { background: #e5e1dc !important; }
+
+.commerce-card-wearer,
+.product-wear-image,
+.product-wear-thumb {
+  background-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/70d939f2-8334-4250-9e7c-c531e28fb1b6.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: 300% 300% !important;
+  background-position: var(--product-x) var(--product-y) !important;
+}
 
 .commerce-card-wearer {
   position: absolute !important;
@@ -95,73 +115,60 @@
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  background-image: var(--media-image) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: var(--media-x) 50% !important;
-  transform: scale(1.02);
+  transform: scale(1.01);
   transition: transform .45s cubic-bezier(.2,.7,.2,1);
 }
 .commerce-card:hover .commerce-card-wearer,
 .commerce-card:focus-visible .commerce-card-wearer {
-  transform: scale(1.06);
+  transform: scale(1.045);
 }
 .commerce-card-badge { z-index: 4 !important; }
 
-/* Product page: three visible worn views using the same reliable source photo. */
-.product-page .wear-track { background: #e3ded7 !important; }
+.product-page .wear-track {
+  background: #e3ded7 !important;
+}
 .product-page .wear-frame {
   position: relative !important;
-  aspect-ratio: 4 / 3 !important;
+  aspect-ratio: 3 / 2 !important;
   min-height: 0 !important;
   background: #e3ded7 !important;
 }
-
 .product-wear-image {
   position: absolute !important;
   inset: 0 !important;
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  background-image: var(--media-image) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: var(--media-x) 50% !important;
 }
-
 .product-wear-thumb {
   position: relative;
   display: block;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2 !important;
   border: 2px solid transparent;
   border-radius: 5px;
   background-color: #dfd9d1;
-  background-image: var(--media-image) !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  background-position: var(--media-x) 50% !important;
 }
 .wear-thumbnails button.active .product-wear-thumb {
   border-color: #791625 !important;
 }
 
-/* The stripe/lookbook still uses its original <img> files and is intentionally untouched. */
+/* The MEDIA COMMITTEE stripe/lookbook keeps its original /lookbook/*.webp images untouched. */
 
 @media (max-width: 900px) {
-  .campaign-visual { min-height: 560px !important; }
-  .campaign-angle-1 { width: 58%; left: -15%; bottom: 12%; }
-  .campaign-angle-2 { width: 70%; left: 15%; top: 5%; }
-  .campaign-angle-3 { width: 58%; right: -15%; bottom: 11%; }
-  .product-page .wear-frame { aspect-ratio: 4 / 3 !important; }
+  .campaign-visual { min-height: 540px !important; }
+  .campaign-angle-1 { width: 58%; left: -17%; bottom: 13%; }
+  .campaign-angle-2 { width: 68%; left: 16%; top: 8%; }
+  .campaign-angle-3 { width: 58%; right: -17%; bottom: 11%; }
+  .product-page .wear-frame { aspect-ratio: 3 / 2 !important; }
 }
 
 @media (max-width: 640px) {
-  .campaign-visual { min-height: 470px !important; }
-  .campaign-angle-1 { width: 66%; left: -25%; bottom: 12%; }
-  .campaign-angle-2 { width: 82%; left: 9%; top: 5%; }
-  .campaign-angle-3 { width: 66%; right: -25%; bottom: 11%; }
-  .commerce-card-media { aspect-ratio: 4 / 5 !important; }
+  .campaign-visual { min-height: 455px !important; }
+  .campaign-angle-1 { width: 66%; left: -28%; bottom: 14%; transform: rotate(-4deg); }
+  .campaign-angle-2 { width: 79%; left: 10.5%; top: 8%; }
+  .campaign-angle-3 { width: 66%; right: -28%; bottom: 12%; transform: rotate(4deg); }
+  .commerce-card-media { aspect-ratio: 3 / 2 !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
