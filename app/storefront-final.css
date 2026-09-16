@@ -1,9 +1,79 @@
-/* Final direction: permanent adaptive header + poster-style collection cards. */
+/* Final direction: permanent inverse-contrast header + clean commerce cards. */
 
-/* Header is always present. The menu trigger belongs to desktop and mobile. */
+/* ---------- Header ---------- */
 .shop-header,
 .shop-header.header-hidden {
   transform: none !important;
+}
+
+/* data-theme describes the section beneath the header.
+   We deliberately render the header in the opposite tone for contrast. */
+.shop-header[data-theme='dark'] {
+  color: var(--lux-ink) !important;
+  background: rgb(251 250 247 / 96%) !important;
+  border-bottom-color: rgb(13 12 12 / 12%) !important;
+  box-shadow: 0 10px 34px rgb(13 12 12 / 7%) !important;
+}
+
+.shop-header[data-theme='dark'] .brand-lockup strong,
+.shop-header[data-theme='dark'] .header-instagram,
+.shop-header[data-theme='dark'] .header-contact,
+.shop-header[data-theme='dark'] .desktop-navigation a,
+.shop-header[data-theme='dark'] .mobile-menu {
+  color: var(--lux-ink) !important;
+}
+
+.shop-header[data-theme='dark'] .brand-lockup i {
+  color: var(--lux-paper) !important;
+  background: var(--lux-wine) !important;
+}
+
+.shop-header[data-theme='dark'] .header-contact small {
+  color: #736c65 !important;
+}
+
+.shop-header[data-theme='dark'] .mobile-menu {
+  border-color: rgb(13 12 12 / 26%) !important;
+}
+
+.shop-header[data-theme='light'] {
+  color: var(--lux-paper) !important;
+  background: rgb(13 12 12 / 95%) !important;
+  border-bottom-color: rgb(255 255 255 / 13%) !important;
+  box-shadow: 0 10px 34px rgb(0 0 0 / 19%) !important;
+}
+
+.shop-header[data-theme='light'] .brand-lockup strong,
+.shop-header[data-theme='light'] .header-instagram,
+.shop-header[data-theme='light'] .header-contact,
+.shop-header[data-theme='light'] .desktop-navigation a,
+.shop-header[data-theme='light'] .mobile-menu {
+  color: var(--lux-paper) !important;
+}
+
+.shop-header[data-theme='light'] .brand-lockup i {
+  color: var(--lux-ink) !important;
+  background: #e9e1d7 !important;
+}
+
+.shop-header[data-theme='light'] .header-contact small {
+  color: #aaa29b !important;
+}
+
+.shop-header[data-theme='light'] .mobile-menu {
+  border-color: rgb(255 255 255 / 36%) !important;
+}
+
+.shop-header[data-theme='light'] .desktop-navigation a[aria-current='page'],
+.shop-header[data-theme='light'] .header-contact svg,
+.shop-header[data-theme='dark'] .desktop-navigation a[aria-current='page'],
+.shop-header[data-theme='dark'] .header-contact svg {
+  color: #d77486 !important;
+}
+
+.shop-header[data-theme='light'] .desktop-navigation a::after,
+.shop-header[data-theme='dark'] .desktop-navigation a::after {
+  background: #d77486 !important;
 }
 
 .mobile-menu {
@@ -12,21 +82,11 @@
   height: 42px !important;
   place-items: center;
   padding: 0 !important;
-  color: currentColor !important;
   background: transparent !important;
   border: 1px solid currentColor !important;
   border-radius: 999px !important;
-  opacity: 0.92;
-}
-
-.shop-header[data-theme='dark'] .mobile-menu {
-  color: var(--lux-paper) !important;
-  border-color: rgb(255 255 255 / 35%) !important;
-}
-
-.shop-header[data-theme='light'] .mobile-menu {
-  color: var(--lux-ink) !important;
-  border-color: rgb(13 12 12 / 25%) !important;
+  opacity: 0.94;
+  transition: opacity 160ms ease, transform 160ms ease, border-color 160ms ease;
 }
 
 .header-left {
@@ -42,224 +102,185 @@
   }
 }
 
-/* Product cards: one poster, one message. No miniature proof card or technical clutter. */
-.dossier-grid {
+/* ---------- Product cards ---------- */
+.commerce-grid {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: clamp(14px, 1.6vw, 24px) !important;
+  gap: clamp(18px, 2vw, 28px) !important;
   align-items: stretch !important;
 }
 
-.dossier-card,
-.dossier-card:nth-child(1),
-.dossier-card:nth-child(2),
-.dossier-card:nth-child(3) {
-  position: relative;
-  grid-column: auto !important;
-  width: 100% !important;
-  margin: 0 !important;
-  overflow: visible !important;
+.commerce-card {
+  display: flex !important;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
   color: var(--lux-ink) !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
+  background: #fffdfa !important;
+  border: 1px solid rgb(13 12 12 / 10%) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 28px rgb(13 12 12 / 5%);
   transform: none !important;
+  transition:
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 260ms ease,
+    border-color 220ms ease;
 }
 
-.dossier-visual {
-  position: relative !important;
-  display: block !important;
-  width: 100% !important;
-  overflow: hidden !important;
-  aspect-ratio: 4 / 5 !important;
-  border: 0 !important;
+.commerce-card-media {
+  position: relative;
+  display: block;
+  margin: 14px 14px 0;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background:
+    radial-gradient(circle at 50% 42%, rgb(255 255 255 / 80%), transparent 52%),
+    #e7e1da;
+  border-radius: 15px;
   isolation: isolate;
 }
 
-.dossier-card:nth-child(1) .dossier-visual {
-  background: #e8e0d5 !important;
+.commerce-card:nth-child(2) .commerce-card-media {
+  background:
+    radial-gradient(circle at 50% 42%, rgb(255 255 255 / 52%), transparent 52%),
+    #d7c2c8;
 }
 
-.dossier-card:nth-child(2) .dossier-visual {
-  background: #c8afb7 !important;
+.commerce-card:nth-child(3) .commerce-card-media {
+  background:
+    radial-gradient(circle at 50% 42%, rgb(255 255 255 / 20%), transparent 48%),
+    #242221;
 }
 
-.dossier-card:nth-child(3) .dossier-visual {
-  background: #191817 !important;
-}
-
-.dossier-visual::before {
+.commerce-card-badge {
   position: absolute;
-  inset: auto auto -0.08em 0.02em;
-  z-index: 0;
-  content: attr(data-card-number);
-  color: rgb(255 255 255 / 18%);
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: clamp(96px, 11vw, 176px);
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  padding: 7px 9px 6px;
+  color: var(--lux-paper);
+  background: var(--lux-ink);
+  border-radius: 999px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 8px;
   font-weight: 700;
-  line-height: 0.72;
-  letter-spacing: -0.08em;
-  pointer-events: none;
+  line-height: 1;
+  letter-spacing: 0.12em;
 }
 
-/* Existing number becomes the oversized poster numeral. */
-.dossier-number {
+.commerce-card-shirt {
   position: absolute !important;
-  top: auto !important;
-  right: auto !important;
-  bottom: -0.08em !important;
-  left: 0.03em !important;
-  z-index: 0 !important;
-  display: block !important;
-  width: auto !important;
-  height: auto !important;
-  padding: 0 !important;
-  color: rgb(255 255 255 / 18%) !important;
-  background: transparent !important;
-  border: 0 !important;
-  backdrop-filter: none !important;
-  font-family: 'Josefin Sans', sans-serif !important;
-  font-size: clamp(96px, 11vw, 176px) !important;
-  font-weight: 700 !important;
-  line-height: 0.72 !important;
-  letter-spacing: -0.08em !important;
-  -webkit-text-stroke: 0 !important;
-}
-
-.dossier-back {
-  position: absolute !important;
-  inset: 7% !important;
-  z-index: 2 !important;
-  width: 86% !important;
-  height: 86% !important;
+  inset: 5% !important;
+  width: 90% !important;
+  height: 90% !important;
   object-fit: contain !important;
-  filter: drop-shadow(0 30px 34px rgb(0 0 0 / 15%));
-  opacity: 1;
-  transform: scale(1) rotate(0deg) !important;
+  filter: drop-shadow(0 25px 30px rgb(13 12 12 / 13%));
   transition:
     opacity 260ms ease,
-    transform 520ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
-/* The existing front-proof markup becomes a full-card alternate view. */
-.dossier-front-proof {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 3 !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
+.commerce-card-back {
+  z-index: 2;
+  opacity: 1;
+}
+
+.commerce-card-front {
+  z-index: 3;
   opacity: 0;
-  pointer-events: none;
-  transform: none !important;
-  transition: opacity 260ms ease !important;
+  transform: scale(0.97) !important;
 }
 
-.dossier-front-proof img,
-.dossier-front {
-  position: absolute !important;
-  inset: 7% !important;
-  width: 86% !important;
-  height: 86% !important;
-  object-fit: contain !important;
-  filter: drop-shadow(0 30px 34px rgb(0 0 0 / 15%));
-  transform: none !important;
+.commerce-card-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+  padding: 20px 18px 18px;
 }
 
-.dossier-front-proof > span,
-.dossier-side,
-.dossier-side-back,
-.dossier-open {
-  display: none !important;
+.commerce-card-copy {
+  min-width: 0;
 }
 
-.dossier-meta {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  gap: 18px !important;
-  align-items: center !important;
-  padding: 14px 2px 0 !important;
-  background: transparent !important;
-  border: 0 !important;
+.commerce-card-copy small {
+  display: block;
+  margin-bottom: 7px;
+  color: #7f7770;
+  font-family: 'Outfit', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
 }
 
-.dossier-meta small,
-.dossier-spec small {
-  display: none !important;
+.commerce-card-copy strong {
+  display: block;
+  color: var(--lux-ink);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: clamp(20px, 1.55vw, 25px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
 }
 
-.dossier-meta strong {
-  display: block !important;
-  color: var(--lux-ink) !important;
-  font-family: 'Josefin Sans', sans-serif !important;
-  font-size: clamp(18px, 1.4vw, 23px) !important;
-  font-weight: 600 !important;
-  line-height: 1 !important;
-  letter-spacing: -0.035em !important;
-}
-
-.dossier-spec {
-  text-align: right !important;
-}
-
-.dossier-spec strong {
-  color: var(--lux-wine) !important;
-  font-family: 'Outfit', sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.02em !important;
+.commerce-card-price {
+  color: var(--lux-wine);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
   white-space: nowrap;
 }
 
+.commerce-card-cta {
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: auto 14px 14px;
+  padding: 0 18px;
+  color: var(--lux-paper);
+  background: var(--lux-ink);
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 180ms ease, color 180ms ease;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .dossier-card:hover,
-  .dossier-card:focus-visible {
-    transform: none !important;
-    box-shadow: none !important;
+  .commerce-card:hover,
+  .commerce-card:focus-visible {
+    transform: translateY(-4px) !important;
+    border-color: rgb(121 22 37 / 28%) !important;
+    box-shadow: 0 20px 48px rgb(13 12 12 / 10%);
   }
 
-  .dossier-card:hover .dossier-back,
-  .dossier-card:focus-visible .dossier-back {
+  .commerce-card:hover .commerce-card-back,
+  .commerce-card:focus-visible .commerce-card-back {
     opacity: 0;
-    transform: scale(0.96) rotate(-1deg) !important;
+    transform: scale(0.97) !important;
   }
 
-  .dossier-card:hover .dossier-front-proof,
-  .dossier-card:focus-visible .dossier-front-proof {
+  .commerce-card:hover .commerce-card-front,
+  .commerce-card:focus-visible .commerce-card-front {
     opacity: 1;
+    transform: scale(1) !important;
   }
 
-  .dossier-card:hover .dossier-visual,
-  .dossier-card:focus-visible .dossier-visual {
-    outline: 1px solid rgb(121 22 37 / 34%);
-    outline-offset: 4px;
+  .commerce-card:hover .commerce-card-cta,
+  .commerce-card:focus-visible .commerce-card-cta {
+    background: var(--lux-wine);
   }
 }
 
 @media (max-width: 900px) {
-  .dossier-grid {
-    grid-template-columns: 1fr !important;
-    gap: 34px !important;
-  }
-
-  .dossier-visual {
-    aspect-ratio: 5 / 6 !important;
-  }
-
-  .dossier-number {
-    font-size: clamp(110px, 36vw, 168px) !important;
-  }
-
-  .dossier-meta {
-    padding-top: 12px !important;
-  }
-
-  .dossier-meta strong {
-    font-size: 21px !important;
+  .commerce-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px !important;
   }
 }
 
@@ -279,11 +300,31 @@
     height: 39px !important;
   }
 
-  .dossier-grid {
-    gap: 30px !important;
+  .commerce-grid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
   }
 
-  .dossier-meta {
-    gap: 12px !important;
+  .commerce-card {
+    border-radius: 17px !important;
+  }
+
+  .commerce-card-media {
+    margin: 11px 11px 0;
+    border-radius: 13px;
+  }
+
+  .commerce-card-body {
+    padding: 17px 15px 15px;
+  }
+
+  .commerce-card-copy strong {
+    font-size: 22px;
+  }
+
+  .commerce-card-cta {
+    min-height: 48px;
+    margin: auto 11px 11px;
+    border-radius: 11px;
   }
 }
