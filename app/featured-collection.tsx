@@ -1,12 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ArrowRight, Pause, Play } from 'lucide-react';
 import { products } from './catalog';
+
+const heroAngles = ['Front', 'Three-quarter', 'Back'] as const;
+
 export default function FeaturedCollection() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+
   useEffect(() => {
     if (paused) return;
     const timer = window.setInterval(
@@ -15,7 +18,9 @@ export default function FeaturedCollection() {
     );
     return () => window.clearInterval(timer);
   }, [paused]);
+
   const p = products[index];
+
   return (
     <section
       className={`launch-hero hero-${p.slug}`}
@@ -49,16 +54,22 @@ export default function FeaturedCollection() {
           <span><strong>120</strong> MAD from</span>
         </div>
       </div>
+
       <div className="launch-visual campaign-visual">
-        <Image
+        <div
           key={p.slug}
-          className="launch-model-photo"
-          src={p.model}
-          fill
-          priority
-          sizes="(max-width: 900px) 100vw, 55vw"
-          alt={`Models wearing ${p.name}`}
-        />
+          className={`campaign-triptych media-row-${index}`}
+          aria-label={`Three worn angles of ${p.name}`}
+        >
+          {heroAngles.map((angle, angleIndex) => (
+            <span
+              key={angle}
+              className={`campaign-angle campaign-angle-${angleIndex + 1} media-angle-${angleIndex}`}
+              role="img"
+              aria-label={`${p.name}, ${angle.toLowerCase()} worn view`}
+            />
+          ))}
+        </div>
         <div className="campaign-shade" aria-hidden="true" />
         <span className="launch-ghost" aria-hidden="true">0{index + 1}</span>
         <div className="launch-product">
@@ -72,6 +83,7 @@ export default function FeaturedCollection() {
           </div>
         </div>
       </div>
+
       <div className="launch-selector" aria-label="Choose featured design">
         {products.map((product, productIndex) => (
           <button
