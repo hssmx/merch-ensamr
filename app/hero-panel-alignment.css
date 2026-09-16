@@ -1,0 +1,12 @@
+/* Keeps the featured-product CTA copy and icon vertically centered.
+   Loaded after hero-panel-polish.css because its place-items shorthand resets align-items. */
+.campaign-visual .launch-product .launch-product-buy a {
+  place-items: center !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+.campaign-visual .launch-product .launch-product-buy a span,
+.campaign-visual .launch-product .launch-product-buy a svg {
+  align-self: center !important;
+}
