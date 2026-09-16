@@ -16,6 +16,17 @@ const mindInMotionHero = [
   },
 ] as const;
 
+const beCreativeHero = [
+  {
+    label: 'Front',
+    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dd029bf6-745e-42b0-8d68-2133c157e1ab.png',
+  },
+  {
+    label: 'Back',
+    src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/8e0860b6-1ff1-4d4d-9ffa-19e06e7e7cf8.png',
+  },
+] as const;
+
 export default function FeaturedCollection() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -30,7 +41,12 @@ export default function FeaturedCollection() {
   }, [paused]);
 
   const p = products[index];
-  const isMindInMotion = p.slug === 'mind-in-motion';
+  const heroPair =
+    p.slug === 'mind-in-motion'
+      ? mindInMotionHero
+      : p.slug === 'be-creative'
+        ? beCreativeHero
+        : null;
 
   return (
     <section
@@ -70,11 +86,11 @@ export default function FeaturedCollection() {
         <div
           key={p.slug}
           className={`campaign-triptych media-row-${index}`}
-          aria-label={`${isMindInMotion ? 'Two' : 'Three'} worn views of ${p.name}`}
+          aria-label={`${heroPair ? 'Two' : 'Three'} worn views of ${p.name}`}
         >
-          {isMindInMotion ? (
+          {heroPair ? (
             <div className="campaign-duo">
-              {mindInMotionHero.map((shot, shotIndex) => (
+              {heroPair.map((shot, shotIndex) => (
                 <img
                   key={shot.label}
                   className={`campaign-model campaign-model-${shotIndex + 1}`}
