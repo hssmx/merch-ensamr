@@ -1,0 +1,365 @@
+/* Authoritative final layer: user-approved direction. */
+
+/* 1. Header: always visible and inverse to the section underneath. */
+.shop-header,
+.shop-header.header-scrolled,
+.shop-header.header-hidden {
+  position: sticky !important;
+  top: 0 !important;
+  transform: none !important;
+  backdrop-filter: blur(18px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.08) !important;
+}
+
+/* `data-theme` is the sampled tone BELOW the header, so use the opposite header tone. */
+.shop-header[data-theme='dark'] {
+  color: #151313 !important;
+  background: rgb(250 248 244 / 96%) !important;
+  border-bottom: 1px solid rgb(21 19 19 / 13%) !important;
+  box-shadow: 0 10px 32px rgb(0 0 0 / 7%) !important;
+}
+
+.shop-header[data-theme='dark'] .brand-lockup strong,
+.shop-header[data-theme='dark'] .header-instagram,
+.shop-header[data-theme='dark'] .header-contact,
+.shop-header[data-theme='dark'] .desktop-navigation a,
+.shop-header[data-theme='dark'] .mobile-menu {
+  color: #151313 !important;
+}
+
+.shop-header[data-theme='dark'] .brand-lockup i {
+  color: #fff !important;
+  background: #791625 !important;
+}
+
+.shop-header[data-theme='dark'] .header-contact small {
+  color: rgb(21 19 19 / 57%) !important;
+}
+
+.shop-header[data-theme='dark'] .mobile-menu {
+  border-color: rgb(21 19 19 / 28%) !important;
+}
+
+.shop-header[data-theme='light'] {
+  color: #fff !important;
+  background: rgb(15 14 14 / 95%) !important;
+  border-bottom: 1px solid rgb(255 255 255 / 13%) !important;
+  box-shadow: 0 10px 32px rgb(0 0 0 / 18%) !important;
+}
+
+.shop-header[data-theme='light'] .brand-lockup strong,
+.shop-header[data-theme='light'] .header-instagram,
+.shop-header[data-theme='light'] .header-contact,
+.shop-header[data-theme='light'] .desktop-navigation a,
+.shop-header[data-theme='light'] .mobile-menu {
+  color: #fff !important;
+}
+
+.shop-header[data-theme='light'] .brand-lockup i {
+  color: #151313 !important;
+  background: #eee7df !important;
+}
+
+.shop-header[data-theme='light'] .header-contact small {
+  color: rgb(255 255 255 / 60%) !important;
+}
+
+.shop-header[data-theme='light'] .mobile-menu {
+  border-color: rgb(255 255 255 / 38%) !important;
+}
+
+.shop-header[data-theme='dark'] .desktop-navigation a[aria-current='page'],
+.shop-header[data-theme='dark'] .header-contact svg,
+.shop-header[data-theme='light'] .desktop-navigation a[aria-current='page'],
+.shop-header[data-theme='light'] .header-contact svg {
+  color: #d77486 !important;
+}
+
+.mobile-menu { display: grid !important; }
+
+/* 2 + 3. Commerce cards use the actual transparent shirt assets. */
+.commerce-card-shirt,
+.related-grid img,
+.order-product img,
+.photo-dialog img {
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+.commerce-card {
+  background: #fffdfa !important;
+  border-radius: 18px !important;
+}
+
+.commerce-card-media {
+  background: #eeebe6 !important;
+}
+
+.commerce-card:nth-child(2) .commerce-card-media { background: #e6d6da !important; }
+.commerce-card:nth-child(3) .commerce-card-media { background: #dcd6ce !important; }
+
+.commerce-card-shirt {
+  inset: 4% !important;
+  width: 92% !important;
+  height: 92% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 24px 28px rgb(0 0 0 / 13%));
+}
+
+.commerce-card-body {
+  padding: 18px 18px 13px !important;
+}
+
+.commerce-card-copy strong {
+  font-size: clamp(20px, 1.5vw, 24px) !important;
+}
+
+.commerce-card-cta {
+  min-height: 50px !important;
+  margin: 0 18px 18px !important;
+  border-radius: 10px !important;
+}
+
+/* 4. Homepage opening: campaign photography is the visual, not a floating product render. */
+.launch-hero {
+  background: #111 !important;
+}
+
+.campaign-visual {
+  position: relative !important;
+  min-height: clamp(570px, 70vh, 780px) !important;
+  overflow: hidden !important;
+  background: #171515 !important;
+}
+
+.campaign-visual .launch-model-photo {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: scale(1.015) !important;
+  filter: saturate(.96) contrast(1.025);
+}
+
+.hero-mind-in-motion .launch-model-photo { object-position: 50% 49% !important; }
+.hero-be-creative .launch-model-photo { object-position: 50% 43% !important; }
+.hero-think-beyond-limits .launch-model-photo { object-position: 50% 43% !important; }
+
+.campaign-shade {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 2%) 28%, rgb(0 0 0 / 64%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 14%), transparent 52%) !important;
+}
+
+.campaign-visual .launch-product {
+  z-index: 3 !important;
+  color: #fff !important;
+  background: rgb(16 14 14 / 56%) !important;
+  border: 1px solid rgb(255 255 255 / 16%) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* 5. Product detail: large wearable gallery + thumbnails + calm right purchase panel. */
+.product-page {
+  background: #f5f2ed !important;
+}
+
+.product-page > .breadcrumbs {
+  width: min(94%, 1440px) !important;
+}
+
+.product-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.3fr) minmax(350px, .7fr) !important;
+  width: min(94%, 1440px) !important;
+  max-width: 1440px !important;
+  gap: clamp(30px, 4.5vw, 72px) !important;
+  align-items: start !important;
+}
+
+.product-gallery {
+  min-width: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.wear-reel {
+  background: transparent !important;
+}
+
+.wear-track {
+  display: flex !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  scrollbar-width: none !important;
+  background: #ddd8d1 !important;
+  border-radius: 8px !important;
+}
+.wear-track::-webkit-scrollbar { display: none !important; }
+
+.wear-frame {
+  position: relative !important;
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  aspect-ratio: 4 / 5 !important;
+  overflow: hidden !important;
+  scroll-snap-align: start !important;
+  background: #ddd8d1 !important;
+}
+
+.wear-frame img {
+  object-fit: cover !important;
+}
+
+.wear-front img,
+.wear-back img {
+  transform: scale(1.42) !important;
+}
+
+.wear-view-label {
+  position: absolute !important;
+  left: 18px !important;
+  bottom: 18px !important;
+  z-index: 4 !important;
+  padding: 8px 10px !important;
+  color: #fff !important;
+  background: rgb(14 13 13 / 58%) !important;
+  border: 1px solid rgb(255 255 255 / 18%) !important;
+  border-radius: 999px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 8px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.wear-thumbnails {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+
+.wear-thumbnails button {
+  display: grid !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  color: #706964 !important;
+  background: transparent !important;
+  border: 0 !important;
+  text-align: left !important;
+}
+
+.wear-thumb-image {
+  position: relative !important;
+  display: block !important;
+  overflow: hidden !important;
+  aspect-ratio: 4 / 3 !important;
+  background: #ded9d2 !important;
+  border: 2px solid transparent !important;
+  border-radius: 5px !important;
+}
+
+.wear-thumb-image img { object-fit: cover !important; }
+.wear-thumb-image.wear-front img,
+.wear-thumb-image.wear-back img { transform: scale(1.42) !important; }
+.wear-thumbnails button.active .wear-thumb-image { border-color: #791625 !important; }
+
+.product-info {
+  position: sticky !important;
+  top: 92px !important;
+  padding: clamp(28px, 3vw, 46px) !important;
+  background: #fff !important;
+  border: 1px solid rgb(27 21 21 / 10%) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 18px 44px rgb(37 25 25 / 6%) !important;
+}
+
+.product-info h1 {
+  margin-top: 9px !important;
+  font-size: clamp(34px, 3.2vw, 54px) !important;
+  line-height: .98 !important;
+}
+
+.detail-price {
+  margin: 17px 0 !important;
+}
+
+.product-description {
+  max-width: 55ch !important;
+  color: #625b56 !important;
+  line-height: 1.65 !important;
+}
+
+.size-options label,
+.order-button,
+.quantity-input {
+  border-radius: 7px !important;
+}
+
+.order-button {
+  min-height: 54px !important;
+}
+
+@media (max-width: 900px) {
+  .campaign-visual {
+    min-height: min(72vh, 680px) !important;
+  }
+
+  .campaign-visual .launch-model-photo {
+    object-position: center center !important;
+  }
+
+  .product-layout {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 0 !important;
+  }
+
+  .product-gallery {
+    width: 100% !important;
+  }
+
+  .wear-track,
+  .wear-frame {
+    border-radius: 0 !important;
+  }
+
+  .wear-frame {
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .wear-thumbnails {
+    padding: 0 14px !important;
+  }
+
+  .wear-reel-bottom {
+    padding: 10px 14px 0 !important;
+  }
+
+  .product-info {
+    position: static !important;
+    top: auto !important;
+    margin: 22px 14px 0 !important;
+    padding: 26px 20px !important;
+    border-radius: 8px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .commerce-card-media {
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  .campaign-visual {
+    min-height: 58vh !important;
+  }
+
+  .product-info h1 {
+    font-size: clamp(31px, 11vw, 44px) !important;
+  }
+}
