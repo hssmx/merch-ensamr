@@ -29,9 +29,11 @@ export default function CollectionGrid() {
                   inset: 0,
                   width: '100%',
                   height: '100%',
-                  objectFit: 'contain',
-                  objectPosition: 'center bottom',
-                  padding: '10px 8px 0',
+                  objectFit: 'cover',
+                  objectPosition: 'center 27%',
+                  padding: 0,
+                  transform: 'scale(1.06)',
+                  transformOrigin: 'center 35%',
                 }}
               />
             ) : (
