@@ -10,10 +10,8 @@
 .media-angle-1 { --product-y: 50%; }
 .media-angle-2 { --product-y: 100%; }
 
-/* HERO — nine purpose-built photographs, three unique angles per T-shirt. */
-.media-row-0.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/13e1bc97-5287-4ee5-a49c-d124708d3c38.png'); }
-.media-row-0.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/ffd3c471-d3a7-4545-9ef0-065623e1c2f3.png'); }
-.media-row-0.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/a229507e-de51-4810-bc72-c6b084ec71e6.png'); }
+/* HERO — Mind in Motion now uses two individual transparent model files directly.
+   The remaining designs keep their existing temporary hero media until their dedicated pairs are generated. */
 .media-row-1.media-angle-0 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/0f85854d-1f56-4ce5-a778-8d5b030fbd83.png'); }
 .media-row-1.media-angle-1 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/56b18f5e-a0ac-4206-9fb2-cb4f56c03e21.png'); }
 .media-row-1.media-angle-2 { --hero-image: url('https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dfc3a8b1-a09c-4e98-b863-0688af94a0a2.png'); }
@@ -28,12 +26,41 @@
     linear-gradient(135deg, #0e0d0e 0%, #181316 54%, #28161b 100%) !important;
 }
 
-.campaign-triptych {
+.campaign-triptych,
+.campaign-duo {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+}
+
+.campaign-model {
+  position: absolute;
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: 96%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 28px 44px rgb(0 0 0 / 30%));
+  transform-origin: 50% 100%;
+  animation: campaign-angle-in .58s cubic-bezier(.2,.75,.25,1) both;
+}
+
+.campaign-model-1 {
+  left: -1%;
+  bottom: -1%;
+  max-width: 58%;
+  z-index: 1;
+}
+
+.campaign-model-2 {
+  right: -2%;
+  bottom: -1%;
+  max-width: 57%;
+  z-index: 2;
+  animation-delay: 90ms;
 }
 
 .campaign-angle {
@@ -157,6 +184,8 @@
 
 @media (max-width: 900px) {
   .campaign-visual { min-height: 540px !important; }
+  .campaign-model-1 { left: -8%; max-width: 67%; max-height: 92%; }
+  .campaign-model-2 { right: -10%; max-width: 66%; max-height: 93%; }
   .campaign-angle-1 { width: 58%; left: -17%; bottom: 13%; }
   .campaign-angle-2 { width: 68%; left: 16%; top: 8%; }
   .campaign-angle-3 { width: 58%; right: -17%; bottom: 11%; }
@@ -165,6 +194,8 @@
 
 @media (max-width: 640px) {
   .campaign-visual { min-height: 455px !important; }
+  .campaign-model-1 { left: -21%; bottom: -2%; max-width: 79%; max-height: 88%; }
+  .campaign-model-2 { right: -24%; bottom: -2%; max-width: 78%; max-height: 89%; }
   .campaign-angle-1 { width: 66%; left: -28%; bottom: 14%; transform: rotate(-4deg); }
   .campaign-angle-2 { width: 79%; left: 10.5%; top: 8%; }
   .campaign-angle-3 { width: 66%; right: -28%; bottom: 12%; transform: rotate(4deg); }
@@ -172,6 +203,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .campaign-angle { animation: none; }
+  .campaign-angle,
+  .campaign-model { animation: none; }
   .commerce-card-wearer { transition: none; }
 }
