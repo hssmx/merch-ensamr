@@ -9,6 +9,12 @@ const views = [
   { key: 'back', label: 'Back worn', angle: 2 },
 ] as const;
 
+const viewLabelBySlug: Record<string, Partial<Record<(typeof views)[number]['key'], string>>> = {
+  'be-creative': {
+    'three-quarter': 'Artwork view',
+  },
+};
+
 const rowBySlug: Record<string, number> = {
   'mind-in-motion': 0,
   'be-creative': 1,
@@ -99,6 +105,7 @@ export default function PhotoReel({
       >
         {views.map((view) => {
           const image = dedicatedImages?.[view.key];
+          const label = viewLabelBySlug[p.slug]?.[view.key] ?? view.label;
 
           return (
             <div
@@ -109,7 +116,7 @@ export default function PhotoReel({
                 <img
                   className="product-wear-photo"
                   src={image}
-                  alt={`${p.name}, ${view.label.toLowerCase()} view`}
+                  alt={`${p.name}, ${label.toLowerCase()} view`}
                   loading={view.key === 'front' ? 'eager' : 'lazy'}
                   decoding="async"
                 />
@@ -117,10 +124,10 @@ export default function PhotoReel({
                 <span
                   className={`product-wear-image media-row-${mediaRow} media-angle-${view.angle}`}
                   role="img"
-                  aria-label={`${p.name}, ${view.label.toLowerCase()} view`}
+                  aria-label={`${p.name}, ${label.toLowerCase()} view`}
                 />
               )}
-              <span className="wear-view-label">{view.label}</span>
+              <span className="wear-view-label">{label}</span>
             </div>
           );
         })}
@@ -129,6 +136,7 @@ export default function PhotoReel({
       <div className="wear-thumbnails" aria-label="Choose product photograph">
         {views.map((view, viewIndex) => {
           const image = dedicatedImages?.[view.key];
+          const label = viewLabelBySlug[p.slug]?.[view.key] ?? view.label;
 
           return (
             <button
@@ -136,7 +144,7 @@ export default function PhotoReel({
               type="button"
               className={index === viewIndex ? 'active' : ''}
               onClick={() => go(viewIndex)}
-              aria-label={`Show ${view.label.toLowerCase()} of ${p.name}`}
+              aria-label={`Show ${label.toLowerCase()} of ${p.name}`}
               aria-current={index === viewIndex ? 'true' : undefined}
             >
               {image ? (
@@ -149,7 +157,7 @@ export default function PhotoReel({
                   aria-hidden="true"
                 />
               )}
-              <small>{view.label}</small>
+              <small>{label}</small>
             </button>
           );
         })}
