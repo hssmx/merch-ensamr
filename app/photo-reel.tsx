@@ -15,6 +15,20 @@ const rowBySlug: Record<string, number> = {
   'think-beyond-limits': 2,
 };
 
+const dedicatedWearerImages: Record<
+  string,
+  Partial<Record<(typeof views)[number]['key'], string>>
+> = {
+  'mind-in-motion': {
+    front:
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5dc29100-1984-4536-835b-777648d6138d.png',
+    'three-quarter':
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png',
+    back:
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/44c838ca-bc37-4a19-a6ed-b9aba00dab36.png',
+  },
+};
+
 export default function PhotoReel({
   product: p,
   hoverTurn = false,
@@ -27,6 +41,7 @@ export default function PhotoReel({
   const drag = useRef<{ x: number; scroll: number; moved: boolean } | null>(null);
   const [index, setIndex] = useState(0);
   const mediaRow = rowBySlug[p.slug] ?? 0;
+  const dedicatedImages = dedicatedWearerImages[p.slug];
 
   function go(n: number) {
     const el = track.current;
@@ -74,35 +89,62 @@ export default function PhotoReel({
           e.currentTarget.style.scrollSnapType = '';
         }}
       >
-        {views.map((view) => (
-          <div className="reel-frame wear-frame" key={view.key}>
-            <span
-              className={`product-wear-image media-row-${mediaRow} media-angle-${view.angle}`}
-              role="img"
-              aria-label={`${p.name}, ${view.label.toLowerCase()} view`}
-            />
-            <span className="wear-view-label">{view.label}</span>
-          </div>
-        ))}
+        {views.map((view) => {
+          const image = dedicatedImages?.[view.key];
+
+          return (
+            <div
+              className={`reel-frame wear-frame wear-view-${view.key} ${image ? 'wear-frame-dedicated' : ''}`}
+              key={view.key}
+            >
+              {image ? (
+                <img
+                  className="product-wear-photo"
+                  src={image}
+                  alt={`${p.name}, ${view.label.toLowerCase()} view`}
+                  loading={view.key === 'front' ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              ) : (
+                <span
+                  className={`product-wear-image media-row-${mediaRow} media-angle-${view.angle}`}
+                  role="img"
+                  aria-label={`${p.name}, ${view.label.toLowerCase()} view`}
+                />
+              )}
+              <span className="wear-view-label">{view.label}</span>
+            </div>
+          );
+        })}
       </section>
 
       <div className="wear-thumbnails" aria-label="Choose product photograph">
-        {views.map((view, viewIndex) => (
-          <button
-            key={view.key}
-            type="button"
-            className={index === viewIndex ? 'active' : ''}
-            onClick={() => go(viewIndex)}
-            aria-label={`Show ${view.label.toLowerCase()} of ${p.name}`}
-            aria-current={index === viewIndex ? 'true' : undefined}
-          >
-            <span
-              className={`product-wear-thumb media-row-${mediaRow} media-angle-${view.angle}`}
-              aria-hidden="true"
-            />
-            <small>{view.label}</small>
-          </button>
-        ))}
+        {views.map((view, viewIndex) => {
+          const image = dedicatedImages?.[view.key];
+
+          return (
+            <button
+              key={view.key}
+              type="button"
+              className={index === viewIndex ? 'active' : ''}
+              onClick={() => go(viewIndex)}
+              aria-label={`Show ${view.label.toLowerCase()} of ${p.name}`}
+              aria-current={index === viewIndex ? 'true' : undefined}
+            >
+              {image ? (
+                <span className="product-wear-thumb product-wear-thumb-photo">
+                  <img src={image} alt="" loading="lazy" decoding="async" />
+                </span>
+              ) : (
+                <span
+                  className={`product-wear-thumb media-row-${mediaRow} media-angle-${view.angle}`}
+                  aria-hidden="true"
+                />
+              )}
+              <small>{view.label}</small>
+            </button>
+          );
+        })}
       </div>
 
       <div className="reel-bottom wear-reel-bottom">
