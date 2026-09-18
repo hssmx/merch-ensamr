@@ -27,6 +27,14 @@ const dedicatedWearerImages: Record<
     back:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/44c838ca-bc37-4a19-a6ed-b9aba00dab36.png',
   },
+  'be-creative': {
+    front:
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dd029bf6-745e-42b0-8d68-2133c157e1ab.png',
+    'three-quarter':
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/57215826-a584-4e0b-aa8b-9de69d8d68d9.png',
+    back:
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/8e0860b6-1ff1-4d4d-9ffa-19e06e7e7cf8.png',
+  },
 };
 
 export default function PhotoReel({
@@ -53,7 +61,7 @@ export default function PhotoReel({
   }
 
   return (
-    <div className={`photo-reel wear-reel ${hoverTurn ? 'hover-turn' : ''}`}>
+    <div className={`photo-reel wear-reel wear-reel-${p.slug} ${hoverTurn ? 'hover-turn' : ''}`}>
       <section
         ref={track}
         className="reel-track wear-track"
