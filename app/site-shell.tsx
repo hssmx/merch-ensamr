@@ -208,7 +208,7 @@ export function SiteHeader() {
           <p>Collection, printing and design services.</p>
         </div>
         <nav>
-          {[['/', 'Home'], ...navigation].map(([url, name], index) => (
+          {[['/', 'Home'], ...navigation, ['/account', 'Account'], ['/cart', 'Cart']].map(([url, name], index) => (
             <Link key={url} href={url} onClick={() => setMenu(false)}>
               <small>{String(index + 1).padStart(2, '0')}</small>
               <span>{name}</span>
