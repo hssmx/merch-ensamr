@@ -2,10 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   Palette,
   Shirt,
   MessageCircle,
+  Instagram,
 } from 'lucide-react';
 import FeaturedCollection from './featured-collection';
 import CollectionGrid from './collection-grid';
@@ -196,17 +198,26 @@ export default function Home() {
           </details>
         </div>
       </section>
-      <section className="instagram-band">
-        <div>
-          <span>Follow the next drop</span>
-          <h2>@merch.ensamr</h2>
+      <section className="instagram-band" aria-label="Instagram">
+        <div className="instagram-band-copy">
+          <span className="instagram-kicker">
+            <Instagram size={15} />
+            Instagram · ENSAM Rabat
+          </span>
+          <h2>See the drop in motion.</h2>
+          <p>
+            New releases, details and behind-the-scenes from
+            <strong> @merch.ensamr</strong>.
+          </p>
         </div>
         <a
+          className="instagram-band-link"
           href="https://www.instagram.com/merch.ensamr/"
           target="_blank"
           rel="noreferrer"
         >
-          Visit Instagram <ArrowRight size={18} />
+          <span>Follow @merch.ensamr</span>
+          <ArrowUpRight size={21} />
         </a>
       </section>
     </main>
