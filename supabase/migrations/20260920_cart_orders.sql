@@ -269,6 +269,9 @@ begin
 end;
 $;
 
+revoke all on function public.create_store_order(
+  text, text, text, text, text, text, jsonb, text
+) from public;
 grant execute on function public.create_store_order(
   text, text, text, text, text, text, jsonb, text
 ) to anon, authenticated;
@@ -305,6 +308,7 @@ begin
 end;
 $$;
 
+revoke all on function public.claim_guest_orders(text[]) from public;
 grant execute on function public.claim_guest_orders(text[]) to authenticated;
 
 create or replace function public.sync_order_total()
