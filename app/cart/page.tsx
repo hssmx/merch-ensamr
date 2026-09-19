@@ -118,7 +118,7 @@ export default function CartPage() {
                   order from this browser will be attached automatically once
                   you sign in.
                 </p>
-                <Link href="/account?next=/checkout">Create account / sign in</Link>
+                <Link href="/account">Create account / sign in</Link>
               </div>
             </div>
           </aside>
