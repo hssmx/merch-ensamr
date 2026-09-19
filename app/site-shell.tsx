@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Menu, ArrowUpRight, Camera, Phone, X } from 'lucide-react';
+import { useCart } from './cart/cart-provider';
+import { Menu, ArrowUpRight, Camera, Phone, ShoppingBag, UserRound, X } from 'lucide-react';
 
 const navigation = [
   ['/collection', 'Shop collection'],
@@ -51,6 +52,7 @@ function isDarkBackground(element: Element | null) {
 
 export function SiteHeader() {
   const path = usePathname();
+  const { count } = useCart();
   const header = useRef<HTMLElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const [menu, setMenu] = useState(false);
@@ -145,13 +147,23 @@ export function SiteHeader() {
           >
             <Brand />
           </Link>
-          <Link className="header-contact" href="/contact">
-            <Phone size={19} />
-            <span>
-              Order by WhatsApp
-              <small>Talk directly with the team</small>
-            </span>
-          </Link>
+          <div className="header-commerce">
+            <Link className="header-contact" href="/contact">
+              <Phone size={18} />
+              <span>
+                Need help?
+                <small>Contact the team</small>
+              </span>
+            </Link>
+            <Link className="header-account-link" href="/account" aria-label="Your account">
+              <UserRound size={19} />
+            </Link>
+            <Link className="header-cart-link" href="/cart" aria-label={`Cart with ${count} items`}>
+              <ShoppingBag size={19} />
+              <span>Cart</span>
+              <b>{count}</b>
+            </Link>
+          </div>
         </div>
         <nav className="desktop-navigation" aria-label="Main navigation">
           {navigation.map(([url, name]) => (
@@ -262,7 +274,7 @@ export function SiteFooter() {
           >
             Instagram <ArrowUpRight size={14} />
           </a>
-          <Link href="/contact">WhatsApp ordering</Link>
+          <Link href="/contact">WhatsApp support</Link>
         </div>
         <div className="footer-note">
           <span>STUDENT-LED · COMMUNITY-MADE</span>
