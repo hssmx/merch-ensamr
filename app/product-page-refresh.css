@@ -74,15 +74,11 @@
   filter: drop-shadow(0 26px 34px rgb(0 0 0 / 18%));
   transform: scale(1.015);
   transform-origin: center bottom;
+  transition: transform 320ms cubic-bezier(.2,.7,.2,1), transform-origin 120ms linear;
 }
 
-.wear-view-three-quarter .product-wear-photo {
-  object-fit: cover;
-  object-position: center 27%;
-  padding: 0;
-  filter: none;
-  transform: scale(1.025);
-  transform-origin: center 32%;
+.product-wear-image {
+  transition: transform 320ms cubic-bezier(.2,.7,.2,1), transform-origin 120ms linear;
 }
 
 .wear-view-label {
@@ -98,7 +94,7 @@
 }
 
 .product-page .wear-thumbnails {
-  grid-template-columns: repeat(3, minmax(0, 124px)) !important;
+  grid-template-columns: repeat(2, minmax(0, 124px)) !important;
   justify-content: start;
   gap: 10px !important;
   margin-top: 12px !important;
@@ -128,13 +124,6 @@
   object-position: center bottom;
   transform: scale(1.02);
   transform-origin: center bottom;
-}
-
-.wear-thumbnails button:nth-child(2) .product-wear-thumb-photo img {
-  object-fit: cover;
-  object-position: center 27%;
-  transform: scale(1.03);
-  transform-origin: center 32%;
 }
 
 .wear-thumbnails button.active .product-wear-thumb {
@@ -362,6 +351,16 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .wear-frame {
+    cursor: zoom-in;
+  }
+
+  .wear-frame:hover .product-wear-photo,
+  .wear-frame:hover .product-wear-image {
+    transform: scale(1.16) !important;
+    transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%) !important;
+  }
+
   .wear-thumbnails button:hover .product-wear-thumb {
     border-color: rgb(121 22 37 / 44%) !important;
   }
@@ -387,7 +386,7 @@
   }
 
   .product-page .wear-thumbnails {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     justify-content: stretch;
     padding: 0 14px !important;
   }
@@ -415,12 +414,6 @@
   .product-wear-photo {
     padding-top: 4px;
     transform: scale(1.035);
-  }
-
-  .wear-view-three-quarter .product-wear-photo {
-    object-position: center 28%;
-    padding: 0;
-    transform: scale(1.025);
   }
 
   .product-page .wear-thumbnails {
