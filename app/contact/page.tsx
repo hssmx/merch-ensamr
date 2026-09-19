@@ -2,6 +2,14 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Camera, MessageCircle } from 'lucide-react';
 import { shopConfig } from '../shop-config';
 import { whatsappUrl } from '../catalog';
+import { pageMetadata } from '../site-metadata';
+
+export const metadata = pageMetadata({
+  title: 'Contact & WhatsApp Orders | MERCH ENSAM-R',
+  description:
+    'Contact the MERCH ENSAM-R team directly for T-shirt orders, sizing, payment, delivery and custom merch requests.',
+  path: '/contact',
+});
 
 const hello =
   'Hi MERCH ENSAMR! I would like some help with an order or merch enquiry.';
