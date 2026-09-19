@@ -1,14 +1,15 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import ReviewComposer from '../review-composer';
 import { ReviewsArchive } from '../reviews-preview';
+import { pageMetadata } from '../site-metadata';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Reviews | MERCH ENSAM-R',
   description:
     'Browse the MERCH ENSAM-R review archive and submit your own review through WhatsApp.',
-};
+  path: '/reviews',
+});
 
 export default function ReviewsPage() {
   return (
