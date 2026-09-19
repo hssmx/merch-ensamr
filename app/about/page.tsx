@@ -1,5 +1,13 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { pageMetadata } from '../site-metadata';
+
+export const metadata = pageMetadata({
+  title: 'About | MERCH ENSAM-R',
+  description:
+    'Meet MERCH ENSAM-R, the student-led label turning ENSAM Rabat culture into original pieces designed to be worn beyond campus.',
+  path: '/about',
+});
 
 export default function AboutPage() {
   return (
