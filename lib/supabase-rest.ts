@@ -9,7 +9,7 @@ import type {
 } from './order-types';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 const SESSION_KEY = 'merch-ensamr-auth-session';
 const CLAIM_KEY = 'merch-ensamr-guest-order-claims';
 
@@ -38,7 +38,7 @@ type CheckoutInput = {
 };
 
 export function isSupabaseConfigured() {
-  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+  return Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 }
 
 function authHeaders(token?: string) {
@@ -47,8 +47,8 @@ function authHeaders(token?: string) {
   }
 
   return {
-    apikey: SUPABASE_ANON_KEY,
-    Authorization: `Bearer ${token || SUPABASE_ANON_KEY}`,
+    apikey: SUPABASE_PUBLISHABLE_KEY,
+    Authorization: `Bearer ${token || SUPABASE_PUBLISHABLE_KEY}`,
     'Content-Type': 'application/json',
   };
 }
