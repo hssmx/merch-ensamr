@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SiteHeader, SiteFooter } from './site-shell';
+import { CartProvider } from './cart/cart-provider';
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_SOCIAL_IMAGE,
@@ -25,6 +26,7 @@ import './card-media-polish.css';
 import './homepage-refresh.css';
 import './service-strip-polish.css';
 import './product-page-refresh.css';
+import './cart-system.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -66,9 +68,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <CartProvider>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </CartProvider>
       </body>
     </html>
   );
