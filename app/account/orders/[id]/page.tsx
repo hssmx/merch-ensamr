@@ -85,6 +85,11 @@ export default function AccountOrderPage() {
               ))}
             </ol>
           )}
+          {order.admin_note && (
+            <div className="system-notice">
+              <strong>Team update:</strong> {order.admin_note}
+            </div>
+          )}
           <div className="payment-callout">
             <Phone size={18} />
             <div>
