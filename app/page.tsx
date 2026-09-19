@@ -7,6 +7,7 @@ import {
   Palette,
   Shirt,
   MessageCircle,
+  ShoppingBag,
 } from 'lucide-react';
 import FeaturedCollection from './featured-collection';
 import CollectionGrid from './collection-grid';
@@ -33,10 +34,10 @@ export default function Home() {
           </div>
         </article>
         <article className="service-promise">
-          <span className="service-promise-icon" aria-hidden="true"><MessageCircle /></span>
+          <span className="service-promise-icon" aria-hidden="true"><ShoppingBag /></span>
           <div>
-            <h3>Order directly</h3>
-            <p>Confirmation and payment through WhatsApp.</p>
+            <h3>Cart & checkout</h3>
+            <p>Order as a guest or sign in to keep track of every detail.</p>
           </div>
         </article>
         <article className="service-promise">
@@ -167,16 +168,18 @@ export default function Home() {
           <details>
             <summary>How will I place an order?</summary>
             <p>
-              Open a T-shirt, choose your size and quantity, then review the
-              prepared order, then send it directly to one of our available
-              WhatsApp contacts.
+              Open a T-shirt, choose your size and quantity, add it to your cart
+              and check out. Guest checkout is available, but we recommend an
+              account so you can track status and keep your receipts.
             </p>
           </details>
           <details>
             <summary>How do payment and delivery work?</summary>
             <p>
-              Payment instructions, delivery or collection arrangements, and any
-              delivery fee are confirmed directly with the team on WhatsApp.
+              Website admins review each order manually. Expect a call from our
+              team to confirm availability, delivery or collection and whether
+              you will pay by cash or bank transfer. Payment is required before
+              the order is confirmed.
             </p>
           </details>
           <details>
