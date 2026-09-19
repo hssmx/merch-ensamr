@@ -196,36 +196,6 @@ export default function Home() {
           </details>
         </div>
       </section>
-      <section className="home-story-contact" aria-label="About and contact">
-        <article className="home-story-card">
-          <span>BEHIND THE DROP</span>
-          <p className="home-card-word" aria-hidden="true">
-            OURS
-          </p>
-          <h2>Born inside ENSAM Rabat.</h2>
-          <p>
-            A student-led collection by the Media Committee, shaped around the
-            ideas, energy and identity of our community.
-          </p>
-          <Link href="/about">
-            Meet the project <ArrowRight size={17} />
-          </Link>
-        </article>
-        <article className="home-contact-card">
-          <span>ORDER / ASK / CREATE</span>
-          <p className="home-card-word" aria-hidden="true">
-            TALK
-          </p>
-          <h2>Talk directly with us.</h2>
-          <p>
-            Reach our team on WhatsApp for orders, product questions, custom
-            printing and design enquiries.
-          </p>
-          <Link href="/contact">
-            Choose a contact <ArrowRight size={17} />
-          </Link>
-        </article>
-      </section>
       <section className="instagram-band">
         <div>
           <span>Follow the next drop</span>
