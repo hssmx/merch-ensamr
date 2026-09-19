@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Lightbulb, PenTool, MessageCircle } from 'lucide-react';
-export const metadata = { title: 'Design services | The ENSAM Merch Shop' };
+import { pageMetadata } from '../site-metadata';
+export const metadata = pageMetadata({
+  title: 'Design services | MERCH ENSAM-R',
+  description:
+    'Work with the MERCH ENSAM-R team on original artwork for a custom T-shirt, from idea and references to a confirmed final design.',
+  path: '/made-for-you',
+});
 export default function Page() {
   return (
     <main id="main">
