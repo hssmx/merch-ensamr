@@ -255,6 +255,8 @@ export function SiteFooter() {
         <div>
           <h2>Explore</h2>
           <Link href="/collection">Shop collection</Link>
+          <Link href="/cart">Cart</Link>
+          <Link href="/account">My account</Link>
           <Link href="/reviews">Reviews</Link>
           <Link href="/#faq">FAQ</Link>
           <Link href="/about">About us</Link>
