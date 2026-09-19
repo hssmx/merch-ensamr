@@ -533,9 +533,20 @@ body::before {
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
-.instagram-kicker svg {
+.instagram-mark {
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
   flex: 0 0 auto;
-  stroke-width: 1.7;
+  border: 1px solid rgb(255 255 255 / 38%);
+  border-radius: 50%;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 .instagram-band h2 {
   max-width: 700px;
