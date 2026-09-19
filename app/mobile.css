@@ -779,13 +779,13 @@
     font-size: clamp(78px, 27vw, 118px) !important;
   }
 
-  .footer-statement > div {
+  .footer-slogan {
     min-height: 0 !important;
-    padding: 48px 20px !important;
+    padding: 38px 20px 46px !important;
   }
 
-  .footer-statement h2 {
-    font-size: clamp(42px, 12vw, 56px) !important;
+  .footer-slogan p {
+    font-size: clamp(36px, 11vw, 50px) !important;
   }
 
   .footer-grid {
