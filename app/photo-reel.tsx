@@ -41,6 +41,14 @@ const dedicatedWearerImages: Record<
     back:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/8e0860b6-1ff1-4d4d-9ffa-19e06e7e7cf8.png',
   },
+  'think-beyond-limits': {
+    front:
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/04fa18a1-de68-4574-90be-618d8982b033.png',
+    'three-quarter':
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/119f56a5-586a-4954-bbc7-5f60c6e4e93d.png',
+    back:
+      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/ef319207-2e14-412e-85e2-d147abb2e574.png',
+  },
 };
 
 export default function PhotoReel({
