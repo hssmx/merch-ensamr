@@ -841,8 +841,36 @@
 }
 
 @media (max-width: 1000px) {
-  .header-contact {
+  .header-commerce {
+    width: 44px;
+    justify-self: end;
+  }
+
+  .header-contact,
+  .header-account-link {
     display: none !important;
+  }
+
+  .header-cart-link {
+    position: relative;
+    width: 44px;
+    min-height: 44px;
+    gap: 0;
+    padding: 0;
+    border-radius: 999px;
+  }
+
+  .header-cart-link > span {
+    display: none;
+  }
+
+  .header-cart-link b {
+    position: absolute;
+    top: -2px;
+    right: -3px;
+    min-width: 18px;
+    height: 18px;
+    font-size: 7px;
   }
 
   .cart-layout,
