@@ -8,13 +8,15 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { shopConfig } from '../shop-config';
+import { pageMetadata } from '../site-metadata';
 import './custom-print.css';
 
-export const metadata = {
-  title: 'Print your design | MERCH ENSAM RABAT',
+export const metadata = pageMetadata({
+  title: 'Print your design | MERCH ENSAM-R',
   description:
-    'Send your artwork to MERCH ENSAM RABAT and have it printed on a T-shirt.',
-};
+    'Send your artwork to MERCH ENSAM-R and have it printed on a T-shirt with placement and pricing confirmed by our team.',
+  path: '/design-studio',
+});
 
 const message = encodeURIComponent(
   'Hello! I would like to print my own design on a T-shirt.',
