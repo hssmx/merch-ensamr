@@ -231,16 +231,12 @@ export function SiteFooter() {
           <strong>MERCH</strong>
           <span>ENSAM-R</span>
         </Link>
-        <div>
-          <span>THE LABEL FROM ENSAM RABAT</span>
-          <h2>
+        <div className="footer-slogan">
+          <p>
             Wear the idea.
             <br />
             Carry the story.
-          </h2>
-          <Link href="/collection">
-            Explore the collection <ArrowUpRight size={18} />
-          </Link>
+          </p>
         </div>
       </div>
       <div className="footer-grid">
