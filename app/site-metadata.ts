@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const SITE_URL = 'https://merch-ensamr.store';
 export const SITE_NAME = 'MERCH ENSAM-R';
 export const DEFAULT_DESCRIPTION =
-  'Discover original ENSAM Rabat T-shirts, custom printing and design services. Orders and payment are handled directly through WhatsApp.';
+  'Discover original ENSAM Rabat T-shirts, custom printing and design services. Shop by cart, track account orders, and get manual confirmation from our team.';
 export const DEFAULT_SOCIAL_IMAGE =
   'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5dc29100-1984-4536-835b-777648d6138d.png';
 
