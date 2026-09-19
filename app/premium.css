@@ -486,26 +486,114 @@ body::before {
   font-weight: 500;
 }
 .instagram-band {
-  padding-top: 58px;
-  padding-bottom: 58px;
-  background: var(--lux-wine);
+  position: relative;
+  display: flex;
+  min-height: 260px;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(40px, 7vw, 110px);
+  padding: clamp(54px, 6vw, 82px) max(5%, calc((100% - 1320px) / 2));
+  overflow: hidden;
+  color: #f8f2ed;
+  background:
+    linear-gradient(115deg, rgb(255 255 255 / 5%), transparent 42%),
+    var(--lux-wine);
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
 }
-.instagram-band span {
-  color: #d7bfc1;
-  font-family: 'Outfit', sans-serif;
-  font-size: 8px;
-  letter-spacing: 0.3em;
+.instagram-band::after {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.35em;
+  z-index: 0;
+  content: '@';
+  color: rgb(255 255 255 / 5%);
+  font-family: 'Anton', Impact, sans-serif;
+  font-size: clamp(190px, 22vw, 340px);
+  font-weight: 400;
+  line-height: 1;
+  pointer-events: none;
 }
-.instagram-band h2 {
-  font-size: 42px;
-  font-weight: 500;
-  letter-spacing: -0.04em;
+.instagram-band-copy,
+.instagram-band-link {
+  position: relative;
+  z-index: 1;
 }
-.instagram-band a {
+.instagram-band-copy {
+  max-width: 760px;
+}
+.instagram-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #e5c4ca;
   font-family: 'Outfit', sans-serif;
   font-size: 9px;
-  letter-spacing: 0.15em;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
+}
+.instagram-kicker svg {
+  flex: 0 0 auto;
+  stroke-width: 1.7;
+}
+.instagram-band h2 {
+  max-width: 700px;
+  margin: 15px 0 16px;
+  color: #fff9f4;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: clamp(46px, 5.7vw, 82px);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+.instagram-band-copy > p {
+  max-width: 590px;
+  margin: 0;
+  color: #e7cfd3;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.instagram-band-copy > p strong {
+  color: #fff;
+  font-weight: 600;
+}
+.instagram-band-link {
+  display: inline-flex;
+  min-width: 255px;
+  min-height: 58px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  padding: 0 18px 0 20px;
+  color: #fff;
+  border: 1px solid rgb(255 255 255 / 40%);
+  font-family: 'Outfit', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    color 0.25s,
+    background 0.25s,
+    border-color 0.25s,
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.instagram-band-link svg {
+  flex: 0 0 auto;
+  transition: transform 0.25s;
+}
+.instagram-band-link:hover,
+.instagram-band-link:focus-visible {
+  color: var(--lux-wine);
+  background: #fff9f4;
+  border-color: #fff9f4;
+  transform: translateY(-2px);
+}
+.instagram-band-link:hover svg,
+.instagram-band-link:focus-visible svg {
+  transform: translate(2px, -2px);
 }
 
 .catalog-heading {
