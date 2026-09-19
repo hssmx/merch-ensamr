@@ -85,7 +85,7 @@ export function downloadOrderReceipt(order: StoredOrder) {
     pdfText(`${order.total} MAD`, 454, totalsY - 79, 16, 'F2', '1 1 1'),
     pdfText(short(payment, 64), 42, 76, 9, 'F2', '0.47 0.086 0.145'),
     pdfText(
-      'Orders are confirmed manually by the MERCH ENSAM-R team.',
+      'Expect a team call. Cash or bank payment is required before confirmation.',
       42,
       57,
       8,
