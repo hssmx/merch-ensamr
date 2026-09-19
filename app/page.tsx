@@ -7,7 +7,6 @@ import {
   Palette,
   Shirt,
   MessageCircle,
-  Instagram,
 } from 'lucide-react';
 import FeaturedCollection from './featured-collection';
 import CollectionGrid from './collection-grid';
@@ -201,7 +200,7 @@ export default function Home() {
       <section className="instagram-band" aria-label="Instagram">
         <div className="instagram-band-copy">
           <span className="instagram-kicker">
-            <Instagram size={15} />
+            <i className="instagram-mark" aria-hidden="true">@</i>
             Instagram · ENSAM Rabat
           </span>
           <h2>See the drop in motion.</h2>
