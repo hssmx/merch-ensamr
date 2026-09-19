@@ -12,10 +12,23 @@ const cardImages: Record<string, string> = {
     'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/119f56a5-586a-4954-bbc7-5f60c6e4e93d.png',
 };
 
-export default function CollectionGrid() {
+type CollectionGridProps = {
+  excludeSlug?: string;
+  className?: string;
+};
+
+export default function CollectionGrid({
+  excludeSlug,
+  className = '',
+}: CollectionGridProps = {}) {
+  const visibleProducts = products.filter((p) => p.slug !== excludeSlug);
+
   return (
-    <div className="product-grid commerce-grid">
-      {products.map((p, productIndex) => (
+    <div className={`product-grid commerce-grid ${className}`.trim()}>
+      {visibleProducts.map((p) => {
+        const productIndex = products.findIndex((item) => item.slug === p.slug);
+
+        return (
         <Link
           className="commerce-card"
           href={`/collection/${p.slug}`}
@@ -74,7 +87,8 @@ export default function CollectionGrid() {
             <ArrowRight size={18} />
           </span>
         </Link>
-      ))}
+        );
+      })}
     </div>
   );
 }
