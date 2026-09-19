@@ -134,7 +134,7 @@ create or replace function public.create_store_order(
   p_items jsonb,
   p_claim_token text default null
 )
-returns public.orders
+returns jsonb
 language plpgsql
 security definer
 set search_path = public
@@ -265,9 +265,9 @@ begin
   )
   returning * into v_order;
 
-  return v_order;
+  return to_jsonb(v_order);
 end;
-$$;
+$;
 
 grant execute on function public.create_store_order(
   text, text, text, text, text, text, jsonb, text
