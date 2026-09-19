@@ -1,5 +1,11 @@
 import type { Metadata } from 'next';
 import { SiteHeader, SiteFooter } from './site-shell';
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_SOCIAL_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+} from './site-metadata';
 import './globals.css';
 import './storefront.css';
 import './bloxic-port.css';
@@ -19,12 +25,41 @@ import './card-media-polish.css';
 import './homepage-refresh.css';
 import './service-strip-polish.css';
 import './product-page-refresh.css';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'The ENSAM Merch Shop | Original T-shirts & Custom Designs',
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: {
+    canonical: SITE_URL,
+  },
   icons: { icon: '/favicon.svg' },
-  description:
-    'Discover ENSAM Rabat merch, print your own artwork, or commission a unique design. Orders and payment through WhatsApp.',
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    title: 'The ENSAM Merch Shop | Original T-shirts & Custom Designs',
+    description: DEFAULT_DESCRIPTION,
+    images: [
+      {
+        url: DEFAULT_SOCIAL_IMAGE,
+        alt: 'MERCH ENSAM-R',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The ENSAM Merch Shop | Original T-shirts & Custom Designs',
+    description: DEFAULT_DESCRIPTION,
+    images: [DEFAULT_SOCIAL_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
