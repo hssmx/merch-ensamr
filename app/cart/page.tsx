@@ -1,0 +1,129 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowLeft, ArrowRight, Minus, Plus, Trash2, UserRound } from 'lucide-react';
+import { useCart } from './cart-provider';
+
+export default function CartPage() {
+  const { items, subtotal, setQuantity, removeItem } = useCart();
+
+  return (
+    <main id="main" className="cart-page commerce-flow-page">
+      <header className="commerce-flow-head">
+        <Link href="/collection" className="page-back">
+          <ArrowLeft size={16} /> Keep shopping
+        </Link>
+        <span>CART · MERCH ENSAM-R</span>
+        <h1>Your cart.</h1>
+        <p>
+          Checkout works without an account. We still recommend creating one so
+          you can follow confirmation, payment and fulfilment from your account.
+        </p>
+      </header>
+
+      {!items.length ? (
+        <section className="empty-cart">
+          <h2>Your cart is empty.</h2>
+          <p>Choose a design, size and quantity from the collection.</p>
+          <Link className="primary" href="/collection">
+            Shop collection <ArrowRight size={18} />
+          </Link>
+        </section>
+      ) : (
+        <div className="cart-layout">
+          <section className="cart-items" aria-label="Cart items">
+            {items.map((item) => (
+              <article className="cart-line" key={item.key}>
+                <div className="cart-line-image">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    width={260}
+                    height={260}
+                  />
+                </div>
+                <div className="cart-line-copy">
+                  <small>{item.color} · SIZE {item.size}</small>
+                  <h2>{item.name}</h2>
+                  <p>{item.unitPrice} MAD each</p>
+                  <div className="cart-line-actions">
+                    <div className="quantity-input">
+                      <button
+                        type="button"
+                        aria-label="Decrease quantity"
+                        disabled={item.quantity <= 1}
+                        onClick={() => setQuantity(item.key, item.quantity - 1)}
+                      >
+                        <Minus size={15} />
+                      </button>
+                      <input
+                        aria-label={`Quantity for ${item.name}`}
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={item.quantity}
+                        onChange={(event) =>
+                          setQuantity(item.key, Number(event.target.value) || 1)
+                        }
+                      />
+                      <button
+                        type="button"
+                        aria-label="Increase quantity"
+                        disabled={item.quantity >= 99}
+                        onClick={() => setQuantity(item.key, item.quantity + 1)}
+                      >
+                        <Plus size={15} />
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      className="cart-remove"
+                      onClick={() => removeItem(item.key)}
+                    >
+                      <Trash2 size={15} /> Remove
+                    </button>
+                  </div>
+                </div>
+                <strong>{item.unitPrice * item.quantity} MAD</strong>
+              </article>
+            ))}
+          </section>
+
+          <aside className="cart-summary">
+            <span>ORDER SUMMARY</span>
+            <dl>
+              <div>
+                <dt>Items subtotal</dt>
+                <dd>{subtotal} MAD</dd>
+              </div>
+              <div>
+                <dt>Delivery</dt>
+                <dd>Confirmed by team</dd>
+              </div>
+              <div className="cart-total">
+                <dt>Current total</dt>
+                <dd>{subtotal} MAD</dd>
+              </div>
+            </dl>
+            <Link className="primary cart-checkout" href="/checkout">
+              Continue to checkout <ArrowRight size={18} />
+            </Link>
+            <div className="account-nudge">
+              <UserRound size={20} />
+              <div>
+                <strong>Want order tracking?</strong>
+                <p>
+                  Create an account before or after checkout. Your latest guest
+                  order from this browser will be attached automatically once
+                  you sign in.
+                </p>
+                <Link href="/account?next=/checkout">Create account / sign in</Link>
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
+    </main>
+  );
+}
