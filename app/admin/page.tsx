@@ -102,6 +102,15 @@ export default function AdminPage() {
               </div>
             </header>
 
+            <div className="admin-customer-details">
+              <p>
+                <strong>{order.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}</strong>
+                {order.address && <span>{order.address}</span>}
+              </p>
+              {order.notes && <p><strong>Customer note</strong><span>{order.notes}</span></p>}
+              {order.admin_note && <p><strong>Current admin note</strong><span>{order.admin_note}</span></p>}
+            </div>
+
             <div className="admin-order-items">
               {order.items.map((item) => (
                 <p key={`${item.slug}:${item.size}`}>
