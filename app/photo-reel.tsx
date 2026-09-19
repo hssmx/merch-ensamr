@@ -5,15 +5,8 @@ import type { Product } from './catalog';
 
 const views = [
   { key: 'front', label: 'Front worn', angle: 0 },
-  { key: 'three-quarter', label: 'Three-quarter', angle: 1 },
   { key: 'back', label: 'Back worn', angle: 2 },
 ] as const;
-
-const viewLabelBySlug: Record<string, Partial<Record<(typeof views)[number]['key'], string>>> = {
-  'be-creative': {
-    'three-quarter': 'Artwork view',
-  },
-};
 
 const rowBySlug: Record<string, number> = {
   'mind-in-motion': 0,
@@ -28,24 +21,18 @@ const dedicatedWearerImages: Record<
   'mind-in-motion': {
     front:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/5dc29100-1984-4536-835b-777648d6138d.png',
-    'three-quarter':
-      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png',
     back:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/44c838ca-bc37-4a19-a6ed-b9aba00dab36.png',
   },
   'be-creative': {
     front:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/dd029bf6-745e-42b0-8d68-2133c157e1ab.png',
-    'three-quarter':
-      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/57215826-a584-4e0b-aa8b-9de69d8d68d9.png',
     back:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/8e0860b6-1ff1-4d4d-9ffa-19e06e7e7cf8.png',
   },
   'think-beyond-limits': {
     front:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/04fa18a1-de68-4574-90be-618d8982b033.png',
-    'three-quarter':
-      'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/119f56a5-586a-4954-bbc7-5f60c6e4e93d.png',
     back:
       'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/ef319207-2e14-412e-85e2-d147abb2e574.png',
   },
@@ -113,12 +100,24 @@ export default function PhotoReel({
       >
         {views.map((view) => {
           const image = dedicatedImages?.[view.key];
-          const label = viewLabelBySlug[p.slug]?.[view.key] ?? view.label;
+          const label = view.label;
 
           return (
             <div
               className={`reel-frame wear-frame wear-view-${view.key} ${image ? 'wear-frame-dedicated' : ''}`}
               key={view.key}
+              onPointerMove={(event) => {
+                if (event.pointerType !== 'mouse') return;
+                const rect = event.currentTarget.getBoundingClientRect();
+                const x = ((event.clientX - rect.left) / rect.width) * 100;
+                const y = ((event.clientY - rect.top) / rect.height) * 100;
+                event.currentTarget.style.setProperty('--zoom-x', `${x}%`);
+                event.currentTarget.style.setProperty('--zoom-y', `${y}%`);
+              }}
+              onPointerLeave={(event) => {
+                event.currentTarget.style.removeProperty('--zoom-x');
+                event.currentTarget.style.removeProperty('--zoom-y');
+              }}
             >
               {image ? (
                 <img
@@ -144,7 +143,7 @@ export default function PhotoReel({
       <div className="wear-thumbnails" aria-label="Choose product photograph">
         {views.map((view, viewIndex) => {
           const image = dedicatedImages?.[view.key];
-          const label = viewLabelBySlug[p.slug]?.[view.key] ?? view.label;
+          const label = view.label;
 
           return (
             <button
