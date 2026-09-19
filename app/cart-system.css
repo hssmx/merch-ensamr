@@ -756,8 +756,32 @@
   font-size: 18px;
 }
 
+.admin-customer-details {
+  display: grid;
+  gap: 7px;
+  padding: 14px 0 5px;
+}
+
+.admin-customer-details p {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  color: #6c645e;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.admin-customer-details strong {
+  min-width: 92px;
+  color: #211c1c;
+  font-family: 'Outfit', sans-serif;
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
 .admin-order-items {
-  padding: 14px 0;
+  padding: 10px 0 14px;
 }
 
 .admin-order-items p {
