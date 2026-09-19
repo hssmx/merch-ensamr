@@ -448,15 +448,34 @@
   }
 
   .instagram-band {
+    min-height: 0 !important;
     align-items: flex-start !important;
     flex-direction: column;
-    gap: 28px;
-    padding: 42px 20px !important;
+    gap: 32px;
+    padding: 54px 20px 58px !important;
   }
 
-  .instagram-band a {
+  .instagram-band::after {
+    right: -20px;
+    bottom: -70px;
+    font-size: 230px;
+  }
+
+  .instagram-band h2 {
+    margin-top: 14px;
+    font-size: clamp(44px, 13vw, 60px) !important;
+    line-height: 0.94;
+  }
+
+  .instagram-band-copy > p {
+    max-width: 34rem;
+    font-size: 13px;
+  }
+
+  .instagram-band-link {
     width: 100%;
-    min-height: 48px;
+    min-width: 0;
+    min-height: 56px;
     justify-content: space-between;
   }
 
