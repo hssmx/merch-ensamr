@@ -53,17 +53,27 @@ create index if not exists orders_claim_token_hash_idx on public.orders(claim_to
 alter table public.profiles enable row level security;
 alter table public.orders enable row level security;
 
+create or replace function public.current_user_is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $
+  select coalesce(
+    (select is_admin from public.profiles where id = auth.uid()),
+    false
+  );
+$;
+
+revoke all on function public.current_user_is_admin() from public;
+grant execute on function public.current_user_is_admin() to authenticated;
+
 drop policy if exists "profiles_select_self" on public.profiles;
 create policy "profiles_select_self"
 on public.profiles for select
 to authenticated
-using (
-  id = auth.uid()
-  or exists (
-    select 1 from public.profiles admin
-    where admin.id = auth.uid() and admin.is_admin = true
-  )
-);
+using (id = auth.uid() or public.current_user_is_admin());
 
 drop policy if exists "orders_select_owner_or_admin" on public.orders;
 create policy "orders_select_owner_or_admin"
@@ -71,28 +81,15 @@ on public.orders for select
 to authenticated
 using (
   user_id = auth.uid()
-  or exists (
-    select 1 from public.profiles admin
-    where admin.id = auth.uid() and admin.is_admin = true
-  )
+  or public.current_user_is_admin()
 );
 
 drop policy if exists "orders_update_admin" on public.orders;
 create policy "orders_update_admin"
 on public.orders for update
 to authenticated
-using (
-  exists (
-    select 1 from public.profiles admin
-    where admin.id = auth.uid() and admin.is_admin = true
-  )
-)
-with check (
-  exists (
-    select 1 from public.profiles admin
-    where admin.id = auth.uid() and admin.is_admin = true
-  )
-);
+using (public.current_user_is_admin())
+with check (public.current_user_is_admin());
 
 create or replace function public.handle_new_user()
 returns trigger
@@ -329,5 +326,7 @@ create trigger sync_order_total_trigger
 before update on public.orders
 for each row execute function public.sync_order_total();
 
+grant select on public.profiles to authenticated;
+grant select, update on public.orders to authenticated;
 revoke insert, delete on public.orders from anon, authenticated;
 revoke update on public.orders from anon;
