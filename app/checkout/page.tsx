@@ -141,7 +141,7 @@ export default function CheckoutPage() {
                     You can still order as a guest. An account gives you live
                     status, order history and receipt access.
                   </p>
-                  <Link href="/account?next=/checkout">Create account / sign in</Link>
+                  <Link href="/account">Create account / sign in</Link>
                 </div>
               </div>
             )}
