@@ -1,11 +1,12 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import CollectionGrid from '../collection-grid';
-export const metadata: Metadata = {
-  title: 'T-shirts | The ENSAM Merch Shop',
+import { pageMetadata } from '../site-metadata';
+export const metadata = pageMetadata({
+  title: 'T-shirts | MERCH ENSAM-R',
   description:
-    'Shop the opening ENSAM Rabat collection. MIND IN MOTION: 135 MAD. Be creART(et métiers)ive and Think Beyond Limits: 120 MAD.',
-};
+    'Shop the opening ENSAM Rabat collection: MIND IN MOTION, Be creART(et métiers)ive and Think Beyond Limits.',
+  path: '/collection',
+});
 export default function Collection() {
   return (
     <main id="main">
