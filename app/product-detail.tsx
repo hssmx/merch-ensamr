@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/dialog';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import PhotoReel from './photo-reel';
-import { products, orderMessage, whatsappUrl, type Product } from './catalog';
+import CollectionGrid from './collection-grid';
+import { orderMessage, whatsappUrl, type Product } from './catalog';
 import { shopConfig } from './shop-config';
 import { downloadOrderReceipt } from './receipt-pdf';
 export default function ProductDetail({ product: p }: { product: Product }) {
@@ -213,25 +214,10 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             View all <ArrowRight size={17} />
           </Link>
         </div>
-        <div className="related-grid">
-          {products
-            .filter((x) => x.slug !== p.slug)
-            .map((x) => (
-              <Link key={x.slug} href={`/collection/${x.slug}`}>
-                <Image
-                  src={x.back}
-                  alt={`${x.name}, back view`}
-                  width="1500"
-                  height="1500"
-                  loading="lazy"
-                />
-                <div>
-                  <h3>{x.name}</h3>
-                  <span>{x.price} MAD ↗</span>
-                </div>
-              </Link>
-            ))}
-        </div>
+        <CollectionGrid
+          excludeSlug={p.slug}
+          className="related-commerce-grid"
+        />
       </section>
       <Dialog open={zoom} onOpenChange={setZoom}>
         <DialogContent className="photo-dialog">
