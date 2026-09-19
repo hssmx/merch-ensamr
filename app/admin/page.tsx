@@ -160,7 +160,7 @@ export default function AdminPage() {
                 />
               </label>
               <label className="admin-note-field">
-                Internal / customer note
+                Customer update note
                 <textarea name="admin_note" rows={2} defaultValue={order.admin_note || ''} />
               </label>
               <button className="primary" type="submit">Save update</button>
