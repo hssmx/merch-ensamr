@@ -1400,3 +1400,348 @@ body:has(.mini-cart-dock) .cookie-banner {
     font-size: 7px;
   }
 }
+
+
+/* Compact order tracking redesign */
+.order-detail-head-clean {
+  display: block;
+  margin-bottom: clamp(28px, 4vw, 44px);
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--commerce-rule);
+}
+
+.order-detail-head-clean .page-back {
+  margin-bottom: 24px;
+}
+
+.order-detail-heading-copy > span {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--lux-wine);
+  font: 700 8px/1 'Outfit', sans-serif;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.order-detail-heading-copy h1 {
+  max-width: none;
+  margin: 0;
+  font: 500 clamp(42px, 5vw, 68px)/.96 'Josefin Sans', sans-serif;
+  letter-spacing: -.05em;
+}
+
+.order-detail-heading-copy p {
+  margin: 10px 0 0;
+  color: #7a7169;
+  font-size: 10px;
+}
+
+.order-detail-layout-clean {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .78fr);
+  gap: clamp(34px, 5vw, 64px);
+  align-items: start;
+}
+
+.order-status-card {
+  padding: clamp(24px, 3vw, 34px) 0 0;
+  border-top: 1px solid var(--commerce-rule);
+}
+
+.order-status-card-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.order-status-card-head span,
+.order-team-update span,
+.order-next-step span,
+.order-receipt-card-head span {
+  display: block;
+  color: #81776f;
+  font: 700 8px/1 'Outfit', sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.order-status-card-head h2 {
+  margin: 8px 0 0;
+  color: var(--lux-ink);
+  font: 500 clamp(32px, 4vw, 48px)/.98 'Josefin Sans', sans-serif;
+  letter-spacing: -.045em;
+}
+
+.order-status-card-head small {
+  padding-top: 2px;
+  color: #8a8179;
+  font: 650 8px/1.2 'Outfit', sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.order-progress {
+  position: relative;
+  margin: 30px 0 23px;
+}
+
+.order-progress-track {
+  position: relative;
+  height: 2px;
+  margin: 0 4px;
+  overflow: hidden;
+  background: #d9d2cb;
+}
+
+.order-progress-track > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  background: var(--lux-wine);
+}
+
+.order-progress-dots {
+  position: absolute;
+  inset: 50% 0 auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  transform: translateY(-50%);
+}
+
+.order-progress-dots > i {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #b9b0a8;
+  border-radius: 50%;
+  background: #f7f4ee;
+}
+
+.order-progress-dots > i.done {
+  border-color: var(--lux-wine);
+  background: var(--lux-wine);
+}
+
+.order-progress-dots > i.current {
+  width: 11px;
+  height: 11px;
+  margin-top: -1.5px;
+  border: 3px solid #ead7da;
+  background: var(--lux-wine);
+  box-shadow: 0 0 0 1px var(--lux-wine);
+}
+
+.order-current-copy {
+  max-width: 58ch;
+  min-height: 48px;
+}
+
+.order-current-copy p,
+.order-team-update p,
+.order-next-step p,
+.order-status-cancelled p {
+  margin: 0;
+  color: #706760;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.order-team-update,
+.order-next-step {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--commerce-rule);
+}
+
+.order-team-update span {
+  color: var(--lux-wine);
+}
+
+.order-team-update p,
+.order-next-step p {
+  margin-top: 6px;
+}
+
+.order-next-step {
+  margin-top: 20px;
+}
+
+.order-status-cancelled {
+  margin-top: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--commerce-rule);
+  border-bottom: 1px solid var(--commerce-rule);
+}
+
+.order-status-cancelled strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--lux-wine);
+  font: 700 10px/1.2 'Outfit', sans-serif;
+}
+
+.order-receipt-card-clean {
+  position: sticky;
+  top: 92px;
+  padding: 0;
+  overflow: hidden;
+  color: var(--lux-ink);
+  background: #fffdf8;
+  border: 1px solid var(--commerce-rule);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.order-receipt-card-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 19px 20px;
+  border-bottom: 1px solid var(--commerce-rule);
+}
+
+.order-receipt-card-head > div > strong {
+  display: block;
+  margin-top: 4px;
+  color: #6f665f;
+  font: 600 9px/1.2 'Outfit', sans-serif;
+}
+
+.order-receipt-card-head > strong {
+  color: var(--lux-ink);
+  font: 500 24px/1 'Josefin Sans', sans-serif;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+
+.order-receipt-items {
+  padding: 0 20px;
+}
+
+.order-receipt-card-clean .checkout-line {
+  margin: 0;
+  padding: 15px 0;
+  border-color: rgb(20 17 17 / 8%);
+}
+
+.order-receipt-card-clean .checkout-line strong,
+.order-receipt-card-clean .checkout-line b {
+  color: var(--lux-ink);
+}
+
+.order-receipt-card-clean .checkout-line small {
+  color: #857b73;
+}
+
+.order-receipt-card-clean dl {
+  margin: 0;
+  padding: 0 20px;
+}
+
+.order-receipt-card-clean dl > div {
+  padding: 12px 0;
+  color: #6e655e;
+  border-color: rgb(20 17 17 / 8%);
+}
+
+.order-receipt-card-clean dd {
+  color: var(--lux-ink);
+}
+
+.order-receipt-card-clean .secondary {
+  width: calc(100% - 40px);
+  min-height: 46px;
+  margin: 20px;
+  justify-content: center;
+  color: var(--lux-ink);
+  background: transparent;
+  border-color: #cfc7bf;
+}
+
+.order-receipt-card-clean .secondary:hover {
+  color: #fff;
+  background: var(--lux-wine);
+  border-color: var(--lux-wine);
+}
+
+@media (max-width: 900px) {
+  .order-detail-head-clean {
+    display: block !important;
+    margin-bottom: 24px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .order-detail-head-clean .page-back {
+    margin-bottom: 18px !important;
+  }
+
+  .order-detail-layout-clean {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+
+  .order-status-card {
+    width: 100%;
+    padding-top: 20px;
+  }
+
+  .order-receipt-card-clean {
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .order-detail-page {
+    padding-top: 18px !important;
+  }
+
+  .order-detail-heading-copy h1 {
+    font-size: 38px !important;
+  }
+
+  .order-status-card-head {
+    gap: 14px;
+  }
+
+  .order-status-card-head h2 {
+    font-size: 32px;
+  }
+
+  .order-progress {
+    margin: 26px 0 20px;
+  }
+
+  .order-current-copy {
+    min-height: 0;
+  }
+
+  .order-current-copy p,
+  .order-team-update p,
+  .order-next-step p {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .order-team-update,
+  .order-next-step {
+    margin-top: 19px;
+    padding-top: 15px;
+  }
+
+  .order-receipt-card-head {
+    padding: 17px 16px;
+  }
+
+  .order-receipt-items,
+  .order-receipt-card-clean dl {
+    padding-inline: 16px !important;
+  }
+
+  .order-receipt-card-clean .secondary {
+    width: calc(100% - 32px) !important;
+    margin: 16px !important;
+  }
+}
