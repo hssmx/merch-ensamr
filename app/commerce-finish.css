@@ -1745,3 +1745,37 @@ body:has(.mini-cart-dock) .cookie-banner {
     margin: 16px !important;
   }
 }
+
+
+/* Collection-only checkout */
+.collection-only-card {
+  display: grid;
+  gap: 5px;
+  padding: 18px;
+  background: #fffdf8;
+  border: 1px solid #cfc7be;
+  border-left: 3px solid var(--lux-wine);
+}
+
+.collection-only-card strong {
+  color: var(--lux-ink);
+  font: 600 20px/1.1 'Josefin Sans', sans-serif;
+  letter-spacing: -.025em;
+}
+
+.collection-only-card span {
+  max-width: 52ch;
+  color: #756c65;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+@media (max-width: 620px) {
+  .collection-only-card {
+    padding: 15px;
+  }
+
+  .collection-only-card strong {
+    font-size: 18px;
+  }
+}
