@@ -8,8 +8,12 @@ import type {
   StoredOrder,
 } from './order-types';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
-const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ??
+  'https://hpnocasdahzrwcjttuok.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+  'sb_publishable_42Zn7mZ-k3u1HxohxpU3zQ_FnQXscax';
 const SESSION_KEY = 'merch-ensamr-auth-session';
 const CLAIM_KEY = 'merch-ensamr-guest-order-claims';
 
