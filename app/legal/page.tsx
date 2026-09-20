@@ -4,7 +4,7 @@ import { pageMetadata } from '../site-metadata';
 
 export const metadata = pageMetadata({
   title: 'Legal, Privacy & Store Policies | MERCH ENSAM-R',
-  description: 'Terms of sale, privacy, cookies, returns, delivery and account-rights information for MERCH ENSAM-R.',
+  description: 'Terms of sale, privacy, cookies, returns, collection and account-rights information for MERCH ENSAM-R.',
   path: '/legal',
 });
 
@@ -27,7 +27,7 @@ export default function LegalPage() {
         <a href="#operator">Operator</a>
         <a href="#terms">Terms of sale</a>
         <a href="#returns">Returns</a>
-        <a href="#delivery">Delivery</a>
+        <a href="#collection">Collection</a>
         <a href="#privacy">Privacy</a>
         <a href="#cookies">Cookies</a>
         <a href="#accounts">Account rights</a>
@@ -48,7 +48,7 @@ export default function LegalPage() {
           <div>
             <h2>Terms of sale</h2>
             <p>Product descriptions, available sizes and prices are shown in Moroccan dirhams (MAD). Placing an order sends a purchase request to the team; it is not treated as finally confirmed until the team verifies availability and payment.</p>
-            <p>After checkout, the team contacts the customer to confirm collection or delivery and proposes the available payment method, currently cash or bank transfer. Payment is required before an order can be marked Confirmed.</p>
+            <p>After checkout, the team contacts the customer to confirm collection at ENSAM Rabat and proposes the available payment method, currently cash or bank transfer. Payment is required before an order can be marked Confirmed.</p>
             <p>We may correct obvious pricing, stock or description errors before confirmation. If a product becomes unavailable after payment, the customer will be informed and any amount due back will be handled in accordance with applicable consumer law.</p>
           </div>
         </section>
@@ -63,12 +63,12 @@ export default function LegalPage() {
           </div>
         </section>
 
-        <section id="delivery">
+        <section id="collection">
           <span>04</span>
           <div>
-            <h2>Collection & delivery</h2>
-            <p>Collection details are confirmed by the team. For delivery orders, the delivery area, timing and any delivery fee are confirmed before final order confirmation. The checkout subtotal does not automatically include a delivery fee.</p>
-            <p>Customers should provide accurate contact and delivery information and respond to the confirmation call so fulfilment can be arranged.</p>
+            <h2>Collection at ENSAM Rabat</h2>
+            <p>Orders are collected on site at ENSAM Rabat. The team confirms the collection timing during the confirmation call and again when the order is ready.</p>
+            <p>Customers should provide accurate contact information and respond to the confirmation call so collection can be arranged.</p>
           </div>
         </section>
 
@@ -76,9 +76,9 @@ export default function LegalPage() {
           <span>05</span>
           <div>
             <h2>Privacy policy</h2>
-            <p>We process information needed to operate the store, including account email and name, order contact details, delivery address where applicable, order contents, payment-status information, customer notes, and technical browser storage used for sessions and cart continuity.</p>
+            <p>We process information needed to operate the store, including account email and name, order contact details, order contents, payment-status information, customer notes, and technical browser storage used for sessions and cart continuity.</p>
             <p>We use this information to create and manage accounts, process and track orders, contact customers, prevent abuse, resolve disputes, maintain receipts and comply with legal obligations. We do not sell customer data.</p>
-            <p>Store data is hosted using service providers including Supabase and Vercel. Product media may be delivered through external content-delivery infrastructure. Opening WhatsApp or Instagram leaves this website and is then subject to those services’ own privacy practices.</p>
+            <p>Store data is hosted using service providers including Supabase and Vercel. Product media may be delivered through external media infrastructure. Opening WhatsApp or Instagram leaves this website and is then subject to those services’ own privacy practices.</p>
             <p>Personal data is retained only for as long as needed for the relevant purpose and any applicable accounting, dispute, fraud-prevention or legal retention requirement. Requests for access, correction, objection or deletion can be made through the account settings or Contact page. You may also contact Morocco’s CNDP regarding data-protection rights.</p>
           </div>
         </section>
