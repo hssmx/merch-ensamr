@@ -484,7 +484,7 @@ export async function adminUpdateDeletionRequest(
     {
       method: 'PATCH',
       headers: { Prefer: 'return=representation' },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ ...values, delivery_fee: 0, address: null, fulfillment: 'collection' }),
     },
     session.access_token,
   );
@@ -507,7 +507,6 @@ export async function adminUpdateOrder(
     status: OrderStatus;
     payment_status: PaymentStatus;
     payment_method: PaymentMethod | null;
-    delivery_fee: number;
     admin_note: string | null;
   },
 ) {
