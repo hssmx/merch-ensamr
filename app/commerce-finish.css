@@ -1070,3 +1070,151 @@
     gap: 10px;
   }
 }
+
+
+/* Product purchase actions + inline cart preview */
+.product-action-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+}
+
+.product-action-stack .order-button {
+  width: 100%;
+  min-height: 54px;
+  justify-content: space-between !important;
+}
+
+.buy-now-button {
+  background: var(--lux-wine) !important;
+  border-color: var(--lux-wine) !important;
+}
+
+.buy-now-button:hover {
+  background: #5f101e !important;
+  border-color: #5f101e !important;
+}
+
+.add-cart-button {
+  color: var(--lux-ink) !important;
+  background: transparent !important;
+  border-color: rgb(23 20 20 / 24%) !important;
+}
+
+.add-cart-button:hover {
+  color: #fff !important;
+  background: var(--lux-ink) !important;
+  border-color: var(--lux-ink) !important;
+}
+
+.product-cart-panel {
+  display: grid;
+  gap: 0;
+  margin-top: 14px;
+  padding: 0;
+  overflow: hidden;
+  color: #f8f4ee;
+  background: #171515;
+  border: 1px solid #171515;
+}
+
+.product-cart-panel-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 17px 18px 15px;
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
+}
+
+.product-cart-panel-head > div > span,
+.product-cart-panel-added > span {
+  display: block;
+  color: #c9a9af;
+  font: 700 8px/1 'Outfit', sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.product-cart-panel-head > div > strong {
+  display: block;
+  margin-top: 5px;
+  color: #fff;
+  font: 600 12px/1.25 'Outfit', sans-serif;
+}
+
+.product-cart-panel-head > strong {
+  color: #fff;
+  font: 500 23px/1 'Josefin Sans', sans-serif;
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+
+.product-cart-panel-added {
+  padding: 15px 18px;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.product-cart-panel-added p {
+  margin: 5px 0 0;
+  color: #fff;
+  font: 500 10px/1.45 'Outfit', sans-serif;
+}
+
+.product-cart-panel-note {
+  margin: 0;
+  padding: 12px 18px 0;
+  color: #a79e97;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.product-cart-panel-link {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 16px 18px 18px;
+  padding: 0 15px;
+  color: var(--lux-ink);
+  background: #f7f3ec;
+  border: 1px solid #f7f3ec;
+  font: 750 9px/1 'Outfit', sans-serif;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+
+.product-cart-panel-link:hover {
+  color: #fff;
+  background: var(--lux-wine);
+  border-color: var(--lux-wine);
+}
+
+@media (max-width: 620px) {
+  .product-action-stack {
+    gap: 8px;
+  }
+
+  .product-action-stack .order-button {
+    min-height: 52px;
+  }
+
+  .product-cart-panel {
+    margin-top: 12px;
+  }
+
+  .product-cart-panel-head,
+  .product-cart-panel-added {
+    padding-inline: 15px;
+  }
+
+  .product-cart-panel-note {
+    padding-inline: 15px;
+  }
+
+  .product-cart-panel-link {
+    margin: 14px 15px 15px;
+  }
+}
