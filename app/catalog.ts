@@ -55,7 +55,7 @@ export function orderMessage(product: Product, size: string, quantity: number) {
     quantity > 99
   )
     throw new Error('Choose a size and a quantity between 1 and 99.');
-  return `Hi MERCH ENSAMR! I would like to order:\n\n${product.name}\nColor: ${product.color}\nRequested size: ${size.trim()}\nQuantity: ${quantity}\nUnit price: ${product.price} MAD\nItems subtotal: ${product.price * quantity} MAD\n\nPlease confirm size availability, delivery or collection details, any delivery fees, and how to pay.`;
+  return `Hi MERCH ENSAMR! I would like to order:\n\n${product.name}\nColor: ${product.color}\nRequested size: ${size.trim()}\nQuantity: ${quantity}\nUnit price: ${product.price} MAD\nItems subtotal: ${product.price * quantity} MAD\n\nPlease confirm size availability, collection at ENSAM Rabat, and how to pay.`;
 }
 export function whatsappUrl(phone: string, message: string) {
   const digits = phone.replace(/[\s()+-]/g, '');
