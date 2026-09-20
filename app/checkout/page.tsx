@@ -4,20 +4,21 @@ import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle2, Download, UserRound } from 'lucide-react';
 import { useCart } from '../cart/cart-provider';
-import { createOrder, getSession, isSupabaseConfigured } from '../../lib/supabase-rest';
+import { createOrder, getSession, isSupabaseConfigured, type AuthSession } from '../../lib/supabase-rest';
 import type { StoredOrder } from '../../lib/order-types';
 import { downloadOrderReceipt } from '../receipt-pdf';
 
 export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
-  const [signedIn, setSignedIn] = useState(false);
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const signedIn = Boolean(session);
   const [fulfillment, setFulfillment] = useState<'collection' | 'delivery'>('collection');
   const [order, setOrder] = useState<StoredOrder | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    getSession().then((session) => setSignedIn(Boolean(session)));
+    getSession().then(setSession);
   }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -132,14 +133,23 @@ export default function CheckoutPage() {
       ) : (
         <div className="checkout-layout">
           <form className="checkout-form" onSubmit={submit}>
-            {!signedIn && (
+            {signedIn ? (
+              <div className="checkout-account-state">
+                <UserRound size={18} />
+                <div>
+                  <strong>Ordering with your account</strong>
+                  <span>{session?.user.email}</span>
+                </div>
+                <Link href="/account">View account</Link>
+              </div>
+            ) : (
               <div className="account-nudge">
                 <UserRound size={20} />
                 <div>
                   <strong>Recommended: create an account.</strong>
                   <p>
-                    You can still order as a guest. An account gives you live
-                    status, order history and receipt access.
+                    Guest checkout stays available. An account keeps tracking,
+                    order history and receipts in one place.
                   </p>
                   <Link href="/account">Create account / sign in</Link>
                 </div>
@@ -150,11 +160,24 @@ export default function CheckoutPage() {
               <legend>Contact details</legend>
               <label>
                 Full name
-                <input name="name" autoComplete="name" required maxLength={100} />
+                <input
+                  name="name"
+                  autoComplete="name"
+                  required
+                  maxLength={100}
+                  defaultValue={String(session?.user.user_metadata?.full_name || '')}
+                />
               </label>
               <label>
                 Email
-                <input name="email" type="email" autoComplete="email" required maxLength={180} />
+                <input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  maxLength={180}
+                  defaultValue={session?.user.email || ''}
+                />
               </label>
               <label>
                 Phone
