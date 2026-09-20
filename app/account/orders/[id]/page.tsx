@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ArrowLeft, Download, Phone } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 import { getMyOrder } from '../../../../lib/supabase-rest';
 import {
   statusDescriptions,
@@ -11,7 +11,6 @@ import {
   type StoredOrder,
 } from '../../../../lib/order-types';
 import { downloadOrderReceipt } from '../../../receipt-pdf';
-import { CommerceSteps } from '../../../commerce-steps';
 
 const stages = [
   'pending_confirmation',
@@ -84,26 +83,27 @@ export default function AccountOrderPage() {
         <h1>{statusLabels[order.status]}</h1>
         <p>{statusDescriptions[order.status]}</p>
       </header>
-      <CommerceSteps current={2} />
-
       <div className="order-detail-layout">
-        <section className="order-tracking">
-          <div className="tracking-heading">
-            <span>ORDER JOURNEY</span>
-            <h2>Where it stands.</h2>
-            <p>
+        <section className="order-tracking tracking-minimal">
+          <div className="tracking-minimal-head">
+            <div>
+              <span>Current status</span>
+              <strong>{statusLabels[order.status]}</strong>
+            </div>
+            <time dateTime={order.created_at}>
               Placed{' '}
               {new Date(order.created_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
-                month: 'long',
+                month: 'short',
                 year: 'numeric',
               })}
-            </p>
+            </time>
           </div>
+
           {order.status === 'cancelled' ? (
-            <div className="system-notice error">This order was cancelled.</div>
+            <p className="tracking-cancelled">This order was cancelled.</p>
           ) : (
-            <ol>
+            <ol className="tracking-minimal-list">
               {stages.map((stage, index) => (
                 <li
                   key={stage}
@@ -115,11 +115,7 @@ export default function AccountOrderPage() {
                         : ''
                   }
                 >
-                  <i aria-hidden="true">
-                    {index < currentIndex
-                      ? '✓'
-                      : String(index + 1).padStart(2, '0')}
-                  </i>
+                  <i aria-hidden="true" />
                   <div>
                     <strong>
                       {statusLabels[stage as keyof typeof statusLabels]}
@@ -138,21 +134,20 @@ export default function AccountOrderPage() {
               ))}
             </ol>
           )}
+
           {order.admin_note && (
-            <div className="system-notice">
-              <strong>Team update:</strong> {order.admin_note}
+            <div className="tracking-team-note">
+              <span>Team update</span>
+              <p>{order.admin_note}</p>
             </div>
           )}
-          <div className="payment-callout">
-            <Phone size={18} />
-            <div>
-              <strong>Manual confirmation</strong>
-              <p>
-                Expect a call from our team. They will propose cash or bank
-                transfer. Payment must be received before your order is
-                confirmed.
-              </p>
-            </div>
+
+          <div className="tracking-confirmation-note">
+            <strong>Confirmation by phone</strong>
+            <p>
+              We’ll call to confirm the order and payment method. Payment must be
+              received before the order is marked confirmed.
+            </p>
           </div>
         </section>
 
