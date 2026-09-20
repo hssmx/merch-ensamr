@@ -210,17 +210,17 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <summary>How is my order confirmed?</summary>
               <p>
                 Website admins review orders manually. Expect a call from our
-                team to confirm availability, collection or delivery, and the
+                team to confirm availability, collection at ENSAM Rabat, and the
                 payment method. Payment is required before an order is marked
                 confirmed.
               </p>
             </details>
             <details>
-              <summary>How do payment and delivery work?</summary>
+              <summary>How do payment and collection work?</summary>
               <p>
                 The team will propose cash or bank transfer during the
-                confirmation call. Any delivery fee is also confirmed with you
-                before the order is confirmed.
+                confirmation call. Collection takes place on site at ENSAM Rabat
+                after the team confirms your order is ready.
               </p>
             </details>
             <details>
