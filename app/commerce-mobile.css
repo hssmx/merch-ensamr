@@ -1,0 +1,648 @@
+/* Dedicated phone layout for cart, checkout, accounts and order admin. */
+@media (max-width: 900px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .shop-header,
+  .shop-header.header-scrolled,
+  .shop-header.header-hidden {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 64px !important;
+    transform: none !important;
+  }
+
+  .shop-header .header-main,
+  .shop-header.header-scrolled .header-main {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+    width: 100% !important;
+    min-height: 64px !important;
+    height: 64px !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+
+  .header-left,
+  .header-commerce {
+    width: 44px !important;
+    min-width: 44px !important;
+  }
+
+  .header-left {
+    justify-self: start !important;
+  }
+
+  .header-commerce {
+    display: grid !important;
+    place-items: center !important;
+    justify-self: end !important;
+  }
+
+  .header-commerce .header-contact,
+  .header-commerce .header-account-link {
+    display: none !important;
+  }
+
+  .shop-header .shop-brand {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    justify-self: center !important;
+    overflow: visible !important;
+  }
+
+  .shop-header .brand-lockup {
+    max-width: 100% !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+  }
+
+  .shop-header .brand-lockup strong {
+    font-size: 23px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+  }
+
+  .shop-header .brand-lockup i {
+    padding: 3px 4px !important;
+    font-size: 6px !important;
+    letter-spacing: .09em !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+  }
+
+  .mobile-menu,
+  .header-cart-link {
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 0 !important;
+    place-items: center !important;
+    border-radius: 999px !important;
+  }
+
+  .header-cart-link {
+    position: relative !important;
+    display: grid !important;
+  }
+
+  .header-cart-link > span {
+    display: none !important;
+  }
+
+  .header-cart-link b {
+    position: absolute !important;
+    top: -2px !important;
+    right: -2px !important;
+    min-width: 17px !important;
+    height: 17px !important;
+    padding: 0 4px !important;
+    border-radius: 999px !important;
+    font-size: 7px !important;
+  }
+
+  .commerce-flow-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    padding: 24px 14px 58px !important;
+    overflow-x: hidden !important;
+  }
+
+  .commerce-flow-head,
+  .account-dashboard-head,
+  .order-detail-head,
+  .admin-head {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 10px !important;
+    margin: 0 0 26px !important;
+    padding: 0 0 20px !important;
+  }
+
+  .commerce-flow-head > .page-back,
+  .order-detail-head > .page-back {
+    grid-column: auto !important;
+    margin-bottom: 6px !important;
+  }
+
+  .commerce-flow-head > span,
+  .order-detail-head > span {
+    grid-column: auto !important;
+  }
+
+  .commerce-flow-head h1,
+  .account-dashboard-head h1,
+  .order-detail-head h1,
+  .admin-head h1 {
+    max-width: 100% !important;
+    font-size: clamp(38px, 12vw, 52px) !important;
+    line-height: .98 !important;
+    overflow-wrap: normal !important;
+  }
+
+  .commerce-flow-head > p,
+  .account-dashboard-head p,
+  .order-detail-head > p,
+  .admin-head p {
+    width: 100% !important;
+    max-width: 38rem !important;
+    margin: 2px 0 0 !important;
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+  }
+
+  .page-back {
+    width: fit-content !important;
+    min-height: 36px !important;
+  }
+
+  .cart-layout,
+  .checkout-layout,
+  .order-detail-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    gap: 24px !important;
+  }
+
+  .cart-items {
+    width: 100% !important;
+  }
+
+  .cart-line {
+    display: grid !important;
+    grid-template-columns: 78px minmax(0, 1fr) !important;
+    width: 100% !important;
+    gap: 13px !important;
+    padding: 15px 0 !important;
+    align-items: start !important;
+  }
+
+  .cart-line-image {
+    width: 78px !important;
+    min-width: 78px !important;
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .cart-line-copy {
+    min-width: 0 !important;
+  }
+
+  .cart-line-copy h2 {
+    margin: 5px 0 !important;
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+    overflow-wrap: normal !important;
+  }
+
+  .cart-line-copy small,
+  .cart-line-copy > p {
+    line-height: 1.4 !important;
+  }
+
+  .cart-line > strong {
+    grid-column: 2 !important;
+    grid-row: auto !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+  }
+
+  .cart-line-actions {
+    display: flex !important;
+    width: 100% !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 10px 14px !important;
+    margin-top: 13px !important;
+  }
+
+  .quantity-input {
+    display: grid !important;
+    grid-template-columns: 36px 42px 36px !important;
+    width: auto !important;
+  }
+
+  .quantity-input button,
+  .quantity-input input {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 36px !important;
+  }
+
+  .cart-remove {
+    min-height: 36px !important;
+  }
+
+  .cart-summary,
+  .checkout-summary,
+  .order-receipt-card {
+    position: static !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .cart-summary > span,
+  .checkout-summary > span,
+  .order-receipt-card > span {
+    padding: 17px 18px !important;
+  }
+
+  .cart-summary dl,
+  .order-receipt-card dl {
+    padding-inline: 18px !important;
+  }
+
+  .cart-summary .primary,
+  .checkout-summary .primary,
+  .order-receipt-card .secondary {
+    width: calc(100% - 36px) !important;
+    margin: 18px !important;
+  }
+
+  .cart-summary .account-nudge {
+    padding: 18px !important;
+  }
+
+  .account-nudge,
+  .account-product-nudge,
+  .payment-callout {
+    width: 100% !important;
+    gap: 11px !important;
+    padding: 14px !important;
+  }
+
+  .account-nudge p,
+  .account-product-nudge p,
+  .payment-callout p {
+    margin-top: 4px !important;
+    font-size: 10px !important;
+    line-height: 1.55 !important;
+  }
+
+  .product-added {
+    grid-template-columns: 20px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .product-added > a {
+    grid-column: 2 !important;
+    justify-self: start !important;
+  }
+
+  .checkout-form {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .checkout-form fieldset {
+    display: grid !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 14px !important;
+    padding: 24px 0 28px !important;
+  }
+
+  .checkout-form legend {
+    max-width: 100% !important;
+    margin-bottom: 16px !important;
+    font-size: 26px !important;
+    line-height: 1.05 !important;
+  }
+
+  .checkout-form label,
+  .account-auth-card label,
+  .admin-order label {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .checkout-form input,
+  .checkout-form textarea,
+  .account-auth-card input,
+  .admin-order input,
+  .admin-order textarea,
+  .admin-order select {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important;
+  }
+
+  .fulfillment-choice {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+  }
+
+  .fulfillment-choice label {
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 17px !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #cfc7be !important;
+  }
+
+  .fulfillment-choice label:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .fulfillment-choice strong {
+    font-size: 18px !important;
+  }
+
+  .checkout-submit {
+    min-height: 54px !important;
+  }
+
+  .checkout-summary .checkout-line {
+    margin-inline: 18px !important;
+  }
+
+  .checkout-summary .checkout-total {
+    margin-inline: 18px !important;
+  }
+
+  .checkout-summary > p {
+    margin: 10px 18px 18px !important;
+  }
+
+  .checkout-account-state {
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .checkout-account-state > a {
+    grid-column: 2 !important;
+    justify-self: start !important;
+  }
+
+  .account-auth-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+  }
+
+  .account-auth-intro {
+    min-height: 0 !important;
+    padding: 34px 20px 30px !important;
+  }
+
+  .account-auth-intro::after {
+    right: -.02em !important;
+    bottom: -.18em !important;
+    font-size: 170px !important;
+  }
+
+  .account-auth-intro h1 {
+    max-width: 9ch !important;
+    margin: 12px 0 14px !important;
+    font-size: clamp(40px, 12.5vw, 52px) !important;
+    line-height: .95 !important;
+  }
+
+  .account-auth-intro > p {
+    max-width: 34rem !important;
+    font-size: 11px !important;
+    line-height: 1.6 !important;
+  }
+
+  .account-benefits {
+    margin-top: 24px !important;
+  }
+
+  .account-benefits > div {
+    grid-template-columns: 20px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 13px 0 !important;
+  }
+
+  .account-benefits span {
+    font-size: 9px !important;
+  }
+
+  .account-back-shop {
+    min-height: 40px !important;
+    margin-top: 20px !important;
+  }
+
+  .account-auth-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 28px 20px 34px !important;
+    border: 1px solid var(--commerce-rule) !important;
+    border-top: 0 !important;
+  }
+
+  .account-auth-card-head {
+    gap: 11px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .account-auth-card-head h2 {
+    font-size: 30px !important;
+  }
+
+  .account-auth-copy {
+    margin-bottom: 22px !important;
+  }
+
+  .account-auth-card form {
+    width: 100% !important;
+    gap: 14px !important;
+  }
+
+  .account-submit {
+    min-height: 52px !important;
+  }
+
+  .account-auth-switch {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+    margin-top: 22px !important;
+  }
+
+  .account-dashboard-head .secondary,
+  .admin-head .secondary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .account-orders,
+  .admin-orders {
+    width: 100% !important;
+  }
+
+  .account-order-card {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 10px !important;
+    padding: 19px 0 !important;
+  }
+
+  .account-order-meta {
+    text-align: left !important;
+  }
+
+  .account-order-card > a {
+    grid-column: auto !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+    justify-self: stretch !important;
+  }
+
+  .order-tracking {
+    width: 100% !important;
+    padding: 20px 16px !important;
+  }
+
+  .order-tracking h2 {
+    font-size: 28px !important;
+  }
+
+  .order-tracking ol {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .order-tracking li {
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .order-tracking li strong {
+    overflow-wrap: normal !important;
+  }
+
+  .order-receipt-card .checkout-line {
+    margin-inline: 18px !important;
+  }
+
+  .order-receipt-card dd {
+    max-width: 58% !important;
+    text-align: right !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .admin-order {
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .admin-order > header {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .admin-order > header > div:last-child {
+    text-align: left !important;
+  }
+
+  .admin-customer-details,
+  .admin-order-items {
+    width: 100% !important;
+  }
+
+  .admin-order-items p {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+
+  .admin-order-items p strong {
+    justify-self: start !important;
+  }
+
+  .admin-order form {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 13px !important;
+    padding: 14px !important;
+  }
+
+  .admin-note-field {
+    grid-column: auto !important;
+  }
+
+  .admin-order form .primary,
+  .admin-order form .secondary {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .empty-cart {
+    width: 100% !important;
+    min-height: 220px !important;
+    padding: 26px 20px !important;
+  }
+
+  .empty-cart h1,
+  .empty-cart h2 {
+    max-width: 100% !important;
+  }
+
+  .empty-cart .primary {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .shop-header .brand-lockup strong {
+    font-size: 21px !important;
+  }
+
+  .shop-header .brand-lockup i {
+    display: none !important;
+  }
+
+  .commerce-flow-page {
+    padding-inline: 12px !important;
+  }
+
+  .commerce-flow-head h1,
+  .account-dashboard-head h1,
+  .order-detail-head h1,
+  .admin-head h1 {
+    font-size: 38px !important;
+  }
+
+  .cart-line {
+    grid-template-columns: 70px minmax(0, 1fr) !important;
+  }
+
+  .cart-line-image {
+    width: 70px !important;
+    min-width: 70px !important;
+  }
+
+  .account-auth-intro,
+  .account-auth-card {
+    padding-inline: 17px !important;
+  }
+}
