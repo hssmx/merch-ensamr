@@ -184,17 +184,9 @@ export default function AccountOrderPage() {
 
           <dl>
             <div>
-              <dt>Receive by</dt>
-              <dd>
-                {order.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}
-              </dd>
+              <dt>Collection</dt>
+              <dd>ENSAM Rabat</dd>
             </div>
-            {order.address && (
-              <div>
-                <dt>Address</dt>
-                <dd>{order.address}</dd>
-              </div>
-            )}
             {order.notes && (
               <div>
                 <dt>Your note</dt>
@@ -205,12 +197,6 @@ export default function AccountOrderPage() {
               <dt>Subtotal</dt>
               <dd>{order.subtotal} MAD</dd>
             </div>
-            {order.delivery_fee > 0 && (
-              <div>
-                <dt>Delivery fee</dt>
-                <dd>{order.delivery_fee} MAD</dd>
-              </div>
-            )}
             <div>
               <dt>Payment</dt>
               <dd>{order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}</dd>
