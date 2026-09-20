@@ -436,7 +436,7 @@ export default function CheckoutPage() {
               <span>Items subtotal</span>
               <strong>{subtotal} MAD</strong>
             </div>
-            <p>Collection only at ENSAM Rabat. No delivery fee applies.</p>
+            <p>Collection only at ENSAM Rabat.</p>
           </aside>
         </div>
       )}
