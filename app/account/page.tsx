@@ -15,6 +15,7 @@ import {
 import {
   consumeAuthRedirect,
   getSession,
+  isCurrentUserAdmin,
   listMyOrders,
   resendSignupConfirmation,
   signIn,
@@ -28,6 +29,7 @@ import { statusLabels } from '../../lib/order-types';
 export default function AccountPage() {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [orders, setOrders] = useState<StoredOrder[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [busy, setBusy] = useState(true);
   const [message, setMessage] = useState('');
@@ -48,7 +50,18 @@ export default function AccountPage() {
 
     const active = callback.session ?? (await getSession());
     setSession(active);
-    setOrders(active ? await listMyOrders() : []);
+
+    if (active) {
+      const [myOrders, admin] = await Promise.all([
+        listMyOrders(),
+        isCurrentUserAdmin(),
+      ]);
+      setOrders(myOrders);
+      setIsAdmin(admin);
+    } else {
+      setOrders([]);
+      setIsAdmin(false);
+    }
 
     if (
       active &&
@@ -259,6 +272,12 @@ export default function AccountPage() {
                 {mode === 'signup' && <small>At least 8 characters.</small>}
               </label>
 
+              {mode === 'signin' && (
+                <Link className="account-forgot-link" href="/account/forgot-password">
+                  Forgot password?
+                </Link>
+              )}
+
               <button className="primary account-submit" disabled={busy}>
                 <span>
                   {busy
@@ -310,9 +329,17 @@ export default function AccountPage() {
           <h1>Your orders.</h1>
           <p>{session.user.email}</p>
         </div>
-        <button type="button" className="secondary" onClick={logout}>
-          <LogOut size={16} /> Sign out
-        </button>
+        <div className="account-head-actions">
+          <Link className="secondary" href="/account/settings">Account settings</Link>
+          {isAdmin && (
+            <Link className="secondary" href="/admin">
+              <ShieldCheck size={16} /> Admin dashboard
+            </Link>
+          )}
+          <button type="button" className="secondary" onClick={logout}>
+            <LogOut size={16} /> Sign out
+          </button>
+        </div>
       </header>
 
       <div className="account-dashboard-intro">
