@@ -223,7 +223,7 @@ begin
 
   loop
     v_order_number := 'ENSAM-' || to_char(now(), 'YYMMDD') || '-' ||
-      upper(substr(encode(gen_random_bytes(4), 'hex'), 1, 6));
+      upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 6));
     exit when not exists (
       select 1 from public.orders where order_number = v_order_number
     );
