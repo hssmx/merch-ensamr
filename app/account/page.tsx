@@ -288,6 +288,14 @@ export default function AccountPage() {
                 </span>
                 <ArrowRight size={17} />
               </button>
+
+              {mode === 'signup' && (
+                <p className="account-auth-privacy">
+                  By creating an account, you acknowledge the{' '}
+                  <Link href="/legal#privacy">Privacy policy</Link> and{' '}
+                  <Link href="/legal#terms">Terms of sale</Link>.
+                </p>
+              )}
             </form>
 
             {allowResend && pendingEmail && (
