@@ -66,7 +66,7 @@ export const statusDescriptions: Record<OrderStatus, string> = {
     'The team has contacted you. Complete the agreed cash or bank payment so the order can be confirmed.',
   confirmed: 'Payment has been received and an admin has confirmed your order.',
   preparing: 'Your order is being prepared.',
-  ready: 'Your order is ready for collection or delivery coordination.',
+  ready: 'Your order is ready for collection at ENSAM Rabat.',
   completed: 'Your order has been completed.',
   cancelled: 'This order was cancelled. Contact the team if you need help.',
 };
