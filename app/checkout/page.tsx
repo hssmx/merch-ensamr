@@ -24,8 +24,6 @@ type CheckoutDraft = {
   customerName: string;
   email: string;
   phone: string;
-  fulfillment: 'collection' | 'delivery';
-  address: string;
   notes: string;
 };
 
@@ -33,9 +31,6 @@ export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const [session, setSession] = useState<AuthSession | null>(null);
   const signedIn = Boolean(session);
-  const [fulfillment, setFulfillment] = useState<'collection' | 'delivery'>(
-    'collection',
-  );
   const [order, setOrder] = useState<StoredOrder | null>(null);
   const [draft, setDraft] = useState<CheckoutDraft | null>(null);
   const [reviewing, setReviewing] = useState(false);
@@ -55,8 +50,6 @@ export default function CheckoutPage() {
       customerName: String(data.get('name') || '').trim(),
       email: String(data.get('email') || '').trim(),
       phone: String(data.get('phone') || '').trim(),
-      fulfillment,
-      address: String(data.get('address') || '').trim(),
       notes: String(data.get('notes') || '').trim(),
     };
 
@@ -76,8 +69,7 @@ export default function CheckoutPage() {
         customerName: draft.customerName,
         email: draft.email,
         phone: draft.phone,
-        fulfillment: draft.fulfillment,
-        address: draft.address,
+        fulfillment: 'collection',
         notes: draft.notes,
         items: items.map((item) => ({
           slug: item.slug,
@@ -110,8 +102,8 @@ export default function CheckoutPage() {
 
           <h1>Order received.</h1>
           <p>
-            We’ll call you to confirm availability, collection or delivery, and
-            the payment method. The order is confirmed only after payment.
+            We’ll call you to confirm availability, collection at ENSAM Rabat,
+            and the payment method. The order is confirmed only after payment.
           </p>
 
           <div className="order-success-summary">
@@ -227,20 +219,12 @@ export default function CheckoutPage() {
               </div>
 
               <div className="checkout-review-block">
-                <span>Fulfilment</span>
+                <span>Collection</span>
                 <dl>
                   <div>
-                    <dt>Method</dt>
-                    <dd>
-                      {draft.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}
-                    </dd>
+                    <dt>Location</dt>
+                    <dd>ENSAM Rabat</dd>
                   </div>
-                  {draft.fulfillment === 'delivery' && (
-                    <div>
-                      <dt>Address</dt>
-                      <dd>{draft.address}</dd>
-                    </div>
-                  )}
                   <div>
                     <dt>Notes</dt>
                     <dd>{draft.notes || 'None'}</dd>
@@ -252,7 +236,7 @@ export default function CheckoutPage() {
                 <strong>Before you confirm</strong>
                 <p>
                   No payment is taken on this website. The team will call you to
-                  confirm availability, collection or delivery, and the payment
+                  confirm availability, collection at ENSAM Rabat, and the payment
                   method. The order is only confirmed after payment.
                 </p>
               </div>
@@ -278,11 +262,6 @@ export default function CheckoutPage() {
                 <span>Items subtotal</span>
                 <strong>{subtotal} MAD</strong>
               </div>
-              {draft.fulfillment === 'delivery' && (
-                <p className="checkout-review-fee">
-                  Delivery fee is confirmed by the team and may be added later.
-                </p>
-              )}
 
               {error && (
                 <p className="field-error" role="alert">
@@ -379,47 +358,14 @@ export default function CheckoutPage() {
 
             <fieldset>
               <legend>
-                <span className="form-section-number">02 /</span> How do you
-                want to receive it?
+                <span className="form-section-number">02 /</span> Collection
               </legend>
-              <div className="fulfillment-choice">
-                <label
-                  className={fulfillment === 'collection' ? 'selected' : ''}
-                >
-                  <input
-                    type="radio"
-                    name="fulfillment"
-                    value="collection"
-                    checked={fulfillment === 'collection'}
-                    onChange={() => setFulfillment('collection')}
-                  />
-                  <strong>Collection</strong>
-                  <span>Details confirmed during the team call.</span>
-                </label>
-                <label className={fulfillment === 'delivery' ? 'selected' : ''}>
-                  <input
-                    type="radio"
-                    name="fulfillment"
-                    value="delivery"
-                    checked={fulfillment === 'delivery'}
-                    onChange={() => setFulfillment('delivery')}
-                  />
-                  <strong>Delivery</strong>
-                  <span>Delivery fee is confirmed by the team.</span>
-                </label>
+              <div className="collection-only-card">
+                <strong>Collect at ENSAM Rabat</strong>
+                <span>
+                  Your collection details and timing are confirmed during the team call.
+                </span>
               </div>
-              {fulfillment === 'delivery' && (
-                <label>
-                  Delivery address
-                  <textarea
-                    name="address"
-                    required
-                    rows={3}
-                    maxLength={400}
-                    defaultValue={draft?.address || ''}
-                  />
-                </label>
-              )}
               <label>
                 Notes <small>Optional</small>
                 <textarea
@@ -490,10 +436,7 @@ export default function CheckoutPage() {
               <span>Items subtotal</span>
               <strong>{subtotal} MAD</strong>
             </div>
-            <p>
-              Any delivery fee is added only after the team confirms it with
-              you.
-            </p>
+            <p>Collection only at ENSAM Rabat. No delivery fee applies.</p>
           </aside>
         </div>
       )}
