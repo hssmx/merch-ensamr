@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteHeader, SiteFooter } from './site-shell';
 import { CartProvider } from './cart/cart-provider';
+import { MiniCartDock } from './cart/mini-cart-dock';
 import { CookieConsent } from './cookie-consent';
 import {
   DEFAULT_DESCRIPTION,
@@ -77,6 +78,7 @@ export default function RootLayout({
           {children}
           <SiteFooter />
           <CookieConsent />
+          <MiniCartDock />
         </CartProvider>
       </body>
     </html>
