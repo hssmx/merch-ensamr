@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -16,6 +16,7 @@ import PhotoReel from './photo-reel';
 import CollectionGrid from './collection-grid';
 import type { Product } from './catalog';
 import { useCart } from './cart/cart-provider';
+import { getSession } from '../lib/supabase-rest';
 
 export default function ProductDetail({ product: p }: { product: Product }) {
   const [size, setSize] = useState('');
@@ -23,6 +24,11 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   const [error, setError] = useState('');
   const [added, setAdded] = useState(false);
   const { addItem } = useCart();
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    getSession().then((session) => setSignedIn(Boolean(session)));
+  }, []);
 
   function addToCart(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -171,14 +177,16 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             </p>
           </form>
 
-          <div className="account-product-nudge">
-            <UserRound size={17} />
-            <p>
-              <strong>We recommend creating an account.</strong> It keeps your
-              order history, tracking updates and receipts together.
-            </p>
-            <Link href="/account">Account</Link>
-          </div>
+          {signedIn === false && (
+            <div className="account-product-nudge">
+              <UserRound size={17} />
+              <p>
+                <strong>We recommend creating an account.</strong> It keeps your
+                order history, tracking updates and receipts together.
+              </p>
+              <Link href="/account">Account</Link>
+            </div>
+          )}
 
           <div className="product-faq">
             <details>
