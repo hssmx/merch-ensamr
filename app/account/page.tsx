@@ -4,20 +4,16 @@ import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
 import {
   ArrowRight,
-  CheckCircle2,
   Clock3,
   Download,
   LogOut,
   PackageCheck,
-  RotateCcw,
   ShieldCheck,
   UserRound,
 } from 'lucide-react';
 import {
-  consumeAuthRedirect,
   getSession,
   listMyOrders,
-  resendSignupConfirmation,
   signIn,
   signOut,
   signUp,
@@ -32,28 +28,12 @@ export default function AccountPage() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [busy, setBusy] = useState(true);
   const [message, setMessage] = useState('');
-  const [messageTone, setMessageTone] = useState<'error' | 'success'>('error');
-  const [pendingEmail, setPendingEmail] = useState('');
 
   async function load() {
     setBusy(true);
-
-    const callback = await consumeAuthRedirect();
-    if (callback.error) {
-      setMessage(callback.error);
-      setMessageTone('error');
-    }
-
-    const active = callback.session ?? (await getSession());
+    const active = await getSession();
     setSession(active);
     setOrders(active ? await listMyOrders() : []);
-
-    if (active && new URLSearchParams(window.location.search).get('confirmed') === '1') {
-      setMessage('Email confirmed. Your account is ready.');
-      setMessageTone('success');
-      window.history.replaceState({}, '', '/account');
-    }
-
     setBusy(false);
   }
 
@@ -70,52 +50,17 @@ export default function AccountPage() {
 
     try {
       if (mode === 'signup') {
-        const result = await signUp(
+        await signUp(
           String(data.get('name') || ''),
           email,
           String(data.get('password') || ''),
         );
-
-        if (!result.access_token) {
-          setPendingEmail(email);
-          setMessage('Check your inbox. We sent a confirmation link that returns you to this account page.');
-          setMessageTone('success');
-          setMode('signin');
-          setBusy(false);
-          return;
-        }
       } else {
         await signIn(email, String(data.get('password') || ''));
       }
       await load();
     } catch (err) {
-      const text = err instanceof Error ? err.message : 'Could not continue.';
-      setMessage(text);
-      setMessageTone('error');
-      if (
-        mode === 'signin' &&
-        /confirm|verified|verification/i.test(text) &&
-        email
-      ) {
-        setPendingEmail(email);
-      }
-      setBusy(false);
-    }
-  }
-
-  async function resendConfirmation() {
-    if (!pendingEmail || busy) return;
-    setBusy(true);
-    setMessage('');
-
-    try {
-      await resendSignupConfirmation(pendingEmail);
-      setMessage('A fresh confirmation link has been sent.');
-      setMessageTone('success');
-    } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Could not resend the confirmation email.');
-      setMessageTone('error');
-    } finally {
+      setMessage(err instanceof Error ? err.message : 'Could not continue.');
       setBusy(false);
     }
   }
@@ -196,8 +141,8 @@ export default function AccountPage() {
             </p>
 
             {message && (
-              <div className={`account-message ${messageTone}`} role="status">
-                {messageTone === 'success' ? <CheckCircle2 size={17} /> : <UserRound size={17} />}
+              <div className="account-message error" role="alert">
+                <UserRound size={17} />
                 <span>{message}</span>
               </div>
             )}
@@ -216,7 +161,6 @@ export default function AccountPage() {
                   type="email"
                   required
                   autoComplete="email"
-                  defaultValue={pendingEmail}
                 />
               </label>
               <label>
@@ -242,17 +186,6 @@ export default function AccountPage() {
                 <ArrowRight size={17} />
               </button>
             </form>
-
-            {pendingEmail && (
-              <button
-                className="account-resend"
-                type="button"
-                disabled={busy}
-                onClick={resendConfirmation}
-              >
-                <RotateCcw size={15} /> Resend confirmation email
-              </button>
-            )}
 
             <div className="account-auth-switch">
               <span>
