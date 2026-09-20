@@ -2,10 +2,22 @@
 
 import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
-import { ArrowRight, LogOut, PackageCheck, UserRound } from 'lucide-react';
 import {
+  ArrowRight,
+  CheckCircle2,
+  Clock3,
+  Download,
+  LogOut,
+  PackageCheck,
+  RotateCcw,
+  ShieldCheck,
+  UserRound,
+} from 'lucide-react';
+import {
+  consumeAuthRedirect,
   getSession,
   listMyOrders,
+  resendSignupConfirmation,
   signIn,
   signOut,
   signUp,
@@ -20,12 +32,28 @@ export default function AccountPage() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [busy, setBusy] = useState(true);
   const [message, setMessage] = useState('');
+  const [messageTone, setMessageTone] = useState<'error' | 'success'>('error');
+  const [pendingEmail, setPendingEmail] = useState('');
 
   async function load() {
     setBusy(true);
-    const active = await getSession();
+
+    const callback = await consumeAuthRedirect();
+    if (callback.error) {
+      setMessage(callback.error);
+      setMessageTone('error');
+    }
+
+    const active = callback.session ?? (await getSession());
     setSession(active);
     setOrders(active ? await listMyOrders() : []);
+
+    if (active && new URLSearchParams(window.location.search).get('confirmed') === '1') {
+      setMessage('Email confirmed. Your account is ready.');
+      setMessageTone('success');
+      window.history.replaceState({}, '', '/account');
+    }
+
     setBusy(false);
   }
 
@@ -38,28 +66,48 @@ export default function AccountPage() {
     setMessage('');
     setBusy(true);
     const data = new FormData(event.currentTarget);
+    const email = String(data.get('email') || '').trim();
+
     try {
       if (mode === 'signup') {
         const result = await signUp(
           String(data.get('name') || ''),
-          String(data.get('email') || ''),
+          email,
           String(data.get('password') || ''),
         );
+
         if (!result.access_token) {
-          setMessage('Account created. Check your email to verify it, then sign in here.');
+          setPendingEmail(email);
+          setMessage('Check your inbox. We sent a confirmation link that returns you to this account page.');
+          setMessageTone('success');
           setMode('signin');
           setBusy(false);
           return;
         }
       } else {
-        await signIn(
-          String(data.get('email') || ''),
-          String(data.get('password') || ''),
-        );
+        await signIn(email, String(data.get('password') || ''));
       }
       await load();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Could not continue.');
+      setMessageTone('error');
+      setBusy(false);
+    }
+  }
+
+  async function resendConfirmation() {
+    if (!pendingEmail || busy) return;
+    setBusy(true);
+    setMessage('');
+
+    try {
+      await resendSignupConfirmation(pendingEmail);
+      setMessage('A fresh confirmation link has been sent.');
+      setMessageTone('success');
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Could not resend the confirmation email.');
+      setMessageTone('error');
+    } finally {
       setBusy(false);
     }
   }
@@ -71,63 +119,149 @@ export default function AccountPage() {
   }
 
   if (busy && !session) {
-    return <main id="main" className="commerce-flow-page account-page"><p>Loading…</p></main>;
+    return (
+      <main id="main" className="commerce-flow-page account-page account-loading">
+        <div className="account-loading-mark">
+          <span />
+          <p>Loading your account…</p>
+        </div>
+      </main>
+    );
   }
 
   if (!session) {
     return (
       <main id="main" className="commerce-flow-page account-page">
-        <section className="account-auth-card">
-          <UserRound size={28} />
-          <span>YOUR MERCH ACCOUNT</span>
-          <h1>{mode === 'signin' ? 'Track your orders.' : 'Create your account.'}</h1>
-          <p>
-            Accounts are recommended because they keep your order details,
-            tracking updates and downloadable receipts in one place.
-          </p>
-          <form onSubmit={submit}>
-            {mode === 'signup' && (
-              <label>
-                Full name
-                <input name="name" required autoComplete="name" maxLength={100} />
-              </label>
+        <div className="account-auth-layout">
+          <aside className="account-auth-intro">
+            <span className="commerce-kicker">ACCOUNT · ORDER TRACKING</span>
+            <h1>Keep every order in one place.</h1>
+            <p>
+              Guest checkout stays available. An account gives you the complete
+              history, live status and downloadable receipts after every order.
+            </p>
+
+            <div className="account-benefits">
+              <div>
+                <Clock3 size={19} />
+                <span>
+                  <strong>Track progress</strong>
+                  See confirmation, payment and fulfilment updates.
+                </span>
+              </div>
+              <div>
+                <Download size={19} />
+                <span>
+                  <strong>Keep receipts</strong>
+                  Download order receipts whenever you need them.
+                </span>
+              </div>
+              <div>
+                <ShieldCheck size={19} />
+                <span>
+                  <strong>Guest orders follow you</strong>
+                  Orders from this browser are attached automatically after sign-in.
+                </span>
+              </div>
+            </div>
+
+            <Link href="/collection" className="account-back-shop">
+              Shop the collection <ArrowRight size={17} />
+            </Link>
+          </aside>
+
+          <section className="account-auth-card">
+            <div className="account-auth-card-head">
+              <span className="account-auth-icon">
+                <UserRound size={19} />
+              </span>
+              <div>
+                <small>{mode === 'signin' ? 'WELCOME BACK' : 'NEW ACCOUNT'}</small>
+                <h2>{mode === 'signin' ? 'Sign in.' : 'Create account.'}</h2>
+              </div>
+            </div>
+
+            <p className="account-auth-copy">
+              {mode === 'signin'
+                ? 'Use the email and password connected to your MERCH ENSAM-R account.'
+                : 'Create an account now, or continue shopping as a guest and create one later.'}
+            </p>
+
+            {message && (
+              <div className={`account-message ${messageTone}`} role="status">
+                {messageTone === 'success' ? <CheckCircle2 size={17} /> : <UserRound size={17} />}
+                <span>{message}</span>
+              </div>
             )}
-            <label>
-              Email
-              <input name="email" type="email" required autoComplete="email" />
-            </label>
-            <label>
-              Password
-              <input
-                name="password"
-                type="password"
-                required
-                minLength={8}
-                autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-              />
-            </label>
-            {message && <p className="field-error">{message}</p>}
-            <button className="primary" disabled={busy}>
-              {mode === 'signin' ? 'Sign in' : 'Create account'} <ArrowRight size={17} />
-            </button>
-          </form>
-          <button
-            className="account-mode-switch"
-            type="button"
-            onClick={() => {
-              setMode(mode === 'signin' ? 'signup' : 'signin');
-              setMessage('');
-            }}
-          >
-            {mode === 'signin'
-              ? 'New here? Create an account'
-              : 'Already have an account? Sign in'}
-          </button>
-          <p className="account-claim-note">
-            If you already placed a guest order in this browser, it is attached
-            automatically after you sign in.
-          </p>
-        </section>
+
+            <form onSubmit={submit}>
+              {mode === 'signup' && (
+                <label>
+                  <span>Full name</span>
+                  <input name="name" required autoComplete="name" maxLength={100} />
+                </label>
+              )}
+              <label>
+                <span>Email</span>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  defaultValue={pendingEmail}
+                />
+              </label>
+              <label>
+                <span>Password</span>
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  minLength={8}
+                  autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                />
+                {mode === 'signup' && <small>At least 8 characters.</small>}
+              </label>
+
+              <button className="primary account-submit" disabled={busy}>
+                <span>
+                  {busy
+                    ? 'Working…'
+                    : mode === 'signin'
+                      ? 'Sign in'
+                      : 'Create account'}
+                </span>
+                <ArrowRight size={17} />
+              </button>
+            </form>
+
+            {pendingEmail && (
+              <button
+                className="account-resend"
+                type="button"
+                disabled={busy}
+                onClick={resendConfirmation}
+              >
+                <RotateCcw size={15} /> Resend confirmation email
+              </button>
+            )}
+
+            <div className="account-auth-switch">
+              <span>
+                {mode === 'signin' ? 'No account yet?' : 'Already registered?'}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode(mode === 'signin' ? 'signup' : 'signin');
+                  setMessage('');
+                }}
+              >
+                {mode === 'signin' ? 'Create one' : 'Sign in'}
+              </button>
+            </div>
+          </section>
+        </div>
       </main>
     );
   }
@@ -136,7 +270,7 @@ export default function AccountPage() {
     <main id="main" className="commerce-flow-page account-page">
       <header className="account-dashboard-head">
         <div>
-          <span>YOUR ACCOUNT</span>
+          <span className="commerce-kicker">YOUR ACCOUNT</span>
           <h1>Orders & tracking.</h1>
           <p>{session.user.email}</p>
         </div>
@@ -146,10 +280,13 @@ export default function AccountPage() {
       </header>
 
       {!orders.length ? (
-        <section className="empty-cart">
+        <section className="empty-cart account-empty">
           <PackageCheck size={34} />
           <h2>No orders yet.</h2>
-          <Link className="primary" href="/collection">Shop collection</Link>
+          <p>Your future orders, tracking updates and receipts will appear here.</p>
+          <Link className="primary" href="/collection">
+            Shop collection <ArrowRight size={17} />
+          </Link>
         </section>
       ) : (
         <section className="account-orders">
