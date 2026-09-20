@@ -7,7 +7,7 @@ import { pageMetadata } from '../site-metadata';
 export const metadata = pageMetadata({
   title: 'Contact the Team | MERCH ENSAM-R',
   description:
-    'Contact the MERCH ENSAM-R team directly for sizing help, order questions, delivery support and custom merch requests.',
+    'Contact the MERCH ENSAM-R team directly for sizing help, order questions, collection support and custom merch requests.',
   path: '/contact',
 });
 
