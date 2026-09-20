@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
-  CheckCircle2,
   Minus,
   Plus,
   ShoppingBag,
@@ -23,24 +23,37 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState('');
   const [added, setAdded] = useState(false);
-  const { addItem } = useCart();
+  const router = useRouter();
+  const { addItem, items: cartItems, count: cartCount, subtotal: cartSubtotal } = useCart();
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
     getSession().then((session) => setSignedIn(Boolean(session)));
   }, []);
 
+  function validateSelection() {
+    if (size) return true;
+    setError('Choose your size to continue.');
+    document.getElementById('size-S')?.focus();
+    return false;
+  }
+
   function addToCart(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!size) {
-      setError('Choose your size to continue.');
-      document.getElementById('size-S')?.focus();
-      return;
-    }
+    if (!validateSelection()) return;
 
     addItem(p, size, quantity);
     setError('');
     setAdded(true);
+  }
+
+  function buyNow() {
+    if (!validateSelection()) return;
+
+    addItem(p, size, quantity);
+    setError('');
+    setAdded(false);
+    router.push('/checkout');
   }
 
   return (
@@ -154,20 +167,51 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <strong>{p.price * quantity} MAD</strong>
             </div>
 
-            <button type="submit" className="primary order-button">
-              <span>Add to cart</span>
-              <ShoppingBag size={19} />
-            </button>
+            <div className="product-action-stack">
+              <button
+                type="button"
+                className="primary order-button buy-now-button"
+                onClick={buyNow}
+              >
+                <span>Buy now</span>
+                <ArrowRight size={19} />
+              </button>
+              <button
+                type="submit"
+                className="secondary order-button add-cart-button"
+              >
+                <span>Add to cart</span>
+                <ShoppingBag size={19} />
+              </button>
+            </div>
 
             {added && (
-              <div className="product-added" role="status">
-                <CheckCircle2 size={18} />
-                <div>
-                  <strong>Added to your cart.</strong>
+              <aside className="product-cart-panel" aria-live="polite">
+                <div className="product-cart-panel-head">
+                  <div>
+                    <span>YOUR CART</span>
+                    <strong>
+                      {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                    </strong>
+                  </div>
+                  <strong>{cartSubtotal} MAD</strong>
+                </div>
+
+                <div className="product-cart-panel-added">
+                  <span>Just added</span>
                   <p>{p.name} · {size} · Qty {quantity}</p>
                 </div>
-                <Link href="/cart">Open cart <ArrowRight size={15} /></Link>
-              </div>
+
+                {cartItems.length > 1 && (
+                  <p className="product-cart-panel-note">
+                    Plus {cartItems.length - 1} other {cartItems.length - 1 === 1 ? 'line' : 'lines'} already in your cart.
+                  </p>
+                )}
+
+                <Link className="product-cart-panel-link" href="/cart">
+                  View cart <ArrowRight size={16} />
+                </Link>
+              </aside>
             )}
 
             <p className="payment-note">
