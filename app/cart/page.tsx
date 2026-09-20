@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,10 +14,16 @@ import {
 import { useCart } from './cart-provider';
 import { CommerceSteps } from '../commerce-steps';
 import { products } from '../catalog';
+import { getSession } from '../../lib/supabase-rest';
 
 export default function CartPage() {
   const { items, subtotal, setQuantity, removeItem } = useCart();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    getSession().then((session) => setSignedIn(Boolean(session)));
+  }, []);
 
   return (
     <main id="main" className="cart-page commerce-flow-page">
@@ -152,18 +159,20 @@ export default function CartPage() {
               No payment is taken online. We’ll confirm availability and the
               final amount with you.
             </p>
-            <div className="account-nudge">
-              <UserRound size={20} />
-              <div>
-                <strong>Want order tracking?</strong>
-                <p>
-                  Create an account before or after checkout. Your latest guest
-                  order from this browser will be attached automatically once
-                  you sign in.
-                </p>
-                <Link href="/account">Create account / sign in</Link>
+            {signedIn === false && (
+              <div className="account-nudge">
+                <UserRound size={20} />
+                <div>
+                  <strong>Want order tracking?</strong>
+                  <p>
+                    Create an account before or after checkout. Your latest guest
+                    order from this browser will be attached automatically once
+                    you sign in.
+                  </p>
+                  <Link href="/account">Create account / sign in</Link>
+                </div>
               </div>
-            </div>
+            )}
           </aside>
         </div>
       )}
