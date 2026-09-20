@@ -22,9 +22,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   const [size, setSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState('');
-  const [added, setAdded] = useState(false);
   const router = useRouter();
-  const { addItem, items: cartItems, count: cartCount, subtotal: cartSubtotal } = useCart();
+  const { addItem } = useCart();
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -44,7 +43,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
 
     addItem(p, size, quantity);
     setError('');
-    setAdded(true);
   }
 
   function buyNow() {
@@ -52,7 +50,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
 
     addItem(p, size, quantity);
     setError('');
-    setAdded(false);
     router.push('/checkout');
   }
 
@@ -96,7 +93,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 onValueChange={(value) => {
                   setSize(String(value));
                   setError('');
-                  setAdded(false);
                 }}
                 aria-label="T-shirt size"
                 aria-describedby={error ? 'size-error' : undefined}
@@ -125,7 +121,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                   disabled={quantity <= 1}
                   onClick={() => {
                     setQuantity((value) => value - 1);
-                    setAdded(false);
                   }}
                 >
                   <Minus size={16} />
@@ -145,7 +140,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                         ? Math.max(1, Math.min(99, Math.floor(value)))
                         : 1,
                     );
-                    setAdded(false);
                   }}
                 />
                 <button
@@ -154,7 +148,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                   disabled={quantity >= 99}
                   onClick={() => {
                     setQuantity((value) => value + 1);
-                    setAdded(false);
                   }}
                 >
                   <Plus size={16} />
@@ -185,34 +178,6 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               </button>
             </div>
 
-            {added && (
-              <aside className="product-cart-panel" aria-live="polite">
-                <div className="product-cart-panel-head">
-                  <div>
-                    <span>YOUR CART</span>
-                    <strong>
-                      {cartCount} {cartCount === 1 ? 'item' : 'items'}
-                    </strong>
-                  </div>
-                  <strong>{cartSubtotal} MAD</strong>
-                </div>
-
-                <div className="product-cart-panel-added">
-                  <span>Just added</span>
-                  <p>{p.name} · {size} · Qty {quantity}</p>
-                </div>
-
-                {cartItems.length > 1 && (
-                  <p className="product-cart-panel-note">
-                    Plus {cartItems.length - 1} other {cartItems.length - 1 === 1 ? 'line' : 'lines'} already in your cart.
-                  </p>
-                )}
-
-                <Link className="product-cart-panel-link" href="/cart">
-                  View cart <ArrowRight size={16} />
-                </Link>
-              </aside>
-            )}
 
             <p className="payment-note">
               Checkout as a guest or with an account. No online payment is taken
