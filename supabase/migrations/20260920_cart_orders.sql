@@ -64,7 +64,7 @@ as $$
     (select is_admin from public.profiles where id = auth.uid()),
     false
   );
-$;
+$$;
 
 revoke all on function public.current_user_is_admin() from public;
 grant execute on function public.current_user_is_admin() to authenticated;
