@@ -9,7 +9,7 @@ export function MiniCartDock() {
   const { items, count, subtotal } = useCart();
   const pathname = usePathname();
 
-  if (!count || pathname === '/cart') return null;
+  if (!count || pathname === '/cart' || pathname.startsWith('/checkout')) return null;
 
   const latest = items[items.length - 1];
 
