@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
 import { useCart } from './cart-provider';
 
 export function MiniCartDock() {
   const { items, count, subtotal } = useCart();
+  const pathname = usePathname();
 
-  if (!count) return null;
+  if (!count || pathname === '/cart') return null;
 
   const latest = items[items.length - 1];
 
