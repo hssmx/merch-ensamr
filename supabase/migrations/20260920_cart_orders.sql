@@ -137,8 +137,8 @@ create or replace function public.create_store_order(
 returns jsonb
 language plpgsql
 security definer
-set search_path = public
-as $$
+set search_path = public, extensions
+as $
 declare
   v_user_id uuid := auth.uid();
   v_order public.orders;
@@ -280,8 +280,8 @@ create or replace function public.claim_guest_orders(p_claim_tokens text[])
 returns jsonb
 language plpgsql
 security definer
-set search_path = public
-as $$
+set search_path = public, extensions
+as $
 declare
   v_user_id uuid := auth.uid();
   v_claimed integer := 0;
