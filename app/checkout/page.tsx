@@ -275,6 +275,15 @@ export default function CheckoutPage() {
               </p>
             </div>
 
+            <label className="checkout-legal-consent">
+              <input name="terms_accepted" type="checkbox" required />
+              <span>
+                I have read and accept the <Link href="/legal#terms">Terms of sale</Link>,
+                {' '}<Link href="/legal#returns">Returns policy</Link> and
+                {' '}<Link href="/legal#privacy">Privacy policy</Link>.
+              </span>
+            </label>
+
             {error && (
               <p className="field-error" role="alert">
                 {error}
