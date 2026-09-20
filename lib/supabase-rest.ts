@@ -145,25 +145,88 @@ export async function signIn(email: string, password: string) {
   return session;
 }
 
+function getAuthRedirectUrl() {
+  if (typeof window === 'undefined') {
+    return 'https://merch-ensamr.store/account?confirmed=1';
+  }
+  return `${window.location.origin}/account?confirmed=1`;
+}
+
 export async function signUp(
   name: string,
   email: string,
   password: string,
 ) {
-  const result = await api<AuthSession & { identities?: unknown[] }>('/auth/v1/signup', {
-    method: 'POST',
-    body: JSON.stringify({
-      email: email.trim().toLowerCase(),
-      password,
-      data: { full_name: name.trim() },
-    }),
-  });
+  const redirectTo = getAuthRedirectUrl();
+  const result = await api<AuthSession & { identities?: unknown[] }>(
+    `/auth/v1/signup?redirect_to=${encodeURIComponent(redirectTo)}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email.trim().toLowerCase(),
+        password,
+        data: { full_name: name.trim() },
+      }),
+    },
+  );
 
   if (result.access_token) {
     saveSession(result);
     await claimLocalGuestOrders(result);
   }
   return result;
+}
+
+export async function resendSignupConfirmation(email: string) {
+  const redirectTo = getAuthRedirectUrl();
+  return api(
+    `/auth/v1/resend?redirect_to=${encodeURIComponent(redirectTo)}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'signup',
+        email: email.trim().toLowerCase(),
+      }),
+    },
+  );
+}
+
+export async function consumeAuthRedirect() {
+  if (typeof window === 'undefined' || !window.location.hash) {
+    return { session: null as AuthSession | null, error: null as string | null };
+  }
+
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  const error = params.get('error_description') || params.get('error');
+  if (error) {
+    window.history.replaceState({}, '', window.location.pathname + window.location.search);
+    return { session: null as AuthSession | null, error };
+  }
+
+  const accessToken = params.get('access_token');
+  const refreshToken = params.get('refresh_token');
+  if (!accessToken || !refreshToken) {
+    return { session: null as AuthSession | null, error: null as string | null };
+  }
+
+  try {
+    const user = await api<AuthUser>('/auth/v1/user', {}, accessToken);
+    const session: AuthSession = {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      expires_in: Number(params.get('expires_in') || 3600),
+      user,
+    };
+    saveSession(session);
+    window.history.replaceState({}, '', window.location.pathname + window.location.search);
+    await claimLocalGuestOrders(session);
+    return { session, error: null as string | null };
+  } catch (err) {
+    return {
+      session: null as AuthSession | null,
+      error: err instanceof Error ? err.message : 'Could not finish email confirmation.',
+    };
+  }
 }
 
 export async function signOut() {
