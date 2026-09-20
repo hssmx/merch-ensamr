@@ -144,8 +144,8 @@ export default function CartPage() {
                 <dd>{subtotal} MAD</dd>
               </div>
               <div>
-                <dt>Delivery</dt>
-                <dd>Confirmed by team</dd>
+                <dt>Collection</dt>
+                <dd>ENSAM Rabat</dd>
               </div>
               <div className="cart-total">
                 <dt>Current total</dt>
