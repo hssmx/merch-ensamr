@@ -2,17 +2,31 @@
 
 import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
-import { ArrowLeft, ArrowRight, CheckCircle2, Download, UserRound } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Download,
+  UserRound,
+} from 'lucide-react';
 import { useCart } from '../cart/cart-provider';
-import { createOrder, getSession, isSupabaseConfigured, type AuthSession } from '../../lib/supabase-rest';
+import {
+  createOrder,
+  getSession,
+  isSupabaseConfigured,
+  type AuthSession,
+} from '../../lib/supabase-rest';
 import type { StoredOrder } from '../../lib/order-types';
 import { downloadOrderReceipt } from '../receipt-pdf';
+import { CommerceSteps } from '../commerce-steps';
 
 export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const [session, setSession] = useState<AuthSession | null>(null);
   const signedIn = Boolean(session);
-  const [fulfillment, setFulfillment] = useState<'collection' | 'delivery'>('collection');
+  const [fulfillment, setFulfillment] = useState<'collection' | 'delivery'>(
+    'collection',
+  );
   const [order, setOrder] = useState<StoredOrder | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -45,7 +59,9 @@ export default function CheckoutPage() {
       setOrder(created);
       clear();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not place the order.');
+      setError(
+        err instanceof Error ? err.message : 'Could not place the order.',
+      );
     } finally {
       setBusy(false);
     }
@@ -66,13 +82,20 @@ export default function CheckoutPage() {
           <div className="payment-callout">
             <strong>Payment is required before your order is confirmed.</strong>
             <p>
-              The team will propose cash or bank transfer during the confirmation
-              call. Your status changes to Confirmed only after payment is received.
+              The team will propose cash or bank transfer during the
+              confirmation call. Your status changes to Confirmed only after
+              payment is received.
             </p>
           </div>
           <dl className="success-totals">
-            <div><dt>Items subtotal</dt><dd>{order.subtotal} MAD</dd></div>
-            <div><dt>Current total</dt><dd>{order.total} MAD</dd></div>
+            <div>
+              <dt>Items subtotal</dt>
+              <dd>{order.subtotal} MAD</dd>
+            </div>
+            <div>
+              <dt>Current total</dt>
+              <dd>{order.total} MAD</dd>
+            </div>
           </dl>
           <button
             className="secondary"
@@ -91,9 +114,9 @@ export default function CheckoutPage() {
               <div>
                 <strong>Create an account to track this order.</strong>
                 <p>
-                  Guest checkout is complete, but live tracking is available only
-                  from an account. Sign up on this device and this order will be
-                  attached automatically.
+                  Guest checkout is complete, but live tracking is available
+                  only from an account. Sign up on this device and this order
+                  will be attached automatically.
                 </p>
                 <Link href="/account">Create account / sign in</Link>
               </div>
@@ -118,6 +141,7 @@ export default function CheckoutPage() {
           from our team to confirm the order and arrange payment.
         </p>
       </header>
+      <CommerceSteps current={1} />
 
       {!isSupabaseConfigured() && (
         <div className="system-notice error">
@@ -128,7 +152,9 @@ export default function CheckoutPage() {
       {!items.length ? (
         <section className="empty-cart">
           <h2>Your cart is empty.</h2>
-          <Link className="primary" href="/collection">Return to collection</Link>
+          <Link className="primary" href="/collection">
+            Return to collection
+          </Link>
         </section>
       ) : (
         <div className="checkout-layout">
@@ -157,7 +183,10 @@ export default function CheckoutPage() {
             )}
 
             <fieldset>
-              <legend>Contact details</legend>
+              <legend>
+                <span className="form-section-number">01 /</span> Contact
+                details
+              </legend>
               <label>
                 Full name
                 <input
@@ -165,7 +194,9 @@ export default function CheckoutPage() {
                   autoComplete="name"
                   required
                   maxLength={100}
-                  defaultValue={String(session?.user.user_metadata?.full_name || '')}
+                  defaultValue={String(
+                    session?.user.user_metadata?.full_name || '',
+                  )}
                 />
               </label>
               <label>
@@ -181,14 +212,25 @@ export default function CheckoutPage() {
               </label>
               <label>
                 Phone
-                <input name="phone" type="tel" autoComplete="tel" required maxLength={30} />
+                <input
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  required
+                  maxLength={30}
+                />
               </label>
             </fieldset>
 
             <fieldset>
-              <legend>How do you want to receive it?</legend>
+              <legend>
+                <span className="form-section-number">02 /</span> How do you
+                want to receive it?
+              </legend>
               <div className="fulfillment-choice">
-                <label className={fulfillment === 'collection' ? 'selected' : ''}>
+                <label
+                  className={fulfillment === 'collection' ? 'selected' : ''}
+                >
                   <input
                     type="radio"
                     name="fulfillment"
@@ -226,25 +268,40 @@ export default function CheckoutPage() {
             <div className="payment-callout">
               <strong>What happens next?</strong>
               <p>
-                An admin reviews the order, then a team member calls you.
-                They will confirm availability and propose cash or bank transfer.
+                An admin reviews the order, then a team member calls you. They
+                will confirm availability and propose cash or bank transfer.
                 Payment is necessary before the order can be marked Confirmed.
               </p>
             </div>
 
-            {error && <p className="field-error" role="alert">{error}</p>}
-            <button className="primary checkout-submit" disabled={busy || !isSupabaseConfigured()}>
+            {error && (
+              <p className="field-error" role="alert">
+                {error}
+              </p>
+            )}
+            <button
+              className="primary checkout-submit"
+              disabled={busy || !isSupabaseConfigured()}
+            >
               {busy ? 'Placing order…' : 'Place order'} <ArrowRight size={18} />
             </button>
           </form>
 
           <aside className="checkout-summary">
             <span>YOUR CART</span>
+            <div className="commerce-summary-heading">
+              The order
+              <span>
+                {items.length} {items.length === 1 ? 'design' : 'designs'}
+              </span>
+            </div>
             {items.map((item) => (
               <div className="checkout-line" key={item.key}>
                 <div>
                   <strong>{item.name}</strong>
-                  <small>{item.color} · {item.size} · Qty {item.quantity}</small>
+                  <small>
+                    {item.color} · {item.size} · Qty {item.quantity}
+                  </small>
                 </div>
                 <b>{item.unitPrice * item.quantity} MAD</b>
               </div>
@@ -253,7 +310,10 @@ export default function CheckoutPage() {
               <span>Items subtotal</span>
               <strong>{subtotal} MAD</strong>
             </div>
-            <p>Any delivery fee is added only after the team confirms it with you.</p>
+            <p>
+              Any delivery fee is added only after the team confirms it with
+              you.
+            </p>
           </aside>
         </div>
       )}

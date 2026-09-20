@@ -11,24 +11,47 @@ import {
   type StoredOrder,
 } from '../../../../lib/order-types';
 import { downloadOrderReceipt } from '../../../receipt-pdf';
+import { CommerceSteps } from '../../../commerce-steps';
 
-const stages = ['pending_confirmation', 'awaiting_payment', 'confirmed', 'preparing', 'ready', 'completed'];
+const stages = [
+  'pending_confirmation',
+  'awaiting_payment',
+  'confirmed',
+  'preparing',
+  'ready',
+  'completed',
+];
 
 export default function AccountOrderPage() {
   const params = useParams();
   const id = String(params.id || '');
   const [order, setOrder] = useState<StoredOrder | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    getMyOrder(id).then((value) => {
-      setOrder(value);
-      setLoading(false);
-    });
+    let active = true;
+    void getMyOrder(id)
+      .then((value) => {
+        if (active) setOrder(value);
+      })
+      .catch(() => {
+        if (active) setLoadError(true);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [id]);
 
   if (loading) {
-    return <main id="main" className="commerce-flow-page"><p>Loading order…</p></main>;
+    return (
+      <main id="main" className="commerce-flow-page">
+        <p>Loading order…</p>
+      </main>
+    );
   }
 
   if (!order) {
@@ -36,8 +59,14 @@ export default function AccountOrderPage() {
       <main id="main" className="commerce-flow-page">
         <section className="empty-cart">
           <h1>Order not found.</h1>
-          <p>Sign in with the account that owns this order.</p>
-          <Link className="primary" href="/account">Back to account</Link>
+          <p>
+            {loadError
+              ? 'We could not load this order. Please try again in a moment.'
+              : 'Sign in with the account that owns this order.'}
+          </p>
+          <Link className="primary" href="/account">
+            Back to account
+          </Link>
         </section>
       </main>
     );
@@ -55,10 +84,22 @@ export default function AccountOrderPage() {
         <h1>{statusLabels[order.status]}</h1>
         <p>{statusDescriptions[order.status]}</p>
       </header>
+      <CommerceSteps current={2} />
 
       <div className="order-detail-layout">
         <section className="order-tracking">
-          <h2>Tracking</h2>
+          <div className="tracking-heading">
+            <span>ORDER JOURNEY</span>
+            <h2>Where it stands.</h2>
+            <p>
+              Placed{' '}
+              {new Date(order.created_at).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </p>
+          </div>
           {order.status === 'cancelled' ? (
             <div className="system-notice error">This order was cancelled.</div>
           ) : (
@@ -74,11 +115,23 @@ export default function AccountOrderPage() {
                         : ''
                   }
                 >
-                  <i />
+                  <i aria-hidden="true">
+                    {index < currentIndex
+                      ? '✓'
+                      : String(index + 1).padStart(2, '0')}
+                  </i>
                   <div>
-                    <strong>{statusLabels[stage as keyof typeof statusLabels]}</strong>
+                    <strong>
+                      {statusLabels[stage as keyof typeof statusLabels]}
+                    </strong>
                     {index === currentIndex && (
-                      <p>{statusDescriptions[stage as keyof typeof statusDescriptions]}</p>
+                      <p>
+                        {
+                          statusDescriptions[
+                            stage as keyof typeof statusDescriptions
+                          ]
+                        }
+                      </p>
                     )}
                   </div>
                 </li>
@@ -96,7 +149,8 @@ export default function AccountOrderPage() {
               <strong>Manual confirmation</strong>
               <p>
                 Expect a call from our team. They will propose cash or bank
-                transfer. Payment must be received before your order is confirmed.
+                transfer. Payment must be received before your order is
+                confirmed.
               </p>
             </div>
           </div>
@@ -108,7 +162,9 @@ export default function AccountOrderPage() {
             <div className="checkout-line" key={`${item.slug}:${item.size}`}>
               <div>
                 <strong>{item.name}</strong>
-                <small>{item.color} · {item.size} · Qty {item.quantity}</small>
+                <small>
+                  {item.color} · {item.size} · Qty {item.quantity}
+                </small>
               </div>
               <b>{item.lineTotal} MAD</b>
             </div>
@@ -116,22 +172,51 @@ export default function AccountOrderPage() {
           <dl>
             <div>
               <dt>Receive by</dt>
-              <dd>{order.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}</dd>
+              <dd>
+                {order.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}
+              </dd>
             </div>
-            {order.address && <div><dt>Address</dt><dd>{order.address}</dd></div>}
-            {order.notes && <div><dt>Your note</dt><dd>{order.notes}</dd></div>}
-            <div><dt>Subtotal</dt><dd>{order.subtotal} MAD</dd></div>
-            <div><dt>Delivery fee</dt><dd>{order.delivery_fee} MAD</dd></div>
-            <div><dt>Total</dt><dd>{order.total} MAD</dd></div>
-            <div><dt>Payment</dt><dd>{order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}</dd></div>
+            {order.address && (
+              <div>
+                <dt>Address</dt>
+                <dd>{order.address}</dd>
+              </div>
+            )}
+            {order.notes && (
+              <div>
+                <dt>Your note</dt>
+                <dd>{order.notes}</dd>
+              </div>
+            )}
+            <div>
+              <dt>Subtotal</dt>
+              <dd>{order.subtotal} MAD</dd>
+            </div>
+            <div>
+              <dt>Delivery fee</dt>
+              <dd>{order.delivery_fee} MAD</dd>
+            </div>
+            <div>
+              <dt>Total</dt>
+              <dd>{order.total} MAD</dd>
+            </div>
+            <div>
+              <dt>Payment</dt>
+              <dd>{order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}</dd>
+            </div>
             {order.payment_method && (
               <div>
                 <dt>Method</dt>
-                <dd>{order.payment_method === 'cash' ? 'Cash' : 'Bank transfer'}</dd>
+                <dd>
+                  {order.payment_method === 'cash' ? 'Cash' : 'Bank transfer'}
+                </dd>
               </div>
             )}
           </dl>
-          <button className="secondary" onClick={() => downloadOrderReceipt(order)}>
+          <button
+            className="secondary"
+            onClick={() => downloadOrderReceipt(order)}
+          >
             <Download size={17} /> Download receipt
           </button>
         </aside>

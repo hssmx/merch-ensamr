@@ -73,7 +73,10 @@ export default function AccountPage() {
 
   if (busy && !session) {
     return (
-      <main id="main" className="commerce-flow-page account-page account-loading">
+      <main
+        id="main"
+        className="commerce-flow-page account-page account-loading"
+      >
         <div className="account-loading-mark">
           <span />
           <p>Loading your account…</p>
@@ -113,7 +116,8 @@ export default function AccountPage() {
                 <ShieldCheck size={19} />
                 <span>
                   <strong>Guest orders follow you</strong>
-                  Orders from this browser are attached automatically after sign-in.
+                  Orders from this browser are attached automatically after
+                  sign-in.
                 </span>
               </div>
             </div>
@@ -129,7 +133,9 @@ export default function AccountPage() {
                 <UserRound size={19} />
               </span>
               <div>
-                <small>{mode === 'signin' ? 'WELCOME BACK' : 'NEW ACCOUNT'}</small>
+                <small>
+                  {mode === 'signin' ? 'WELCOME BACK' : 'NEW ACCOUNT'}
+                </small>
                 <h2>{mode === 'signin' ? 'Sign in.' : 'Create account.'}</h2>
               </div>
             </div>
@@ -151,7 +157,12 @@ export default function AccountPage() {
               {mode === 'signup' && (
                 <label>
                   <span>Full name</span>
-                  <input name="name" required autoComplete="name" maxLength={100} />
+                  <input
+                    name="name"
+                    required
+                    autoComplete="name"
+                    maxLength={100}
+                  />
                 </label>
               )}
               <label>
@@ -170,7 +181,9 @@ export default function AccountPage() {
                   type="password"
                   required
                   minLength={8}
-                  autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                  autoComplete={
+                    mode === 'signin' ? 'current-password' : 'new-password'
+                  }
                 />
                 {mode === 'signup' && <small>At least 8 characters.</small>}
               </label>
@@ -212,7 +225,7 @@ export default function AccountPage() {
       <header className="account-dashboard-head">
         <div>
           <span className="commerce-kicker">YOUR ACCOUNT</span>
-          <h1>Orders & tracking.</h1>
+          <h1>Your orders.</h1>
           <p>{session.user.email}</p>
         </div>
         <button type="button" className="secondary" onClick={logout}>
@@ -220,11 +233,24 @@ export default function AccountPage() {
         </button>
       </header>
 
+      <div className="account-dashboard-intro">
+        <div>
+          <span>YOUR ORDER HISTORY</span>
+          <strong>{String(orders.length).padStart(2, '0')}</strong>
+        </div>
+        <p>
+          Every order, update and receipt in one place. Open an order to see
+          where it stands.
+        </p>
+      </div>
+
       {!orders.length ? (
         <section className="empty-cart account-empty">
           <PackageCheck size={34} />
           <h2>No orders yet.</h2>
-          <p>Your future orders, tracking updates and receipts will appear here.</p>
+          <p>
+            Your future orders, tracking updates and receipts will appear here.
+          </p>
           <Link className="primary" href="/collection">
             Shop collection <ArrowRight size={17} />
           </Link>
@@ -234,12 +260,25 @@ export default function AccountPage() {
           {orders.map((order) => (
             <article key={order.id} className="account-order-card">
               <div>
-                <small>{order.order_number}</small>
+                <small>
+                  ORDER {order.order_number} ·{' '}
+                  {new Date(order.created_at).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}
+                </small>
                 <h2>{statusLabels[order.status]}</h2>
-                <p>{new Date(order.created_at).toLocaleDateString()}</p>
+                <p>{order.items.map((item) => item.name).join(' · ')}</p>
               </div>
               <div className="account-order-meta">
-                <span>{order.items.reduce((sum, item) => sum + item.quantity, 0)} items</span>
+                <span>
+                  {order.items.reduce((sum, item) => sum + item.quantity, 0)}{' '}
+                  {order.items.reduce((sum, item) => sum + item.quantity, 0) ===
+                  1
+                    ? 'piece'
+                    : 'pieces'}
+                </span>
                 <strong>{order.total} MAD</strong>
               </div>
               <Link href={`/account/orders/${order.id}`}>

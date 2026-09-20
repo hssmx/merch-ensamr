@@ -40,7 +40,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') as CartItem[];
+      const stored = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || '[]',
+      ) as CartItem[];
       if (Array.isArray(stored)) setItems(stored);
     } catch {
       localStorage.removeItem(STORAGE_KEY);
@@ -54,32 +56,37 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     window.dispatchEvent(new Event('merch-cart-change'));
   }, [items, ready]);
 
-  const addItem = useCallback((product: Product, size: string, quantity: number) => {
-    const key = `${product.slug}:${size}`;
-    setItems((current) => {
-      const existing = current.find((item) => item.key === key);
-      if (existing) {
-        return current.map((item) =>
-          item.key === key
-            ? { ...item, quantity: Math.min(99, item.quantity + quantity) }
-            : item,
-        );
-      }
-      return [
-        ...current,
-        {
-          key,
-          slug: product.slug,
-          name: product.name,
-          color: product.color,
-          size,
-          quantity: Math.max(1, Math.min(99, quantity)),
-          unitPrice: product.price,
-          image: product.back,
-        },
-      ];
-    });
-  }, []);
+  const addItem = useCallback(
+    (product: Product, size: string, quantity: number) => {
+      const key = `${product.slug}:${size}`;
+      setItems((current) => {
+        const existing = current.find((item) => item.key === key);
+        if (existing) {
+          return current.map((item) =>
+            item.key === key
+              ? { ...item, quantity: Math.min(99, item.quantity + quantity) }
+              : item,
+          );
+        }
+        return [
+          ...current,
+          {
+            key,
+            slug: product.slug,
+            name: product.name,
+            color: product.color,
+            size,
+            quantity: Math.max(1, Math.min(99, quantity)),
+            unitPrice: product.price,
+            image: product.back
+              .replace('/cutouts/', '/')
+              .replace(/\.svg$/, '.webp'),
+          },
+        ];
+      });
+    },
+    [],
+  );
 
   const setQuantity = useCallback((key: string, quantity: number) => {
     setItems((current) =>
