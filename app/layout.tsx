@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteHeader, SiteFooter } from './site-shell';
 import { CartProvider } from './cart/cart-provider';
+import { CookieConsent } from './cookie-consent';
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_SOCIAL_IMAGE,
@@ -29,6 +30,7 @@ import './product-page-refresh.css';
 import './cart-system.css';
 import './commerce-mobile.css';
 import './commerce-finish.css';
+import './legal-system.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -74,6 +76,7 @@ export default function RootLayout({
           <SiteHeader />
           {children}
           <SiteFooter />
+          <CookieConsent />
         </CartProvider>
       </body>
     </html>
