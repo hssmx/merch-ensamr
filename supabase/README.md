@@ -38,7 +38,7 @@ set is_admin = true
 where lower(email) = lower('ADMIN_EMAIL_HERE');
 ```
 
-That account can then open `/admin`, review orders, mark payment as paid, choose cash or bank transfer, set delivery fees, update tracking status, and download receipts.
+That account can then open `/admin`, review orders, mark payment as paid, choose cash or bank transfer, confirm ENSAM Rabat collection, update tracking status, and download receipts.
 
 ## Order flow
 
