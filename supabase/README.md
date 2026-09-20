@@ -54,28 +54,12 @@ That account can then open `/admin`, review orders, mark payment as paid, choose
 WhatsApp contacts remain available on the Contact page for questions, sizing help and custom requests; standard merchandise checkout no longer depends on WhatsApp.
 
 
-## 4. Configure Auth redirects
+## 4. Account signup
 
-In Supabase Dashboard go to Authentication -> URL Configuration.
+Store accounts are created through the `store-signup` Supabase Edge Function.
+The function creates the Auth user with the email already confirmed, then the
+storefront signs the customer in immediately.
 
-Set the Site URL to:
+This intentionally avoids confirmation-email redirects and Supabase's built-in
+email sending limits. Guest checkout still works without an account.
 
-```
-https://merch-ensamr.store
-```
-
-Add these Redirect URLs:
-
-```
-https://merch-ensamr.store/**
-https://*-hssmxs-projects.vercel.app/**
-```
-
-The storefront passes the current origin back to Supabase during sign-up, so preview
-confirmation emails return to the active Vercel preview and production emails return
-to the store domain. The account page consumes the Auth callback, stores the session,
-claims any guest orders from the same browser, and removes the auth fragment from the URL.
-
-Existing confirmation emails created before this setting was changed may still point to
-localhost or have expired; use the account page's resend-confirmation action after the
-redirect configuration is updated.
