@@ -20,6 +20,15 @@ import type { StoredOrder } from '../../lib/order-types';
 import { downloadOrderReceipt } from '../receipt-pdf';
 import { CommerceSteps } from '../commerce-steps';
 
+type CheckoutDraft = {
+  customerName: string;
+  email: string;
+  phone: string;
+  fulfillment: 'collection' | 'delivery';
+  address: string;
+  notes: string;
+};
+
 export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const [session, setSession] = useState<AuthSession | null>(null);
@@ -28,6 +37,8 @@ export default function CheckoutPage() {
     'collection',
   );
   const [order, setOrder] = useState<StoredOrder | null>(null);
+  const [draft, setDraft] = useState<CheckoutDraft | null>(null);
+  const [reviewing, setReviewing] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -35,21 +46,39 @@ export default function CheckoutPage() {
     getSession().then(setSession);
   }, []);
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  function reviewCheckout(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!items.length || busy) return;
+
+    const data = new FormData(event.currentTarget);
+    const nextDraft: CheckoutDraft = {
+      customerName: String(data.get('name') || '').trim(),
+      email: String(data.get('email') || '').trim(),
+      phone: String(data.get('phone') || '').trim(),
+      fulfillment,
+      address: String(data.get('address') || '').trim(),
+      notes: String(data.get('notes') || '').trim(),
+    };
+
+    setDraft(nextDraft);
+    setError('');
+    setReviewing(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function confirmOrder() {
+    if (!draft || !items.length || busy) return;
     setBusy(true);
     setError('');
 
-    const data = new FormData(event.currentTarget);
     try {
       const created = await createOrder({
-        customerName: String(data.get('name') || ''),
-        email: String(data.get('email') || ''),
-        phone: String(data.get('phone') || ''),
-        fulfillment,
-        address: String(data.get('address') || ''),
-        notes: String(data.get('notes') || ''),
+        customerName: draft.customerName,
+        email: draft.email,
+        phone: draft.phone,
+        fulfillment: draft.fulfillment,
+        address: draft.address,
+        notes: draft.notes,
         items: items.map((item) => ({
           slug: item.slug,
           size: item.size,
@@ -157,9 +186,132 @@ export default function CheckoutPage() {
             Return to collection
           </Link>
         </section>
+      ) : reviewing && draft ? (
+        <section className="checkout-review" aria-labelledby="checkout-review-title">
+          <div className="checkout-review-head">
+            <div>
+              <span>FINAL CHECK</span>
+              <h2 id="checkout-review-title">Your order.</h2>
+              <p>Check the details below before sending your order to the team.</p>
+            </div>
+            <button
+              type="button"
+              className="checkout-review-edit"
+              onClick={() => {
+                setReviewing(false);
+                setError('');
+              }}
+            >
+              Edit details
+            </button>
+          </div>
+
+          <div className="checkout-review-grid">
+            <section className="checkout-review-details">
+              <div className="checkout-review-block">
+                <span>Contact</span>
+                <dl>
+                  <div>
+                    <dt>Name</dt>
+                    <dd>{draft.customerName}</dd>
+                  </div>
+                  <div>
+                    <dt>Email</dt>
+                    <dd>{draft.email}</dd>
+                  </div>
+                  <div>
+                    <dt>Phone</dt>
+                    <dd>{draft.phone}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div className="checkout-review-block">
+                <span>Fulfilment</span>
+                <dl>
+                  <div>
+                    <dt>Method</dt>
+                    <dd>
+                      {draft.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}
+                    </dd>
+                  </div>
+                  {draft.fulfillment === 'delivery' && (
+                    <div>
+                      <dt>Address</dt>
+                      <dd>{draft.address}</dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt>Notes</dt>
+                    <dd>{draft.notes || 'None'}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div className="checkout-review-notice">
+                <strong>Before you confirm</strong>
+                <p>
+                  No payment is taken on this website. The team will call you to
+                  confirm availability, collection or delivery, and the payment
+                  method. The order is only confirmed after payment.
+                </p>
+              </div>
+            </section>
+
+            <aside className="checkout-review-order">
+              <span>YOUR ORDER</span>
+              <div className="checkout-review-items">
+                {items.map((item) => (
+                  <div className="checkout-review-item" key={item.key}>
+                    <div>
+                      <strong>{item.name}</strong>
+                      <small>
+                        {item.color} · {item.size} · Qty {item.quantity}
+                      </small>
+                    </div>
+                    <b>{item.unitPrice * item.quantity} MAD</b>
+                  </div>
+                ))}
+              </div>
+
+              <div className="checkout-review-total">
+                <span>Items subtotal</span>
+                <strong>{subtotal} MAD</strong>
+              </div>
+              {draft.fulfillment === 'delivery' && (
+                <p className="checkout-review-fee">
+                  Delivery fee is confirmed by the team and may be added later.
+                </p>
+              )}
+
+              {error && (
+                <p className="field-error" role="alert">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="button"
+                className="primary checkout-review-confirm"
+                disabled={busy || !isSupabaseConfigured()}
+                onClick={confirmOrder}
+              >
+                {busy ? 'Confirming…' : 'Confirm order'} <ArrowRight size={18} />
+              </button>
+              <button
+                type="button"
+                className="checkout-review-back"
+                disabled={busy}
+                onClick={() => setReviewing(false)}
+              >
+                Go back and edit
+              </button>
+            </aside>
+          </div>
+        </section>
       ) : (
         <div className="checkout-layout">
-          <form className="checkout-form" onSubmit={submit}>
+          <form className="checkout-form" onSubmit={reviewCheckout}>
             {signedIn ? (
               <div className="checkout-account-state">
                 <UserRound size={18} />
@@ -195,9 +347,10 @@ export default function CheckoutPage() {
                   autoComplete="name"
                   required
                   maxLength={100}
-                  defaultValue={String(
-                    session?.user.user_metadata?.full_name || '',
-                  )}
+                  defaultValue={
+                    draft?.customerName ||
+                    String(session?.user.user_metadata?.full_name || '')
+                  }
                 />
               </label>
               <label>
@@ -208,7 +361,7 @@ export default function CheckoutPage() {
                   autoComplete="email"
                   required
                   maxLength={180}
-                  defaultValue={session?.user.email || ''}
+                  defaultValue={draft?.email || session?.user.email || ''}
                 />
               </label>
               <label>
@@ -219,6 +372,7 @@ export default function CheckoutPage() {
                   autoComplete="tel"
                   required
                   maxLength={30}
+                  defaultValue={draft?.phone || ''}
                 />
               </label>
             </fieldset>
@@ -257,12 +411,23 @@ export default function CheckoutPage() {
               {fulfillment === 'delivery' && (
                 <label>
                   Delivery address
-                  <textarea name="address" required rows={3} maxLength={400} />
+                  <textarea
+                    name="address"
+                    required
+                    rows={3}
+                    maxLength={400}
+                    defaultValue={draft?.address || ''}
+                  />
                 </label>
               )}
               <label>
                 Notes <small>Optional</small>
-                <textarea name="notes" rows={3} maxLength={500} />
+                <textarea
+                  name="notes"
+                  rows={3}
+                  maxLength={500}
+                  defaultValue={draft?.notes || ''}
+                />
               </label>
             </fieldset>
 
@@ -276,7 +441,12 @@ export default function CheckoutPage() {
             </div>
 
             <label className="checkout-legal-consent">
-              <input name="terms_accepted" type="checkbox" required />
+              <input
+                name="terms_accepted"
+                type="checkbox"
+                required
+                defaultChecked={Boolean(draft)}
+              />
               <span>
                 I have read and accept the <Link href="/legal#terms">Terms of sale</Link>,
                 {' '}<Link href="/legal#returns">Returns policy</Link> and
@@ -293,7 +463,7 @@ export default function CheckoutPage() {
               className="primary checkout-submit"
               disabled={busy || !isSupabaseConfigured()}
             >
-              {busy ? 'Placing order…' : 'Place order'} <ArrowRight size={18} />
+              Review order <ArrowRight size={18} />
             </button>
           </form>
 
