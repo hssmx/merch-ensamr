@@ -89,8 +89,16 @@ export default function AccountPage() {
       }
       await load();
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Could not continue.');
+      const text = err instanceof Error ? err.message : 'Could not continue.';
+      setMessage(text);
       setMessageTone('error');
+      if (
+        mode === 'signin' &&
+        /confirm|verified|verification/i.test(text) &&
+        email
+      ) {
+        setPendingEmail(email);
+      }
       setBusy(false);
     }
   }
