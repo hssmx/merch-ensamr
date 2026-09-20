@@ -76,3 +76,82 @@
   .admin-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .admin-privacy-request form { grid-template-columns:1fr; }
 }
+
+
+.account-forgot-link {
+  width: fit-content;
+  margin-top: -5px;
+  color: var(--lux-wine);
+  font: 650 9px/1.3 'Outfit', sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.account-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.account-head-actions .secondary {
+  min-height: 42px;
+}
+
+.account-auth-privacy {
+  margin: 4px 0 0;
+  color: #837970;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.account-auth-privacy a {
+  color: var(--lux-wine);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-bottom {
+  gap: 14px 28px;
+}
+
+.footer-legal-links {
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-legal-links a,
+.footer-legal-links button {
+  font-size: 8px !important;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .account-head-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .account-head-actions .secondary {
+    flex: 1 1 180px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .account-head-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .account-head-actions .secondary {
+    width: 100%;
+  }
+
+  .footer-legal-links {
+    justify-content: flex-start;
+  }
+}
