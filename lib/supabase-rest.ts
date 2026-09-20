@@ -46,8 +46,7 @@ type CheckoutInput = {
   customerName: string;
   email: string;
   phone: string;
-  fulfillment: 'collection' | 'delivery';
-  address?: string;
+  fulfillment: 'collection';
   notes?: string;
   items: Array<{ slug: string; size: string; quantity: number }>;
 };
@@ -389,7 +388,7 @@ export async function createOrder(input: CheckoutInput) {
         p_email: input.email.trim().toLowerCase(),
         p_phone: input.phone.trim(),
         p_fulfillment: input.fulfillment,
-        p_address: input.address?.trim() || null,
+        p_address: null,
         p_notes: input.notes?.trim() || null,
         p_items: input.items,
         p_claim_token: claimToken,
