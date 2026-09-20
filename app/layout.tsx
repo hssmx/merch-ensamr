@@ -27,6 +27,7 @@ import './homepage-refresh.css';
 import './service-strip-polish.css';
 import './product-page-refresh.css';
 import './cart-system.css';
+import './commerce-mobile.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
