@@ -59,7 +59,7 @@ language sql
 stable
 security definer
 set search_path = public
-as $
+as $$
   select coalesce(
     (select is_admin from public.profiles where id = auth.uid()),
     false
@@ -267,7 +267,7 @@ begin
 
   return to_jsonb(v_order);
 end;
-$;
+$$;
 
 revoke all on function public.create_store_order(
   text, text, text, text, text, text, jsonb, text
