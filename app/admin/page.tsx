@@ -68,7 +68,6 @@ export default function AdminPage() {
         payment_status: String(data.get('payment_status')) as StoredOrder['payment_status'],
         payment_method:
           (String(data.get('payment_method') || '') as PaymentMethod) || null,
-        delivery_fee: Math.max(0, Number(data.get('delivery_fee') || 0)),
         admin_note: String(data.get('admin_note') || '').trim() || null,
       });
       setOrders((current) =>
@@ -163,8 +162,8 @@ export default function AdminPage() {
 
             <div className="admin-customer-details">
               <p>
-                <strong>{order.fulfillment === 'delivery' ? 'Delivery' : 'Collection'}</strong>
-                {order.address && <span>{order.address}</span>}
+                <strong>Collection</strong>
+                <span>ENSAM Rabat</span>
               </p>
               {order.notes && <p><strong>Customer note</strong><span>{order.notes}</span></p>}
               {order.admin_note && <p><strong>Current team note</strong><span>{order.admin_note}</span></p>}
@@ -207,10 +206,6 @@ export default function AdminPage() {
                   <option value="cash">Cash</option>
                   <option value="bank_transfer">Bank transfer</option>
                 </select>
-              </label>
-              <label>
-                Delivery fee (MAD)
-                <input name="delivery_fee" type="number" min="0" step="1" defaultValue={order.delivery_fee} />
               </label>
               <label className="admin-note-field">
                 Customer-visible update
