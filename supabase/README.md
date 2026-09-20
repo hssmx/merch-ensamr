@@ -52,3 +52,30 @@ That account can then open `/admin`, review orders, mark payment as paid, choose
 8. Signed-in customers see status changes and can download receipts from their account.
 
 WhatsApp contacts remain available on the Contact page for questions, sizing help and custom requests; standard merchandise checkout no longer depends on WhatsApp.
+
+
+## 4. Configure Auth redirects
+
+In Supabase Dashboard go to Authentication -> URL Configuration.
+
+Set the Site URL to:
+
+```
+https://merch-ensamr.store
+```
+
+Add these Redirect URLs:
+
+```
+https://merch-ensamr.store/**
+https://*-hssmxs-projects.vercel.app/**
+```
+
+The storefront passes the current origin back to Supabase during sign-up, so preview
+confirmation emails return to the active Vercel preview and production emails return
+to the store domain. The account page consumes the Auth callback, stores the session,
+claims any guest orders from the same browser, and removes the auth fragment from the URL.
+
+Existing confirmation emails created before this setting was changed may still point to
+localhost or have expired; use the account page's resend-confirmation action after the
+redirect configuration is updated.
