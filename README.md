@@ -1,12 +1,12 @@
 # MERCH ENSAMR
 
-The storefront uses the supplied Bloxic Homepage One package as its design source, ported into the React application and adapted for the ENSAM Rabat catalog and WhatsApp ordering flow.
+The storefront uses the supplied Bloxic Homepage One package as its design source, ported into the React application and adapted for the ENSAM Rabat catalog, cart checkout and Supabase-backed order tracking.
 
 Local preview only; not deployed. Run npm run dev.
 
 ## Collection
 
-Dedicated collection and product pages use all six supplied mockups. MIND IN MOTION: 135 MAD. Be creART(et métiers)ive and Think Beyond Limits: 120 MAD each. Sizes: S, M, L, XL, XXL. Includes photo browsing, enlarged galleries, size and quantity selection, subtotal, order review, order-text copy/download and related products.
+Dedicated collection and product pages use the current front/back wearer photography. MIND IN MOTION: 135 MAD. Be creART(et métiers)ive and Think Beyond Limits: 120 MAD each. Sizes: S, M, L, XL, XXL. Products add to a shared cart; checkout supports guests and accounts, while account holders receive persistent order history, tracking and receipts.
 
 ## Customizer
 
@@ -16,7 +16,7 @@ Save editable designs as JSON and reopen them with validated embedded images. Ex
 
 ## Before deployment
 
-Add the four WhatsApp contacts in app/shop-config.ts. Ordering/payment are arranged on WhatsApp. Custom designs request a quote; there are no invented custom-print prices. Confirm printable dimensions against the supplier's templates. Browser visual/interaction QA has not been performed.
+Apply the Supabase migration and configure the public Supabase URL/anon key as described in supabase/README.md. Standard merchandise ordering uses cart checkout and manual admin confirmation. WhatsApp remains available for support and custom-service conversations. Custom designs request a quote; there are no invented custom-print prices. Confirm printable dimensions against the supplier's templates. Browser visual/interaction QA has not been performed.
 
 ## Design and assets
 

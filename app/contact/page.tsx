@@ -5,9 +5,9 @@ import { whatsappUrl } from '../catalog';
 import { pageMetadata } from '../site-metadata';
 
 export const metadata = pageMetadata({
-  title: 'Contact & WhatsApp Orders | MERCH ENSAM-R',
+  title: 'Contact the Team | MERCH ENSAM-R',
   description:
-    'Contact the MERCH ENSAM-R team directly for T-shirt orders, sizing, payment, delivery and custom merch requests.',
+    'Contact the MERCH ENSAM-R team directly for sizing help, order questions, delivery support and custom merch requests.',
   path: '/contact',
 });
 
@@ -27,8 +27,9 @@ export default function ContactPage() {
           <span>merch.</span>
         </h1>
         <p>
-          Orders, payment, sizing and custom requests are handled personally
-          through WhatsApp. Choose the contact that fits your request.
+          Need help with sizing, an existing order or a custom request? Our
+          contacts stay available on WhatsApp. Standard T-shirt orders are placed
+          through the cart and checkout.
         </p>
       </section>
 
@@ -61,21 +62,21 @@ export default function ContactPage() {
 
       <section className="contact-guide">
         <div>
-          <span>HOW TO ORDER</span>
-          <h2>Your order in three steps.</h2>
+          <span>HOW ORDERS WORK</span>
+          <h2>Checkout first. We confirm by phone.</h2>
         </div>
         <ol>
           <li>
             <strong>01</strong>
-            <span>Choose a design, size and quantity.</span>
+            <span>Choose a design, size and quantity, then add it to your cart.</span>
           </li>
           <li>
             <strong>02</strong>
-            <span>Send the prepared order on WhatsApp.</span>
+            <span>Check out as a guest or with an account for tracking.</span>
           </li>
           <li>
             <strong>03</strong>
-            <span>Confirm availability, payment and delivery.</span>
+            <span>Expect a call from our team. Pay by the agreed cash or bank method before final confirmation.</span>
           </li>
         </ol>
       </section>
