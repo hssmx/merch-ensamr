@@ -285,7 +285,18 @@ export function SiteFooter() {
       </div>
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} MERCH ENSAM-R</span>
-        <span>RABAT · MOROCCO</span>
+        <div className="footer-legal-links">
+          <Link href="/legal">Legal & policies</Link>
+          <Link href="/legal#privacy">Privacy</Link>
+          <Link href="/legal#returns">Returns</Link>
+          <Link href="/legal#cookies">Cookies</Link>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('merch-open-cookie-settings'))}
+          >
+            Cookie settings
+          </button>
+        </div>
         <a href="#main">BACK TO TOP ↑</a>
       </div>
     </footer>
