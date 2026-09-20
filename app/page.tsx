@@ -174,10 +174,10 @@ export default function Home() {
             </p>
           </details>
           <details>
-            <summary>How do payment and delivery work?</summary>
+            <summary>How do payment and collection work?</summary>
             <p>
               Website admins review each order manually. Expect a call from our
-              team to confirm availability, delivery or collection and whether
+              team to confirm availability, collection at ENSAM Rabat and whether
               you will pay by cash or bank transfer. Payment is required before
               the order is confirmed.
             </p>
