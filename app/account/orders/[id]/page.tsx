@@ -72,78 +72,86 @@ export default function AccountOrderPage() {
   }
 
   const currentIndex = stages.indexOf(order.status);
+  const progress =
+    currentIndex < 0 ? 0 : (currentIndex / (stages.length - 1)) * 100;
+  const currentStep = currentIndex < 0 ? 0 : currentIndex + 1;
 
   return (
     <main id="main" className="commerce-flow-page order-detail-page">
-      <header className="order-detail-head">
+      <header className="order-detail-head order-detail-head-clean">
         <Link className="page-back" href="/account">
           <ArrowLeft size={16} /> All orders
         </Link>
-        <span>{order.order_number}</span>
-        <h1>{statusLabels[order.status]}</h1>
-        <p>{statusDescriptions[order.status]}</p>
+        <div className="order-detail-heading-copy">
+          <span>{order.order_number}</span>
+          <h1>Order details.</h1>
+          <p>
+            Placed{' '}
+            {new Date(order.created_at).toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}
+          </p>
+        </div>
       </header>
-      <div className="order-detail-layout">
-        <section className="order-tracking tracking-minimal">
-          <div className="tracking-minimal-head">
+
+      <div className="order-detail-layout order-detail-layout-clean">
+        <section className="order-status-card">
+          <div className="order-status-card-head">
             <div>
               <span>Current status</span>
-              <strong>{statusLabels[order.status]}</strong>
+              <h2>{statusLabels[order.status]}</h2>
             </div>
-            <time dateTime={order.created_at}>
-              Placed{' '}
-              {new Date(order.created_at).toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              })}
-            </time>
+            {order.status !== 'cancelled' && (
+              <small>
+                Step {currentStep} of {stages.length}
+              </small>
+            )}
           </div>
 
           {order.status === 'cancelled' ? (
-            <p className="tracking-cancelled">This order was cancelled.</p>
+            <div className="order-status-cancelled">
+              <strong>Order cancelled</strong>
+              <p>This order will not continue through fulfilment.</p>
+            </div>
           ) : (
-            <ol className="tracking-minimal-list">
-              {stages.map((stage, index) => (
-                <li
-                  key={stage}
-                  className={
-                    index < currentIndex
-                      ? 'done'
-                      : index === currentIndex
-                        ? 'current'
-                        : ''
-                  }
-                >
-                  <i aria-hidden="true" />
-                  <div>
-                    <strong>
-                      {statusLabels[stage as keyof typeof statusLabels]}
-                    </strong>
-                    {index === currentIndex && (
-                      <p>
-                        {
-                          statusDescriptions[
-                            stage as keyof typeof statusDescriptions
-                          ]
-                        }
-                      </p>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <>
+              <div className="order-progress" aria-label="Order progress">
+                <div className="order-progress-track">
+                  <i style={{ width: `${progress}%` }} />
+                </div>
+                <div className="order-progress-dots" aria-hidden="true">
+                  {stages.map((stage, index) => (
+                    <i
+                      key={stage}
+                      className={
+                        index < currentIndex
+                          ? 'done'
+                          : index === currentIndex
+                            ? 'current'
+                            : ''
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="order-current-copy">
+                <p>{statusDescriptions[order.status]}</p>
+              </div>
+            </>
           )}
 
           {order.admin_note && (
-            <div className="tracking-team-note">
+            <div className="order-team-update">
               <span>Team update</span>
               <p>{order.admin_note}</p>
             </div>
           )}
 
-          <div className="tracking-confirmation-note">
-            <strong>Confirmation by phone</strong>
+          <div className="order-next-step">
+            <span>What happens next</span>
             <p>
               We’ll call to confirm the order and payment method. Payment must be
               received before the order is marked confirmed.
@@ -151,19 +159,29 @@ export default function AccountOrderPage() {
           </div>
         </section>
 
-        <aside className="order-receipt-card">
-          <span>ORDER DETAILS</span>
-          {order.items.map((item) => (
-            <div className="checkout-line" key={`${item.slug}:${item.size}`}>
-              <div>
-                <strong>{item.name}</strong>
-                <small>
-                  {item.color} · {item.size} · Qty {item.quantity}
-                </small>
-              </div>
-              <b>{item.lineTotal} MAD</b>
+        <aside className="order-receipt-card order-receipt-card-clean">
+          <div className="order-receipt-card-head">
+            <div>
+              <span>YOUR ORDER</span>
+              <strong>{order.items.reduce((sum, item) => sum + item.quantity, 0)} items</strong>
             </div>
-          ))}
+            <strong>{order.total} MAD</strong>
+          </div>
+
+          <div className="order-receipt-items">
+            {order.items.map((item) => (
+              <div className="checkout-line" key={`${item.slug}:${item.size}`}>
+                <div>
+                  <strong>{item.name}</strong>
+                  <small>
+                    {item.color} · {item.size} · Qty {item.quantity}
+                  </small>
+                </div>
+                <b>{item.lineTotal} MAD</b>
+              </div>
+            ))}
+          </div>
+
           <dl>
             <div>
               <dt>Receive by</dt>
@@ -187,14 +205,12 @@ export default function AccountOrderPage() {
               <dt>Subtotal</dt>
               <dd>{order.subtotal} MAD</dd>
             </div>
-            <div>
-              <dt>Delivery fee</dt>
-              <dd>{order.delivery_fee} MAD</dd>
-            </div>
-            <div>
-              <dt>Total</dt>
-              <dd>{order.total} MAD</dd>
-            </div>
+            {order.delivery_fee > 0 && (
+              <div>
+                <dt>Delivery fee</dt>
+                <dd>{order.delivery_fee} MAD</dd>
+              </div>
+            )}
             <div>
               <dt>Payment</dt>
               <dd>{order.payment_status === 'paid' ? 'Paid' : 'Unpaid'}</dd>
@@ -208,6 +224,7 @@ export default function AccountOrderPage() {
               </div>
             )}
           </dl>
+
           <button
             className="secondary"
             onClick={() => downloadOrderReceipt(order)}
