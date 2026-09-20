@@ -31,6 +31,17 @@ export type AuthSession = {
   user: AuthUser;
 };
 
+export type AccountDeletionRequest = {
+  id: string;
+  user_id: string;
+  email: string;
+  reason: string | null;
+  status: 'pending' | 'in_review' | 'completed' | 'rejected';
+  admin_note: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 type CheckoutInput = {
   customerName: string;
   email: string;
@@ -237,6 +248,84 @@ export async function resendSignupConfirmation(email: string) {
   );
 }
 
+function passwordResetRedirectUrl() {
+  if (typeof window === 'undefined') {
+    return 'https://merch-ensamr.store/account/reset-password';
+  }
+  return `${window.location.origin}/account/reset-password`;
+}
+
+export async function requestPasswordReset(email: string) {
+  const redirectTo = passwordResetRedirectUrl();
+  return api(
+    `/auth/v1/recover?redirect_to=${encodeURIComponent(redirectTo)}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ email: email.trim().toLowerCase() }),
+    },
+  );
+}
+
+export async function consumePasswordRecoveryRedirect() {
+  if (typeof window === 'undefined') {
+    return { session: null as AuthSession | null, error: null as string | null };
+  }
+
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const error = hash.get('error_description') || hash.get('error');
+  if (error) {
+    window.history.replaceState({}, '', window.location.pathname);
+    return { session: null as AuthSession | null, error };
+  }
+
+  if (hash.get('type') !== 'recovery') {
+    return {
+      session: null as AuthSession | null,
+      error: 'This password reset link is invalid or has expired.',
+    };
+  }
+
+  const accessToken = hash.get('access_token');
+  const refreshToken = hash.get('refresh_token');
+  if (!accessToken || !refreshToken) {
+    return {
+      session: null as AuthSession | null,
+      error: 'This password reset link is invalid or has expired.',
+    };
+  }
+
+  try {
+    const user = await api<AuthUser>('/auth/v1/user', {}, accessToken);
+    const session: AuthSession = {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      expires_in: Number(hash.get('expires_in') || 3600),
+      user,
+    };
+    saveSession(session);
+    window.history.replaceState({}, '', window.location.pathname);
+    return { session, error: null as string | null };
+  } catch (err) {
+    return {
+      session: null as AuthSession | null,
+      error: err instanceof Error ? err.message : 'Could not open password reset.',
+    };
+  }
+}
+
+export async function updatePassword(password: string) {
+  const session = await getSession();
+  if (!session) throw new Error('Open a valid password reset link first.');
+  return api<AuthUser>(
+    '/auth/v1/user',
+    {
+      method: 'PUT',
+      body: JSON.stringify({ password }),
+    },
+    session.access_token,
+  );
+}
+
 export async function signOut() {
   const session = await getSession();
   if (session) {
@@ -343,6 +432,64 @@ export async function isCurrentUserAdmin() {
     session.access_token,
   );
   return Boolean(rows[0]?.is_admin);
+}
+
+export async function requestAccountDeletion(reason?: string) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+
+  const rows = await api<AccountDeletionRequest[]>(
+    '/rest/v1/account_deletion_requests',
+    {
+      method: 'POST',
+      headers: { Prefer: 'return=representation' },
+      body: JSON.stringify({
+        user_id: session.user.id,
+        email: session.user.email || '',
+        reason: reason?.trim() || null,
+      }),
+    },
+    session.access_token,
+  );
+  return rows[0];
+}
+
+export async function getMyDeletionRequests() {
+  const session = await getSession();
+  if (!session) return [] as AccountDeletionRequest[];
+  return api<AccountDeletionRequest[]>(
+    '/rest/v1/account_deletion_requests?select=*&order=created_at.desc',
+    {},
+    session.access_token,
+  );
+}
+
+export async function listDeletionRequests() {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<AccountDeletionRequest[]>(
+    '/rest/v1/account_deletion_requests?select=*&order=created_at.desc',
+    {},
+    session.access_token,
+  );
+}
+
+export async function adminUpdateDeletionRequest(
+  id: string,
+  values: Pick<AccountDeletionRequest, 'status' | 'admin_note'>,
+) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  const rows = await api<AccountDeletionRequest[]>(
+    `/rest/v1/account_deletion_requests?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: 'PATCH',
+      headers: { Prefer: 'return=representation' },
+      body: JSON.stringify(values),
+    },
+    session.access_token,
+  );
+  return rows[0];
 }
 
 export async function listAllOrders() {
