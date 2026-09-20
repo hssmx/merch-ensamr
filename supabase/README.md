@@ -1,6 +1,6 @@
 # Supabase setup for cart + order tracking
 
-The storefront code expects one Supabase project and uses only the public anon key in the browser. Admin authorization is enforced with Row Level Security; no service-role key is shipped to customers.
+The storefront code expects one Supabase project and uses only the public publishable key in the browser. Admin authorization is enforced with Row Level Security; no service-role key is shipped to customers.
 
 ## 1. Apply the schema
 
@@ -54,12 +54,29 @@ That account can then open `/admin`, review orders, mark payment as paid, choose
 WhatsApp contacts remain available on the Contact page for questions, sizing help and custom requests; standard merchandise checkout no longer depends on WhatsApp.
 
 
-## 4. Account signup
+## 4. Configure email confirmation
 
-Store accounts are created through the `store-signup` Supabase Edge Function.
-The function creates the Auth user with the email already confirmed, then the
-storefront signs the customer in immediately.
+In Supabase Dashboard:
 
-This intentionally avoids confirmation-email redirects and Supabase's built-in
-email sending limits. Guest checkout still works without an account.
+1. Open **Authentication → Providers → Email** and keep **Confirm email** enabled.
+2. Open **Authentication → URL Configuration**.
+3. Set **Site URL** to:
 
+```
+https://merch-ensamr.store
+```
+
+4. Add these Redirect URLs:
+
+```
+https://merch-ensamr.store/**
+https://*-hssmxs-projects.vercel.app/**
+```
+
+The storefront sends the active site origin as the signup redirect and returns
+customers to `/account?confirmed=1`. The account page consumes Supabase's
+implicit-flow session from the URL fragment, stores the session locally, claims
+any guest orders from the same browser, then cleans the auth tokens from the URL.
+
+The legacy auto-confirm `store-signup` Edge Function is disabled and no longer
+used by the storefront.
