@@ -70,59 +70,60 @@ export default function CheckoutPage() {
   if (order) {
     return (
       <main id="main" className="commerce-flow-page checkout-success">
-        <section className="order-success-card">
-          <CheckCircle2 size={42} />
-          <span>ORDER RECEIVED · {order.order_number}</span>
-          <h1>We received your order.</h1>
-          <p>
-            This is not confirmed yet. A member of the MERCH ENSAM-R team will
-            call you to confirm availability, delivery or collection, and the
-            payment method.
-          </p>
-          <div className="payment-callout">
-            <strong>Payment is required before your order is confirmed.</strong>
-            <p>
-              The team will propose cash or bank transfer during the
-              confirmation call. Your status changes to Confirmed only after
-              payment is received.
-            </p>
+        <section className="order-success-card order-success-minimal">
+          <div className="order-success-mark">
+            <CheckCircle2 size={22} aria-hidden="true" />
+            <div>
+              <span>ORDER RECEIVED</span>
+              <strong>{order.order_number}</strong>
+            </div>
           </div>
-          <dl className="success-totals">
+
+          <h1>Order received.</h1>
+          <p>
+            We’ll call you to confirm availability, collection or delivery, and
+            the payment method. The order is confirmed only after payment.
+          </p>
+
+          <div className="order-success-summary">
             <div>
-              <dt>Items subtotal</dt>
-              <dd>{order.subtotal} MAD</dd>
+              <span>Total</span>
+              <strong>{order.total} MAD</strong>
             </div>
             <div>
-              <dt>Current total</dt>
-              <dd>{order.total} MAD</dd>
+              <span>Status</span>
+              <strong>Awaiting confirmation</strong>
             </div>
-          </dl>
-          <button
-            className="secondary"
-            type="button"
-            onClick={() => downloadOrderReceipt(order)}
-          >
-            <Download size={17} /> Download receipt
-          </button>
-          {signedIn ? (
-            <Link className="primary" href={`/account/orders/${order.id}`}>
-              Track this order <ArrowRight size={18} />
+          </div>
+
+          <div className="order-success-actions">
+            {signedIn ? (
+              <Link className="primary" href={`/account/orders/${order.id}`}>
+                Track order <ArrowRight size={17} />
+              </Link>
+            ) : (
+              <Link className="primary" href="/account">
+                Create account to track <ArrowRight size={17} />
+              </Link>
+            )}
+            <button
+              className="secondary"
+              type="button"
+              onClick={() => downloadOrderReceipt(order)}
+            >
+              <Download size={16} /> Download receipt
+            </button>
+            <Link className="order-success-shop-link" href="/collection">
+              Continue shopping
             </Link>
-          ) : (
-            <div className="account-nudge account-nudge-success">
-              <UserRound size={21} />
-              <div>
-                <strong>Create an account to track this order.</strong>
-                <p>
-                  Guest checkout is complete, but live tracking is available
-                  only from an account. Sign up on this device and this order
-                  will be attached automatically.
-                </p>
-                <Link href="/account">Create account / sign in</Link>
-              </div>
-            </div>
+          </div>
+
+          {!signedIn && (
+            <p className="order-success-guest-note">
+              Create the account on this device and this guest order will attach
+              automatically.
+            </p>
           )}
-          <Link href="/collection">Continue shopping</Link>
         </section>
       </main>
     );
