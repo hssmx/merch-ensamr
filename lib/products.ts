@@ -1,11 +1,10 @@
 import type { Product } from '../app/catalog';
 import { products as fallbackProducts } from '../app/catalog';
 import { getSession } from './supabase-rest';
-
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
-const SUPABASE_PUBLISHABLE_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
+import {
+  SUPABASE_PUBLISHABLE_KEY,
+  SUPABASE_URL,
+} from './supabase-config';
 
 export type ProductStatus = 'draft' | 'published';
 

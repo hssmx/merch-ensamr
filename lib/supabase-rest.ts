@@ -7,9 +7,11 @@ import type {
   PaymentStatus,
   StoredOrder,
 } from './order-types';
+import {
+  SUPABASE_PUBLISHABLE_KEY,
+  SUPABASE_URL,
+} from './supabase-config';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
-const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 const SESSION_KEY = 'merch-ensamr-auth-session';
 const CLAIM_KEY = 'merch-ensamr-guest-order-claims';
 
