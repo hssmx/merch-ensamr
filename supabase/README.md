@@ -17,6 +17,10 @@ It creates:
 - admin-only order updates
 - a database constraint that blocks Confirmed / Preparing / Ready / Completed while payment is still unpaid
 
+Then run `supabase/migrations/20261003_admin_products.sql`. It adds the live
+product catalog, the public product-image bucket, admin-only product writes and
+database-backed price/size validation during checkout.
+
 ## 2. Configure the storefront
 
 Set these build variables in Vercel:
@@ -38,7 +42,9 @@ set is_admin = true
 where lower(email) = lower('ADMIN_EMAIL_HERE');
 ```
 
-That account can then open `/admin`, review orders, mark payment as paid, choose cash or bank transfer, set delivery fees, update tracking status, and download receipts.
+That account can then open `/admin`, review orders, mark payment as paid, choose
+cash or bank transfer, set delivery fees, update tracking status, download
+receipts, and add draft or published products with storefront imagery.
 
 ## Order flow
 
@@ -52,7 +58,6 @@ That account can then open `/admin`, review orders, mark payment as paid, choose
 8. Signed-in customers see status changes and can download receipts from their account.
 
 WhatsApp contacts remain available on the Contact page for questions, sizing help and custom requests; standard merchandise checkout no longer depends on WhatsApp.
-
 
 ## 4. Configure email confirmation
 

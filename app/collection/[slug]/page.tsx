@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { products } from '../../catalog';
+import { getPublishedProduct } from '../../../lib/products';
 import ProductDetail from '../../product-detail';
 import { pageMetadata } from '../../site-metadata';
 type Props = { params: Promise<{ slug: string }> };
@@ -9,7 +10,7 @@ export function generateStaticParams() {
 }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const p = products.find((p) => p.slug === slug);
+  const p = await getPublishedProduct(slug);
   if (!p) {
     return {
       title: 'Product not found | MERCH ENSAM-R',
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const p = products.find((p) => p.slug === slug);
+  const p = await getPublishedProduct(slug);
   if (!p) notFound();
   return <ProductDetail product={p} />;
 }

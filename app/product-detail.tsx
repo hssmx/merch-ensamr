@@ -27,7 +27,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
-    getSession().then((session) => setSignedIn(Boolean(session)));
+    void getSession().then((session) => setSignedIn(Boolean(session)));
   }, []);
 
   function addToCart(event: React.SyntheticEvent<HTMLFormElement>) {
@@ -72,7 +72,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               style={{ background: p.color === 'Black' ? '#161616' : '#fff' }}
             />
             {p.color}
-            <span>Front & back printed</span>
+            <span>{p.printDetails}</span>
           </div>
 
           <form onSubmit={addToCart}>
@@ -89,8 +89,11 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 aria-describedby={error ? 'size-error' : undefined}
                 className="size-options"
               >
-                {['S', 'M', 'L', 'XL', 'XXL'].map((option) => (
-                  <label className={size === option ? 'selected' : ''} key={option}>
+                {p.sizes.map((option) => (
+                  <label
+                    className={size === option ? 'selected' : ''}
+                    key={option}
+                  >
                     <RadioGroupItem id={`size-${option}`} value={option} />
                     <span>{option}</span>
                   </label>
@@ -160,14 +163,18 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             </button>
 
             {added && (
-              <div className="product-added" role="status">
+              <output className="product-added">
                 <CheckCircle2 size={18} />
                 <div>
                   <strong>Added to your cart.</strong>
-                  <p>{p.name} · {size} · Qty {quantity}</p>
+                  <p>
+                    {p.name} · {size} · Qty {quantity}
+                  </p>
                 </div>
-                <Link href="/cart">Open cart <ArrowRight size={15} /></Link>
-              </div>
+                <Link href="/cart">
+                  Open cart <ArrowRight size={15} />
+                </Link>
+              </output>
             )}
 
             <p className="payment-note">
@@ -193,8 +200,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <summary>How do I order?</summary>
               <p>
                 Choose your size and quantity, add the item to your cart, then
-                check out normally. You can order as a guest or sign in for order
-                tracking.
+                check out normally. You can order as a guest or sign in for
+                order tracking.
               </p>
             </details>
             <details>
@@ -217,7 +224,7 @@ export default function ProductDetail({ product: p }: { product: Product }) {
             <details>
               <summary>Need help with sizing?</summary>
               <p>
-                Available sizes are S, M, L, XL and XXL. You can still contact
+                Available sizes are {p.sizes.join(', ')}. You can still contact
                 our team directly if you need measurements or product help.
               </p>
             </details>

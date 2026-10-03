@@ -1,8 +1,12 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
-import { products } from './catalog';
+'use client';
 
-const cardAngles = [0, 1, 0] as const;
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { products } from './catalog';
+import { listPublishedProducts } from '../lib/products';
+
 const cardImages: Record<string, string> = {
   'mind-in-motion':
     'https://d2ol7oe51mr4n9.cloudfront.net/user_3GNa7EkhqeL3HHNhlp99MWIEnhE/66988455-2a2e-4193-bb04-1c03f067b817.png',
@@ -21,33 +25,40 @@ export default function CollectionGrid({
   excludeSlug,
   className = '',
 }: CollectionGridProps = {}) {
-  const visibleProducts = products.filter((p) => p.slug !== excludeSlug);
+  const [catalog, setCatalog] = useState(products);
+
+  useEffect(() => {
+    let active = true;
+    void listPublishedProducts().then((next) => {
+      if (active) setCatalog(next);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const visibleProducts = catalog.filter((p) => p.slug !== excludeSlug);
 
   return (
     <div className={`product-grid commerce-grid ${className}`.trim()}>
       {visibleProducts.map((p) => {
-        const productIndex = products.findIndex((item) => item.slug === p.slug);
-
         return (
-        <Link
-          className="commerce-card"
-          href={`/collection/${p.slug}`}
-          key={p.slug}
-          aria-label={`Explore ${p.name}, ${p.price} MAD`}
-        >
-          <span className="commerce-card-media">
-            <span className="commerce-card-badge">DROP 001 · {p.number}</span>
-            {cardImages[p.slug] ? (
-              <img
-                src={cardImages[p.slug]}
+          <Link
+            className="commerce-card"
+            href={`/collection/${p.slug}`}
+            key={p.slug}
+            aria-label={`Explore ${p.name}, ${p.price} MAD`}
+          >
+            <span className="commerce-card-media">
+              <span className="commerce-card-badge">DROP 001 · {p.number}</span>
+              <Image
+                src={cardImages[p.slug] || p.model}
                 alt={`Model wearing ${p.name}`}
+                fill
+                unoptimized
                 loading="lazy"
                 decoding="async"
                 style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
                   objectFit: 'cover',
                   objectPosition:
                     p.slug === 'be-creative'
@@ -57,36 +68,31 @@ export default function CollectionGrid({
                         : 'center 27%',
                   padding: 0,
                   transform:
-                    p.slug === 'be-creative'
+                    cardImages[p.slug] && p.slug === 'be-creative'
                       ? 'scale(1.03)'
-                      : p.slug === 'think-beyond-limits'
+                      : cardImages[p.slug] && p.slug === 'think-beyond-limits'
                         ? 'scale(1.02)'
-                        : 'scale(1.06)',
+                        : cardImages[p.slug]
+                          ? 'scale(1.06)'
+                          : 'none',
                   transformOrigin: 'center 35%',
                 }}
               />
-            ) : (
-              <span
-                className={`commerce-card-wearer media-row-${productIndex} media-angle-${cardAngles[productIndex]}`}
-                role="img"
-                aria-label={`Model wearing ${p.name}`}
-              />
-            )}
-          </span>
-
-          <span className="commerce-card-body">
-            <span className="commerce-card-copy">
-              <small>{p.color} · FRONT & BACK PRINT</small>
-              <strong>{p.name}</strong>
             </span>
-            <span className="commerce-card-price">{p.price} MAD</span>
-          </span>
 
-          <span className="commerce-card-cta">
-            <span>View T-shirt</span>
-            <ArrowRight size={18} />
-          </span>
-        </Link>
+            <span className="commerce-card-body">
+              <span className="commerce-card-copy">
+                <small>{p.color} · FRONT & BACK PRINT</small>
+                <strong>{p.name}</strong>
+              </span>
+              <span className="commerce-card-price">{p.price} MAD</span>
+            </span>
+
+            <span className="commerce-card-cta">
+              <span>View T-shirt</span>
+              <ArrowRight size={18} />
+            </span>
+          </Link>
         );
       })}
     </div>

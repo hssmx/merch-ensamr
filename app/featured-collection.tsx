@@ -1,8 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { products } from './catalog';
+import { listPublishedProducts } from '../lib/products';
 
 const heroPairs = [
   [
@@ -39,17 +41,34 @@ const heroPairs = [
 
 export default function FeaturedCollection() {
   const [index, setIndex] = useState(0);
+  const [catalog, setCatalog] = useState(products);
+
+  useEffect(() => {
+    let active = true;
+    void listPublishedProducts().then((next) => {
+      if (active && next.length) {
+        setCatalog(next);
+        setIndex(0);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const timer = window.setInterval(
-      () => setIndex((i) => (i + 1) % products.length),
+      () => setIndex((i) => (i + 1) % catalog.length),
       6000,
     );
     return () => window.clearInterval(timer);
-  }, []);
+  }, [catalog.length]);
 
-  const p = products[index];
-  const heroPair = heroPairs[index];
+  const p = catalog[index];
+  const heroPair = heroPairs[index] ?? [
+    { label: 'Front', src: p.front },
+    { label: 'Back', src: p.back },
+  ];
 
   return (
     <section
@@ -88,11 +107,14 @@ export default function FeaturedCollection() {
         >
           <div className="campaign-duo">
             {heroPair.map((shot, shotIndex) => (
-              <img
+              <Image
                 key={shot.label}
                 className={`campaign-model campaign-model-${shotIndex + 1}`}
                 src={shot.src}
                 alt={`${p.name}, ${shot.label.toLowerCase()} worn view`}
+                width={900}
+                height={1200}
+                unoptimized
                 loading="eager"
                 decoding="async"
               />
@@ -105,7 +127,10 @@ export default function FeaturedCollection() {
             <span>FEATURED T-SHIRT</span>
             <div className="launch-product-buy">
               <strong>{p.price} MAD</strong>
-              <Link href={`/collection/${p.slug}`} aria-label={`View ${p.name}`}>
+              <Link
+                href={`/collection/${p.slug}`}
+                aria-label={`View ${p.name}`}
+              >
                 <span>View</span>
                 <ArrowRight size={18} />
               </Link>

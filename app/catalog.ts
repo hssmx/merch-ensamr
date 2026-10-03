@@ -8,6 +8,8 @@ export type Product = {
   back: string;
   model: string;
   number: string;
+  sizes: string[];
+  printDetails: string;
 };
 export const products: Product[] = [
   {
@@ -16,6 +18,8 @@ export const products: Product[] = [
     price: 135,
     color: 'Black',
     number: '01',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    printDetails: 'Front & back printed',
     description:
       'Black T-shirt with cream and violet artwork. A compact Mind in Motion print sits on the front, with the full composition across the back.',
     front: '/collection/cutouts/mind-in-motion-front.svg',
@@ -28,6 +32,8 @@ export const products: Product[] = [
     price: 120,
     color: 'Black',
     number: '02',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    printDetails: 'Front & back printed',
     description:
       'Black T-shirt with a red and white ENSAM mark on the front and the Be creART(et métiers)ive artwork across the back.',
     front: '/collection/cutouts/be-creative-front.svg',
@@ -40,6 +46,8 @@ export const products: Product[] = [
     price: 120,
     color: 'White',
     number: '03',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    printDetails: 'Front & back printed',
     description:
       'White T-shirt with a compact ENSAM mark on the front and the deep-red Think Beyond Limits artwork across the back.',
     front: '/collection/cutouts/think-beyond-limits-front.svg',

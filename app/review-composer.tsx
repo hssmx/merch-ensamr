@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Check, MessageCircle } from 'lucide-react';
 import { products, whatsappUrl } from './catalog';
 import { shopConfig } from './shop-config';
+import { listPublishedProducts } from '../lib/products';
 
 export default function ReviewComposer() {
   const [product, setProduct] = useState(products[0].name);
@@ -11,6 +12,17 @@ export default function ReviewComposer() {
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState('');
   const [status, setStatus] = useState('');
+  const [catalog, setCatalog] = useState(products);
+
+  useEffect(() => {
+    let active = true;
+    void listPublishedProducts().then((next) => {
+      if (active) setCatalog(next);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const message = useMemo(
     () =>
@@ -55,7 +67,7 @@ export default function ReviewComposer() {
               value={product}
               onChange={(event) => setProduct(event.target.value)}
             >
-              {products.map((item) => (
+              {catalog.map((item) => (
                 <option key={item.slug}>{item.name}</option>
               ))}
             </select>

@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
-import { products } from './catalog';
 import { SITE_URL } from './site-metadata';
+import { listPublishedProducts } from '../lib/products';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await listPublishedProducts();
   const staticRoutes = [
     '',
     '/collection',
@@ -16,7 +17,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes.map((path) => ({
       url: `${SITE_URL}${path}`,
-      changeFrequency: path === '' || path === '/collection' ? 'weekly' as const : 'monthly' as const,
+      changeFrequency:
+        path === '' || path === '/collection'
+          ? ('weekly' as const)
+          : ('monthly' as const),
       priority: path === '' ? 1 : path === '/collection' ? 0.9 : 0.7,
     })),
     ...products.map((product) => ({

@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import CollectionGrid from '../collection-grid';
 import { pageMetadata } from '../site-metadata';
+import { listPublishedProducts } from '../../lib/products';
 export const metadata = pageMetadata({
   title: 'T-shirts | MERCH ENSAM-R',
   description:
     'Shop the opening ENSAM Rabat collection: MIND IN MOTION, Be creART(et métiers)ive and Think Beyond Limits.',
   path: '/collection',
 });
-export default function Collection() {
+export default async function Collection() {
+  const products = await listPublishedProducts();
   return (
     <main id="main">
       <section className="catalog-heading">
@@ -25,7 +27,7 @@ export default function Collection() {
       <section className="shop-section catalog-section">
         <div className="catalog-bar">
           <h2>
-            All T-shirts <span>3</span>
+            All T-shirts <span>{products.length}</span>
           </h2>
           <span>Front & back printed · New releases will follow</span>
         </div>
