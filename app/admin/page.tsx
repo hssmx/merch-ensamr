@@ -36,26 +36,41 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
 
   async function load() {
+    setMessage('');
     const admin = await isCurrentUserAdmin();
     setAllowed(admin);
-    if (admin) {
-      const [nextOrders, nextProducts] = await Promise.all([
-        listAllOrders(),
-        listAdminProducts(),
-      ]);
-      setOrders(nextOrders);
-      setProducts(nextProducts);
+    if (!admin) return;
+
+    const [ordersResult, productsResult] = await Promise.allSettled([
+      listAllOrders(),
+      listAdminProducts(),
+    ]);
+    if (ordersResult.status === 'fulfilled') setOrders(ordersResult.value);
+    if (productsResult.status === 'fulfilled') setProducts(productsResult.value);
+
+    const failedSections = [
+      ordersResult.status === 'rejected' ? 'orders' : null,
+      productsResult.status === 'rejected' ? 'products' : null,
+    ].filter(Boolean);
+    if (failedSections.length) {
+      setMessage(
+        `Admin access verified, but ${failedSections.join(' and ')} could not be loaded. Try Refresh.`,
+      );
     }
+  }
+
+  function handleLoadError(error: unknown) {
+    setAllowed(false);
+    setMessage(
+      error instanceof Error
+        ? `Could not verify admin access: ${error.message}`
+        : 'Could not verify admin access.',
+    );
   }
 
   useEffect(() => {
     // oxlint-disable-next-line react-compiler/react-compiler
-    void load().catch((error) => {
-      setAllowed(false);
-      setMessage(
-        error instanceof Error ? error.message : 'Could not load orders.',
-      );
-    });
+    void load().catch(handleLoadError);
   }, []);
 
   async function save(order: StoredOrder, form: HTMLFormElement) {
@@ -120,8 +135,7 @@ export default function AdminPage() {
         <button
           className="secondary"
           onClick={() => {
-            setMessage('');
-            void load();
+            void load().catch(handleLoadError);
           }}
         >
           <RefreshCw size={16} /> Refresh

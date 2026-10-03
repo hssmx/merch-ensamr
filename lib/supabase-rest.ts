@@ -58,12 +58,11 @@ async function api<T>(
   init: RequestInit = {},
   token?: string,
 ): Promise<T> {
+  const headers = new Headers(authHeaders(token));
+  new Headers(init.headers).forEach((value, key) => headers.set(key, value));
   const response = await fetch(`${SUPABASE_URL}${path}`, {
     ...init,
-    headers: {
-      ...authHeaders(token),
-      ...(init.headers || {}),
-    },
+    headers,
   });
 
   const text = await response.text();
@@ -333,12 +332,12 @@ export async function getMyOrder(id: string) {
 export async function isCurrentUserAdmin() {
   const session = await getSession();
   if (!session) return false;
-  const rows = await api<Array<{ is_admin: boolean }>>(
-    `/rest/v1/profiles?id=eq.${session.user.id}&select=is_admin`,
-    {},
+  const isAdmin = await api<boolean>(
+    '/rest/v1/rpc/current_user_is_admin',
+    { method: 'POST', body: '{}' },
     session.access_token,
   );
-  return Boolean(rows[0]?.is_admin);
+  return isAdmin === true;
 }
 
 export async function listAllOrders() {
