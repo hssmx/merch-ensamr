@@ -14,6 +14,8 @@ import {
 
 const SESSION_KEY = 'merch-ensamr-auth-session';
 const CLAIM_KEY = 'merch-ensamr-guest-order-claims';
+const PENDING_CONFIRMATION_KEY = 'merch-ensamr-pending-confirmation';
+const CONFIRMATION_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 export type AuthUser = {
   id: string;
@@ -142,6 +144,7 @@ export async function signIn(email: string, password: string) {
     body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
   });
   saveSession(session);
+  clearPendingConfirmation();
   await claimLocalGuestOrders(session);
   return session;
 }
@@ -157,8 +160,14 @@ export async function signUp(
   name: string,
   email: string,
   password: string,
+  ageConfirmed: boolean,
 ) {
+  if (!ageConfirmed) {
+    throw new Error('You must confirm that you are at least 16 to create an account.');
+  }
   const redirectTo = authRedirectUrl();
+  const normalizedEmail = email.trim().toLowerCase();
+  rememberPendingConfirmation(normalizedEmail);
   const result = await api<
     Partial<AuthSession> & { user?: AuthUser; identities?: unknown[] }
   >(
@@ -166,9 +175,13 @@ export async function signUp(
     {
       method: 'POST',
       body: JSON.stringify({
-        email: email.trim().toLowerCase(),
+        email: normalizedEmail,
         password,
-        data: { full_name: name.trim() },
+        data: {
+          full_name: name.trim(),
+          age_confirmed_16_plus: true,
+          terms_accepted_at: new Date().toISOString(),
+        },
       }),
     },
   );
@@ -176,6 +189,7 @@ export async function signUp(
   if (result.access_token && result.refresh_token && result.user) {
     const session = result as AuthSession;
     saveSession(session);
+    clearPendingConfirmation();
     await claimLocalGuestOrders(session);
   }
 
@@ -200,8 +214,31 @@ export async function consumeAuthRedirect() {
     return { session: null as AuthSession | null, error: null as string | null };
   }
 
+  window.history.replaceState({}, '', window.location.pathname + window.location.search);
+
+  if (new URLSearchParams(window.location.search).get('confirmed') !== '1') {
+    return {
+      session: null as AuthSession | null,
+      error: 'This confirmation link is not valid for this page. Sign in to continue.',
+    };
+  }
+
+  const pending = readPendingConfirmation();
+  if (!pending) {
+    return {
+      session: null as AuthSession | null,
+      error: 'Email confirmation completed. Sign in with your password to continue.',
+    };
+  }
+
   try {
     const user = await api<AuthUser>('/auth/v1/user', {}, accessToken);
+    if (user.email?.trim().toLowerCase() !== pending.email) {
+      return {
+        session: null as AuthSession | null,
+        error: 'This confirmation does not match the account created in this browser. Sign in to continue.',
+      };
+    }
     const session: AuthSession = {
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -209,8 +246,8 @@ export async function consumeAuthRedirect() {
       user,
     };
     saveSession(session);
+    clearPendingConfirmation();
     await claimLocalGuestOrders(session);
-    window.history.replaceState({}, '', window.location.pathname + window.location.search);
     return { session, error: null as string | null };
   } catch (err) {
     return {
@@ -222,13 +259,15 @@ export async function consumeAuthRedirect() {
 
 export async function resendSignupConfirmation(email: string) {
   const redirectTo = authRedirectUrl();
+  const normalizedEmail = email.trim().toLowerCase();
+  rememberPendingConfirmation(normalizedEmail);
   return api(
     `/auth/v1/resend?redirect_to=${encodeURIComponent(redirectTo)}`,
     {
       method: 'POST',
       body: JSON.stringify({
         type: 'signup',
-        email: email.trim().toLowerCase(),
+        email: normalizedEmail,
       }),
     },
   );
@@ -340,6 +379,46 @@ export async function isCurrentUserAdmin() {
     session.access_token,
   );
   return isAdmin === true;
+}
+
+type PendingConfirmation = {
+  email: string;
+  createdAt: number;
+};
+
+function rememberPendingConfirmation(email: string) {
+  if (typeof window === 'undefined') return;
+  const pending: PendingConfirmation = {
+    email: email.trim().toLowerCase(),
+    createdAt: Date.now(),
+  };
+  localStorage.setItem(PENDING_CONFIRMATION_KEY, JSON.stringify(pending));
+}
+
+function readPendingConfirmation(): PendingConfirmation | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const pending = JSON.parse(
+      localStorage.getItem(PENDING_CONFIRMATION_KEY) || 'null',
+    ) as PendingConfirmation | null;
+    if (
+      !pending?.email ||
+      !pending.createdAt ||
+      Date.now() - pending.createdAt > CONFIRMATION_MAX_AGE_MS
+    ) {
+      localStorage.removeItem(PENDING_CONFIRMATION_KEY);
+      return null;
+    }
+    return pending;
+  } catch {
+    localStorage.removeItem(PENDING_CONFIRMATION_KEY);
+    return null;
+  }
+}
+
+function clearPendingConfirmation() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(PENDING_CONFIRMATION_KEY);
 }
 
 export async function listAllOrders() {

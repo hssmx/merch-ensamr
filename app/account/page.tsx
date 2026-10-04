@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState, type BaseSyntheticEvent } from 'react';
 import {
   ArrowRight,
   CheckCircle2,
@@ -26,6 +26,11 @@ import {
 import type { StoredOrder } from '../../lib/order-types';
 import { statusLabels } from '../../lib/order-types';
 
+function formText(data: FormData, name: string) {
+  const value = data.get(name);
+  return typeof value === 'string' ? value : '';
+}
+
 export default function AccountPage() {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [orders, setOrders] = useState<StoredOrder[]>([]);
@@ -45,7 +50,7 @@ export default function AccountPage() {
     if (callback.error) {
       setMessage(callback.error);
       setMessageTone('error');
-      setAllowResend(/expired|invalid|confirm/i.test(callback.error));
+      setAllowResend(/expired|invalid/i.test(callback.error));
     }
 
     const active = callback.session ?? (await getSession());
@@ -75,23 +80,32 @@ export default function AccountPage() {
     setBusy(false);
   }
 
+  function handleLoadError(error: unknown) {
+    setBusy(false);
+    setMessage(error instanceof Error ? error.message : 'Could not load your account.');
+    setMessageTone('error');
+  }
+
   useEffect(() => {
-    load();
+    void Promise.resolve().then(load).catch(handleLoadError);
   }, []);
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(
+    event: BaseSyntheticEvent<SubmitEvent, HTMLFormElement, HTMLFormElement>,
+  ) {
     event.preventDefault();
     setMessage('');
     setBusy(true);
     const data = new FormData(event.currentTarget);
-    const email = String(data.get('email') || '').trim();
+    const email = formText(data, 'email').trim();
 
     try {
       if (mode === 'signup') {
         const result = await signUp(
-          String(data.get('name') || ''),
+          formText(data, 'name'),
           email,
-          String(data.get('password') || ''),
+          formText(data, 'password'),
+          data.get('age_confirmed') === 'yes',
         );
 
         if (!result.access_token) {
@@ -106,7 +120,7 @@ export default function AccountPage() {
           return;
         }
       } else {
-        await signIn(email, String(data.get('password') || ''));
+        await signIn(email, formText(data, 'password'));
       }
       await load();
     } catch (err) {
@@ -273,6 +287,22 @@ export default function AccountPage() {
                 {mode === 'signup' && <small>At least 8 characters.</small>}
               </label>
 
+              {mode === 'signup' && (
+                <label className="account-consent">
+                  <input
+                    name="age_confirmed"
+                    type="checkbox"
+                    value="yes"
+                    required
+                  />
+                  <span>
+                    I confirm I am at least 16 and accept the{' '}
+                    <Link href="/terms">Terms</Link> and{' '}
+                    <Link href="/privacy">Privacy Policy</Link>.
+                  </span>
+                </label>
+              )}
+
               <button className="primary account-submit" disabled={busy}>
                 <span>
                   {busy
@@ -396,4 +426,3 @@ export default function AccountPage() {
     </main>
   );
 }
-

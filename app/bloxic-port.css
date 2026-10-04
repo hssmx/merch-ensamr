@@ -1,5 +1,16 @@
 /* Layout ported from the supplied Bloxic Homepage One package. */
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Jost:wght@400;500;600;700&family=Josefin+Sans:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@font-face { font-family: 'Anton'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/anton-400.ttf') format('truetype'); }
+@font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/josefin-sans-500.ttf') format('truetype'); }
+@font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/josefin-sans-600.ttf') format('truetype'); }
+@font-face { font-family: 'Josefin Sans'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/josefin-sans-700.ttf') format('truetype'); }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/jost-400.ttf') format('truetype'); }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/jost-500.ttf') format('truetype'); }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/jost-600.ttf') format('truetype'); }
+@font-face { font-family: 'Jost'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/jost-700.ttf') format('truetype'); }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/outfit-400.ttf') format('truetype'); }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/outfit-500.ttf') format('truetype'); }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/outfit-600.ttf') format('truetype'); }
+@font-face { font-family: 'Outfit'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/outfit-700.ttf') format('truetype'); }
 
 :root,
 .dark {

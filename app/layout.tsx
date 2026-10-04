@@ -29,6 +29,7 @@ import './product-page-refresh.css';
 import './cart-system.css';
 import './commerce-mobile.css';
 import './commerce-finish.css';
+import './legal.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

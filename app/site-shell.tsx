@@ -260,6 +260,8 @@ export function SiteFooter() {
           <Link href="/reviews">Reviews</Link>
           <Link href="/#faq">FAQ</Link>
           <Link href="/about">About us</Link>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
         </div>
         <div>
           <h2>Create</h2>
