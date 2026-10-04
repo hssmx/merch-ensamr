@@ -9,21 +9,27 @@ import {
   Download,
   LogOut,
   PackageCheck,
+  Bell,
+  UserCog,
   ShieldCheck,
   UserRound,
 } from 'lucide-react';
 import {
   consumeAuthRedirect,
   getSession,
+  getMyProfile,
   isCurrentUserAdmin,
+  listMyNotifications,
   listMyOrders,
+  markNotificationRead,
   resendSignupConfirmation,
   signIn,
   signOut,
   signUp,
+  updateMyProfile,
   type AuthSession,
 } from '../../lib/supabase-rest';
-import type { StoredOrder } from '../../lib/order-types';
+import type { CustomerNotification, CustomerProfile, StoredOrder } from '../../lib/order-types';
 import { statusLabels } from '../../lib/order-types';
 
 function formText(data: FormData, name: string) {
@@ -35,6 +41,9 @@ export default function AccountPage() {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [profile, setProfile] = useState<CustomerProfile | null>(null);
+  const [notifications, setNotifications] = useState<CustomerNotification[]>([]);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [busy, setBusy] = useState(true);
   const [message, setMessage] = useState('');
@@ -57,15 +66,21 @@ export default function AccountPage() {
     setSession(active);
 
     if (active) {
-      const [ordersResult, adminResult] = await Promise.allSettled([
+      const [ordersResult, adminResult, profileResult, notificationResult] = await Promise.allSettled([
         listMyOrders(),
         isCurrentUserAdmin(),
+        getMyProfile(),
+        listMyNotifications(),
       ]);
       setOrders(ordersResult.status === 'fulfilled' ? ordersResult.value : []);
       setIsAdmin(adminResult.status === 'fulfilled' && adminResult.value);
+      setProfile(profileResult.status === 'fulfilled' ? profileResult.value : null);
+      setNotifications(notificationResult.status === 'fulfilled' ? notificationResult.value : []);
     } else {
       setOrders([]);
       setIsAdmin(false);
+      setProfile(null);
+      setNotifications([]);
     }
 
     if (
@@ -160,6 +175,36 @@ export default function AccountPage() {
     setSession(null);
     setOrders([]);
     setIsAdmin(false);
+    setProfile(null);
+    setNotifications([]);
+  }
+
+  async function saveProfile(event: BaseSyntheticEvent<SubmitEvent, HTMLFormElement, HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    setBusy(true);
+    try {
+      const next = await updateMyProfile({
+        full_name: formText(data, 'full_name').trim(),
+        phone: formText(data, 'phone').trim() || null,
+      });
+      setProfile(next);
+      setProfileOpen(false);
+      setMessage('Profile saved.');
+      setMessageTone('success');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Could not save your profile.');
+      setMessageTone('error');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function openNotification(notification: CustomerNotification) {
+    if (!notification.read_at) {
+      await markNotificationRead(notification.id);
+      setNotifications((items) => items.map((item) => item.id === notification.id ? { ...item, read_at: new Date().toISOString() } : item));
+    }
   }
 
   if (busy && !session) {
@@ -353,7 +398,7 @@ export default function AccountPage() {
           <span className="commerce-kicker">
             {isAdmin ? 'ADMIN ACCOUNT' : 'YOUR ACCOUNT'}
           </span>
-          <h1>Your orders.</h1>
+          <h1>{profile?.full_name ? `Welcome, ${profile.full_name.split(' ')[0]}.` : 'Your account.'}</h1>
           <p>{session.user.email}</p>
         </div>
         <div className="account-dashboard-actions">
@@ -362,11 +407,42 @@ export default function AccountPage() {
               <ShieldCheck size={16} /> Admin workspace
             </Link>
           )}
+          <button type="button" className="secondary" onClick={() => setProfileOpen((open) => !open)}>
+            <UserCog size={16} /> Profile
+          </button>
           <button type="button" className="secondary" onClick={logout}>
             <LogOut size={16} /> Sign out
           </button>
         </div>
       </header>
+
+      {message && <output className={`account-message ${messageTone}`}>{message}</output>}
+
+      {profileOpen && (
+        <form className="account-profile-card" onSubmit={saveProfile}>
+          <div><span className="commerce-kicker">PROFILE</span><h2>Your details.</h2></div>
+          <label><span>Full name</span><input name="full_name" defaultValue={profile?.full_name || ''} required maxLength={100} /></label>
+          <label><span>Phone</span><input name="phone" defaultValue={profile?.phone || ''} inputMode="tel" maxLength={40} /></label>
+          <button className="primary" disabled={busy}>Save changes</button>
+        </form>
+      )}
+
+      <section className="account-overview-grid">
+        <article><span>ACTIVE ORDERS</span><strong>{orders.filter((order) => !['completed','cancelled'].includes(order.status)).length}</strong><p>Currently moving through the order desk.</p></article>
+        <article><span>COMPLETED</span><strong>{orders.filter((order) => order.status === 'completed').length}</strong><p>Finished orders remain available with receipts.</p></article>
+        <article><span>UPDATES</span><strong>{notifications.filter((item) => !item.read_at).length}</strong><p>Unread notifications from the team.</p></article>
+      </section>
+
+      {notifications.length > 0 && (
+        <section className="account-notifications">
+          <div className="account-section-head"><span><Bell size={17} /> RECENT UPDATES</span><small>{notifications.filter((item) => !item.read_at).length} unread</small></div>
+          {notifications.slice(0, 5).map((notification) => (
+            <Link key={notification.id} href={notification.order_id ? `/account/orders/${notification.order_id}` : '/account'} className={notification.read_at ? 'read' : ''} onClick={() => void openNotification(notification)}>
+              <i aria-hidden="true" /><span><strong>{notification.title}</strong><small>{notification.message}</small></span><time>{new Date(notification.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</time>
+            </Link>
+          ))}
+        </section>
+      )}
 
       <div className="account-dashboard-intro">
         <div>

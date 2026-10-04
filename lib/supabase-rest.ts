@@ -1,10 +1,17 @@
 'use client';
 
 import type {
+  AdminSavedView,
+  CustomerNotification,
+  CustomerProfile,
+  InternalOrderNote,
+  OrderActivity,
   OrderItem,
   OrderStatus,
   PaymentMethod,
   PaymentStatus,
+  ProductInventory,
+  StaffRole,
   StoredOrder,
 } from './order-types';
 import {
@@ -370,6 +377,65 @@ export async function getMyOrder(id: string) {
   return rows[0] ?? null;
 }
 
+export async function getMyProfile() {
+  const session = await getSession();
+  if (!session) return null;
+  const rows = await api<CustomerProfile[]>(
+    `/rest/v1/profiles?id=eq.${encodeURIComponent(session.user.id)}&select=*`,
+    {},
+    session.access_token,
+  );
+  return rows[0] ?? null;
+}
+
+export async function updateMyProfile(values: {
+  full_name: string;
+  phone: string | null;
+}) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  const rows = await api<CustomerProfile[]>(
+    `/rest/v1/profiles?id=eq.${encodeURIComponent(session.user.id)}`,
+    {
+      method: 'PATCH',
+      headers: { Prefer: 'return=representation' },
+      body: JSON.stringify(values),
+    },
+    session.access_token,
+  );
+  return rows[0];
+}
+
+export async function listMyNotifications() {
+  const session = await getSession();
+  if (!session) return [] as CustomerNotification[];
+  return api<CustomerNotification[]>(
+    '/rest/v1/customer_notifications?select=*&order=created_at.desc&limit=30',
+    {},
+    session.access_token,
+  );
+}
+
+export async function markNotificationRead(id: number) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  await api(
+    `/rest/v1/customer_notifications?id=eq.${id}`,
+    { method: 'PATCH', body: JSON.stringify({ read_at: new Date().toISOString() }) },
+    session.access_token,
+  );
+}
+
+export async function listOrderActivity(orderId: string) {
+  const session = await getSession();
+  if (!session) return [] as OrderActivity[];
+  return api<OrderActivity[]>(
+    `/rest/v1/order_activity?order_id=eq.${encodeURIComponent(orderId)}&select=*&order=created_at.desc`,
+    {},
+    session.access_token,
+  );
+}
+
 export async function isCurrentUserAdmin() {
   const session = await getSession();
   if (!session) return false;
@@ -379,6 +445,16 @@ export async function isCurrentUserAdmin() {
     session.access_token,
   );
   return isAdmin === true;
+}
+
+export async function getCurrentUserRole() {
+  const session = await getSession();
+  if (!session) return 'customer' as StaffRole;
+  return api<StaffRole>(
+    '/rest/v1/rpc/current_user_role',
+    { method: 'POST', body: '{}' },
+    session.access_token,
+  );
 }
 
 type PendingConfirmation = {
@@ -438,21 +514,143 @@ export async function adminUpdateOrder(
     payment_status: PaymentStatus;
     payment_method: PaymentMethod | null;
     delivery_fee: number;
-    admin_note: string | null;
+    customer_update: string | null;
+    internal_note: string | null;
   },
 ) {
   const session = await getSession();
   if (!session) throw new Error('Sign in first.');
-  const rows = await api<StoredOrder[]>(
-    `/rest/v1/orders?id=eq.${encodeURIComponent(id)}`,
+  return api<StoredOrder>(
+    '/rest/v1/rpc/admin_update_order',
     {
-      method: 'PATCH',
-      headers: { Prefer: 'return=representation' },
-      body: JSON.stringify(values),
+      method: 'POST',
+      body: JSON.stringify({
+        p_order_id: id,
+        p_status: values.status,
+        p_payment_status: values.payment_status,
+        p_payment_method: values.payment_method,
+        p_delivery_fee: values.delivery_fee,
+        p_customer_update: values.customer_update,
+        p_internal_note: values.internal_note,
+      }),
+    },
+    session.access_token,
+  );
+}
+
+export async function listAdminOrderActivity() {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<OrderActivity[]>(
+    '/rest/v1/order_activity?select=*&order=created_at.desc&limit=500',
+    {},
+    session.access_token,
+  );
+}
+
+export async function listInternalOrderNotes() {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<InternalOrderNote[]>(
+    '/rest/v1/internal_order_notes?select=*&order=created_at.desc&limit=500',
+    {},
+    session.access_token,
+  );
+}
+
+export async function listInventory() {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<ProductInventory[]>(
+    '/rest/v1/product_inventory?select=*&order=product_id.asc,size.asc',
+    {},
+    session.access_token,
+  );
+}
+
+export async function adminSetInventory(values: {
+  product_id: string;
+  size: string;
+  stock_on_hand: number;
+  low_stock_threshold: number;
+  stock_tracked: boolean;
+}) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<ProductInventory>(
+    '/rest/v1/rpc/admin_set_inventory',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        p_product_id: values.product_id,
+        p_size: values.size,
+        p_stock_on_hand: values.stock_on_hand,
+        p_low_stock_threshold: values.low_stock_threshold,
+        p_stock_tracked: values.stock_tracked,
+      }),
+    },
+    session.access_token,
+  );
+}
+
+export async function adminBulkUpdateOrders(ids: string[], status: OrderStatus) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<number>(
+    '/rest/v1/rpc/admin_bulk_update_orders',
+    { method: 'POST', body: JSON.stringify({ p_order_ids: ids, p_status: status }) },
+    session.access_token,
+  );
+}
+
+export async function listSavedViews() {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<AdminSavedView[]>(
+    '/rest/v1/admin_saved_views?select=*&order=name.asc',
+    {},
+    session.access_token,
+  );
+}
+
+export async function saveAdminView(name: string, filters: Record<string, unknown>) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  const rows = await api<AdminSavedView[]>(
+    '/rest/v1/admin_saved_views?on_conflict=user_id,name',
+    {
+      method: 'POST',
+      headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
+      body: JSON.stringify({
+        user_id: session.user.id,
+        name,
+        filters,
+        updated_at: new Date().toISOString(),
+      }),
     },
     session.access_token,
   );
   return rows[0];
+}
+
+export async function listStaffProfiles() {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<CustomerProfile[]>(
+    '/rest/v1/profiles?select=*&order=created_at.asc',
+    {},
+    session.access_token,
+  );
+}
+
+export async function adminSetStaffRole(userId: string, role: StaffRole) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<CustomerProfile>(
+    '/rest/v1/rpc/admin_set_staff_role',
+    { method: 'POST', body: JSON.stringify({ p_user_id: userId, p_role: role }) },
+    session.access_token,
+  );
 }
 
 export type { OrderItem, StoredOrder };

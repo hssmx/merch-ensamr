@@ -2170,3 +2170,127 @@
   }
 }
 
+/* Production account + operations workspace */
+.account-profile-card,
+.account-notifications,
+.customer-activity,
+.admin-overview-grid > section,
+.inventory-panel,
+.team-panel {
+  border: 1px solid var(--commerce-rule);
+  background: #fffdfa;
+}
+
+.account-profile-card {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.2fr) 1fr 1fr auto;
+  gap: 18px;
+  align-items: end;
+  margin: 0 0 22px;
+  padding: 24px;
+}
+
+.account-profile-card h2 { margin: 5px 0 0; font-size: 28px; }
+.account-profile-card label { display: grid; gap: 7px; }
+.account-profile-card label span { font: 700 10px/1 'Outfit',sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.account-profile-card input { min-height: 44px; border: 1px solid var(--commerce-rule); padding: 0 12px; background: white; }
+
+.account-overview-grid,
+.admin-stat-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--commerce-rule); margin-bottom: 22px; }
+.account-overview-grid article,
+.admin-stat-grid article { min-height: 145px; padding: 24px; border-right: 1px solid var(--commerce-rule); }
+.account-overview-grid article:last-child,
+.admin-stat-grid article:last-child { border-right: 0; }
+.account-overview-grid span,
+.admin-stat-grid span { font: 700 9px/1 'Outfit',sans-serif; letter-spacing: .12em; color: var(--lux-wine); }
+.account-overview-grid strong,
+.admin-stat-grid strong { display: block; margin: 12px 0 9px; font: 600 42px/1 'Outfit',sans-serif; }
+.account-overview-grid p,
+.admin-stat-grid p { margin: 0; color: #746b65; font-size: 12px; }
+
+.account-notifications { margin-bottom: 26px; }
+.account-section-head { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--commerce-rule); font:700 9px/1 'Outfit',sans-serif; letter-spacing:.1em; }
+.account-section-head span { display:flex; align-items:center; gap:8px; }
+.account-notifications > a { display:grid; grid-template-columns:8px 1fr auto; gap:13px; align-items:center; padding:15px 20px; color:inherit; border-bottom:1px solid var(--commerce-rule); }
+.account-notifications > a:last-child { border-bottom:0; }
+.account-notifications > a > i { width:7px; height:7px; border-radius:50%; background:var(--lux-wine); }
+.account-notifications > a.read > i { background:#c8c1ba; }
+.account-notifications strong,.account-notifications small { display:block; }
+.account-notifications strong { font:650 12px/1.3 'Outfit',sans-serif; }
+.account-notifications small,.account-notifications time { margin-top:4px; color:#746b65; font-size:10px; }
+
+.customer-activity { margin-top:26px; }
+.customer-activity article,.admin-order-history article,.activity-feed article { display:grid; grid-template-columns:24px 1fr; gap:10px; padding:14px 18px; border-bottom:1px solid var(--commerce-rule); }
+.customer-activity article:last-child { border-bottom:0; }
+.customer-activity article > i { display:grid; place-items:center; width:18px; height:18px; border:1px solid #c9c1ba; border-radius:50%; color:var(--lux-wine); }
+.customer-activity article.latest > i { border-color:var(--lux-wine); }
+.customer-activity strong,.customer-activity time { display:block; }
+.customer-activity strong { font:600 12px/1.4 'Outfit',sans-serif; }
+.customer-activity time { margin-top:4px; color:#766d66; font-size:10px; }
+
+.admin-stat-grid { grid-template-columns:repeat(4,1fr); margin-top:4px; }
+.admin-stat-grid article.warning { box-shadow:inset 0 3px 0 #a42035; }
+.admin-stat-grid strong small { font-size:12px; }
+.admin-overview-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.admin-overview-grid > section > header,.inventory-panel > header,.team-panel > header { display:flex; gap:13px; align-items:flex-start; padding:22px; border-bottom:1px solid var(--commerce-rule); }
+.admin-overview-grid header span,.inventory-panel header span,.team-panel header span { font:700 9px/1 'Outfit',sans-serif; letter-spacing:.11em; color:var(--lux-wine); }
+.admin-overview-grid h2,.inventory-panel h2,.team-panel h2 { margin:5px 0 0; font-size:25px; }
+.inventory-panel header p,.team-panel header p { margin:7px 0 0; color:#746b65; font-size:11px; }
+.status-bars { padding:20px; }
+.status-bars > div { display:grid; grid-template-columns:120px 1fr 24px; gap:12px; align-items:center; margin:12px 0; font:600 9px/1 'Outfit',sans-serif; text-transform:uppercase; }
+.status-bars i { height:5px; background:#eee9e4; }
+.status-bars b { display:block; height:100%; background:var(--lux-wine); }
+.activity-feed { max-height:390px; overflow:auto; }
+.activity-feed article > i,.admin-order-history article > i { width:7px; height:7px; margin-top:4px; background:var(--lux-wine); border-radius:50%; }
+.activity-feed strong,.activity-feed small,.admin-order-history strong,.admin-order-history small { display:block; }
+.activity-feed strong,.admin-order-history strong { font:600 11px/1.35 'Outfit',sans-serif; }
+.activity-feed small,.admin-order-history small { margin-top:4px; color:#746b65; font-size:9px; }
+
+.order-tool-button { display:flex; align-items:center; gap:6px; border:1px solid var(--commerce-rule); background:#fff; padding:0 12px; font:700 8px/1 'Outfit',sans-serif; letter-spacing:.05em; text-transform:uppercase; }
+.bulk-action-bar { display:flex; gap:8px; align-items:center; padding:10px 14px; background:#191817; color:white; }
+.bulk-action-bar strong { margin-right:auto; font:700 9px/1 'Outfit',sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+.bulk-action-bar button,.bulk-select-order { border:1px solid rgba(255,255,255,.25); background:transparent; color:inherit; padding:8px 11px; font:700 8px/1 'Outfit',sans-serif; text-transform:uppercase; }
+.bulk-select-order { width:100%; border-color:var(--commerce-rule); color:#625b56; }
+.bulk-select-order.active { background:var(--lux-wine); color:white; }
+.admin-note-field.internal textarea { background:#f0ede8; }
+.admin-order-history { border-top:1px solid var(--commerce-rule); }
+
+.inventory-panel,.team-panel { margin-top:4px; }
+.inventory-product { padding:16px 20px; background:#191817; color:white; }
+.inventory-product span,.inventory-product strong,.inventory-product small { display:block; }
+.inventory-product span { color:#d8a7af; font:700 9px/1 'Outfit',sans-serif; }
+.inventory-product strong { margin-top:6px; font:650 17px/1.1 'Outfit',sans-serif; }
+.inventory-product small { margin-top:5px; color:#c8c4c0; font-size:9px; }
+.inventory-table article { border-bottom:1px solid var(--commerce-rule); }
+.inventory-table form { display:grid; grid-template-columns:40px repeat(3,minmax(90px,1fr)) 110px 80px 70px; gap:12px; align-items:end; padding:12px 20px; }
+.inventory-table label { display:grid; gap:5px; font:700 8px/1 'Outfit',sans-serif; text-transform:uppercase; color:#766d66; }
+.inventory-table input { width:100%; min-height:36px; border:1px solid var(--commerce-rule); padding:0 9px; }
+.inventory-table form > span { align-self:center; font:700 9px/1 'Outfit',sans-serif; }
+.inventory-table .inventory-low { color:var(--lux-wine); }
+.inventory-toggle { display:flex!important; flex-direction:row; align-items:center; }
+.inventory-toggle input { width:16px; min-height:16px; }
+.inventory-table button { min-height:36px; border:0; background:#191817; color:white; font:700 8px/1 'Outfit',sans-serif; text-transform:uppercase; }
+
+.team-list article { display:grid; grid-template-columns:1fr 190px; gap:20px; align-items:center; padding:17px 22px; border-bottom:1px solid var(--commerce-rule); }
+.team-list strong,.team-list small { display:block; }
+.team-list strong { font:650 13px/1.2 'Outfit',sans-serif; }
+.team-list small { margin-top:4px; color:#766d66; font-size:10px; }
+.team-list select { min-height:40px; border:1px solid var(--commerce-rule); padding:0 10px; background:white; }
+
+@media (max-width: 900px) {
+  .account-profile-card { grid-template-columns:1fr 1fr; }
+  .account-overview-grid,.admin-stat-grid { grid-template-columns:1fr 1fr; }
+  .admin-overview-grid { grid-template-columns:1fr; }
+  .inventory-table form { grid-template-columns:40px repeat(2,1fr); }
+  .inventory-table form > span,.inventory-table form > button { min-height:36px; }
+}
+
+@media (max-width: 560px) {
+  .account-profile-card,.account-overview-grid,.admin-stat-grid { grid-template-columns:1fr; }
+  .account-overview-grid article,.admin-stat-grid article { border-right:0; border-bottom:1px solid var(--commerce-rule); }
+  .inventory-table form { grid-template-columns:1fr 1fr; }
+  .inventory-table form > strong { grid-column:1/-1; }
+  .team-list article { grid-template-columns:1fr; }
+  .bulk-action-bar { align-items:stretch; flex-direction:column; }
+}
+

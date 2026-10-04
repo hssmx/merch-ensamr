@@ -7,6 +7,11 @@ import {
   Clock3,
   Download,
   Mail,
+  LayoutDashboard,
+  Boxes,
+  Users,
+  FileDown,
+  Save,
   PackagePlus,
   Phone,
   RefreshCw,
@@ -18,20 +23,35 @@ import {
   Truck,
 } from 'lucide-react';
 import {
+  adminBulkUpdateOrders,
   adminUpdateOrder,
+  getCurrentUserRole,
   isCurrentUserAdmin,
+  listAdminOrderActivity,
   listAllOrders,
+  listInternalOrderNotes,
+  listInventory,
+  listSavedViews,
+  listStaffProfiles,
+  saveAdminView,
 } from '../../lib/supabase-rest';
 import {
   orderStatuses,
   statusLabels,
   type OrderStatus,
   type PaymentMethod,
+  type AdminSavedView,
+  type CustomerProfile,
+  type InternalOrderNote,
+  type OrderActivity,
+  type ProductInventory,
+  type StaffRole,
   type StoredOrder,
 } from '../../lib/order-types';
 import { downloadOrderReceipt } from '../receipt-pdf';
 import ProductManager from './product-manager';
 import { listAdminProducts, type StoredProduct } from '../../lib/products';
+import { AdminOverview, InventoryManager, TeamManager } from './admin-panels';
 
 type OrderQueue =
   | 'attention'
@@ -108,7 +128,14 @@ export default function AdminPage() {
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [orders, setOrders] = useState<StoredOrder[]>([]);
   const [products, setProducts] = useState<StoredProduct[]>([]);
-  const [view, setView] = useState<'orders' | 'products'>('orders');
+  const [view, setView] = useState<'overview' | 'orders' | 'inventory' | 'products' | 'team'>('overview');
+  const [role, setRole] = useState<StaffRole>('customer');
+  const [activity, setActivity] = useState<OrderActivity[]>([]);
+  const [internalNotes, setInternalNotes] = useState<InternalOrderNote[]>([]);
+  const [inventory, setInventory] = useState<ProductInventory[]>([]);
+  const [savedViews, setSavedViews] = useState<AdminSavedView[]>([]);
+  const [staff, setStaff] = useState<CustomerProfile[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [queue, setQueue] = useState<OrderQueue>('attention');
   const [sort, setSort] = useState<OrderSort>('priority');
   const [query, setQuery] = useState('');
@@ -122,16 +149,33 @@ export default function AdminPage() {
     setAllowed(admin);
     if (!admin) return;
 
-    const [ordersResult, productsResult] = await Promise.allSettled([
+    const [ordersResult, productsResult, roleResult, activityResult, notesResult, inventoryResult, viewsResult, staffResult] = await Promise.allSettled([
       listAllOrders(),
       listAdminProducts(),
+      getCurrentUserRole(),
+      listAdminOrderActivity(),
+      listInternalOrderNotes(),
+      listInventory(),
+      listSavedViews(),
+      listStaffProfiles(),
     ]);
     if (ordersResult.status === 'fulfilled') setOrders(ordersResult.value);
     if (productsResult.status === 'fulfilled') setProducts(productsResult.value);
+    if (roleResult.status === 'fulfilled') {
+      setRole(roleResult.value);
+      if (!['owner', 'manager'].includes(roleResult.value)) setView('orders');
+    }
+    if (activityResult.status === 'fulfilled') setActivity(activityResult.value);
+    if (notesResult.status === 'fulfilled') setInternalNotes(notesResult.value);
+    if (inventoryResult.status === 'fulfilled') setInventory(inventoryResult.value);
+    if (viewsResult.status === 'fulfilled') setSavedViews(viewsResult.value);
+    if (staffResult.status === 'fulfilled') setStaff(staffResult.value);
 
     const failedSections = [
       ordersResult.status === 'rejected' ? 'orders' : null,
       productsResult.status === 'rejected' ? 'products' : null,
+      activityResult.status === 'rejected' ? 'activity' : null,
+      inventoryResult.status === 'rejected' ? 'inventory' : null,
     ].filter(Boolean);
     if (failedSections.length) {
       setMessage(
@@ -202,6 +246,8 @@ export default function AdminPage() {
     visibleOrders.find((order) => order.id === selectedOrderId) ??
     visibleOrders[0] ??
     null;
+  const canSeeAnalytics = role === 'owner' || role === 'manager';
+  const canSeeInventory = canSeeAnalytics || role === 'fulfillment';
 
   async function save(order: StoredOrder, form: HTMLFormElement) {
     const data = new FormData(form);
@@ -226,13 +272,17 @@ export default function AdminPage() {
         payment_method:
           (formText(data, 'payment_method') as PaymentMethod) || null,
         delivery_fee: Math.max(0, Number(data.get('delivery_fee') || 0)),
-        admin_note: formText(data, 'admin_note').trim() || null,
+        customer_update: formText(data, 'customer_update').trim() || null,
+        internal_note: formText(data, 'internal_note').trim() || null,
       });
       setOrders((current) =>
         current.map((item) => (item.id === updated.id ? updated : item)),
       );
       setSelectedOrderId(updated.id);
       setMessage(`${updated.order_number} updated successfully.`);
+      const [nextActivity, nextNotes] = await Promise.all([listAdminOrderActivity(), listInternalOrderNotes()]);
+      setActivity(nextActivity);
+      setInternalNotes(nextNotes);
     } catch (error) {
       setMessage(
         error instanceof Error ? error.message : 'Could not update order.',
@@ -240,6 +290,35 @@ export default function AdminPage() {
     } finally {
       setSavingOrderId(null);
     }
+  }
+
+  function exportOrders() {
+    const header = ['Order','Date','Customer','Email','Phone','Status','Payment','Total MAD'];
+    const csv = [header, ...visibleOrders.map((order) => [order.order_number, order.created_at, order.customer_name, order.email, order.phone, order.status, order.payment_status, String(order.total)])]
+      .map((row) => row.map((cell) => `"${String(cell).replaceAll('"','""')}"`).join(',')).join('\n');
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    link.download = `merch-ensamr-orders-${new Date().toISOString().slice(0,10)}.csv`;
+    link.click(); URL.revokeObjectURL(link.href);
+  }
+
+  async function saveCurrentView() {
+    const name = window.prompt('Name this order view');
+    if (!name?.trim()) return;
+    try {
+      const saved = await saveAdminView(name.trim(), { queue, sort, query });
+      setSavedViews((items) => [...items.filter((item) => item.id !== saved.id), saved].sort((a,b) => a.name.localeCompare(b.name)));
+      setMessage(`Saved view “${saved.name}”.`);
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not save view.'); }
+  }
+
+  async function bulkMove(status: OrderStatus) {
+    if (!selectedIds.length) return;
+    try {
+      await adminBulkUpdateOrders(selectedIds, status);
+      setSelectedIds([]); await load(); setView('orders');
+      setMessage(`${selectedIds.length} orders moved to ${statusLabels[status]}.`);
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not update selected orders.'); }
   }
 
   if (allowed === null) {
@@ -268,11 +347,9 @@ export default function AdminPage() {
       <header className="admin-head">
         <div>
           <span>MERCH ENSAM-R · ADMIN</span>
-          <h1>{view === 'orders' ? 'Order desk.' : 'Products.'}</h1>
+          <h1>{{ overview: 'Operations.', orders: 'Order desk.', inventory: 'Inventory.', products: 'Products.', team: 'Team access.' }[view]}</h1>
           <p>
-            {view === 'orders'
-              ? 'One focused queue for every order that still needs the team.'
-              : 'Create products, upload imagery and prepare the next release.'}
+            {{ overview: 'A live read on demand, workflow and stock.', orders: 'One focused queue for every order that still needs the team.', inventory: 'Track every product variant without interrupting checkout.', products: 'Create products, upload imagery and prepare the next release.', team: 'Give each teammate only the access their work needs.' }[view]}
           </p>
         </div>
         <button className="secondary" onClick={() => void load().catch(handleLoadError)}>
@@ -283,15 +360,33 @@ export default function AdminPage() {
       {message && <div className="system-notice">{message}</div>}
 
       <nav className="admin-tabs" aria-label="Admin sections">
+        {canSeeAnalytics && <button className={view === 'overview' ? 'active' : ''} onClick={() => setView('overview')}>
+          <LayoutDashboard size={17} /> Overview
+        </button>}
         <button className={view === 'orders' ? 'active' : ''} onClick={() => setView('orders')}>
           <ShoppingBag size={17} /> Orders <span>{orders.length}</span>
         </button>
-        <button className={view === 'products' ? 'active' : ''} onClick={() => setView('products')}>
+        {canSeeAnalytics && <button className={view === 'products' ? 'active' : ''} onClick={() => setView('products')}>
           <PackagePlus size={17} /> Products <span>{products.length}</span>
-        </button>
+        </button>}
+        {canSeeInventory && <button className={view === 'inventory' ? 'active' : ''} onClick={() => setView('inventory')}>
+          <Boxes size={17} /> Inventory <span>{inventory.filter((row) => row.stock_on_hand - row.reserved <= row.low_stock_threshold).length}</span>
+        </button>}
+        {role === 'owner' && <button className={view === 'team' ? 'active' : ''} onClick={() => setView('team')}>
+          <Users size={17} /> Team <span>{staff.filter((person) => person.role !== 'customer').length}</span>
+        </button>}
       </nav>
 
-      {view === 'products' ? (
+      {view === 'overview' ? (
+        <AdminOverview orders={orders} inventory={inventory} activity={activity} />
+      ) : view === 'inventory' ? (
+        <InventoryManager products={products} rows={inventory} onChanged={(row, tracked) => {
+          setInventory((items) => [...items.filter((item) => !(item.product_id === row.product_id && item.size === row.size)), row]);
+          setProducts((items) => items.map((product) => product.id === row.product_id ? { ...product, stockTracked: tracked } : product));
+        }} />
+      ) : view === 'team' ? (
+        <TeamManager people={staff} currentRole={role} onChanged={(profile) => setStaff((items) => items.map((item) => item.id === profile.id ? profile : item))} />
+      ) : view === 'products' ? (
         <ProductManager
           products={products}
           onCreated={(product) =>
@@ -318,6 +413,7 @@ export default function AdminPage() {
               ))}
             </div>
             <div className="order-tools">
+              {savedViews.length > 0 && <label className="order-sort"><span className="sr-only">Saved views</span><select defaultValue="" onChange={(event) => { const saved = savedViews.find((item) => item.id === event.target.value); if (!saved) return; setQueue((saved.filters.queue as OrderQueue) || 'all'); setSort((saved.filters.sort as OrderSort) || 'newest'); setQuery(typeof saved.filters.query === 'string' ? saved.filters.query : ''); }}><option value="">Saved views</option>{savedViews.map((saved) => <option key={saved.id} value={saved.id}>{saved.name}</option>)}</select></label>}
               <label className="order-search">
                 <Search size={16} />
                 <span className="sr-only">Search orders</span>
@@ -338,8 +434,12 @@ export default function AdminPage() {
                   <option value="value">Highest value</option>
                 </select>
               </label>
+              <button type="button" className="order-tool-button" onClick={() => void saveCurrentView()}><Save size={15} /> Save view</button>
+              <button type="button" className="order-tool-button" onClick={exportOrders}><FileDown size={15} /> Export</button>
             </div>
           </div>
+
+          {selectedIds.length > 0 && <div className="bulk-action-bar"><strong>{selectedIds.length} selected</strong><button onClick={() => void bulkMove('preparing')}>Move to preparing</button><button onClick={() => void bulkMove('ready')}>Mark ready</button><button onClick={() => setSelectedIds([])}>Clear</button></div>}
 
           <div className="order-desk-meta">
             <div>
@@ -413,6 +513,7 @@ export default function AdminPage() {
                     </div>
                     <strong>{selectedOrder.total} MAD</strong>
                   </header>
+                  <button type="button" className={`bulk-select-order ${selectedIds.includes(selectedOrder.id) ? 'active' : ''}`} onClick={() => setSelectedIds((ids) => ids.includes(selectedOrder.id) ? ids.filter((id) => id !== selectedOrder.id) : [...ids, selectedOrder.id])}>{selectedIds.includes(selectedOrder.id) ? 'Selected for bulk action' : 'Select for bulk action'}</button>
                   <div className="order-contact-strip">
                     <a href={`tel:${selectedOrder.phone}`}><Phone size={15} /> Call</a>
                     <a href={whatsappUrl(selectedOrder.phone)} target="_blank" rel="noreferrer">WhatsApp</a>
@@ -430,10 +531,9 @@ export default function AdminPage() {
                     <p>{selectedOrder.phone}</p>
                     <p>{selectedOrder.email}</p>
                   </section>
-                  {(selectedOrder.notes || selectedOrder.admin_note) && (
+                  {selectedOrder.notes && (
                     <section className="order-notes">
                       {selectedOrder.notes && <div><small>CUSTOMER NOTE</small><p>{selectedOrder.notes}</p></div>}
-                      {selectedOrder.admin_note && <div><small>LATEST TEAM UPDATE</small><p>{selectedOrder.admin_note}</p></div>}
                     </section>
                   )}
                   <section className="order-line-items">
@@ -465,7 +565,11 @@ export default function AdminPage() {
                     </div>
                     <label className="admin-note-field">
                       Customer-facing update
-                      <textarea name="admin_note" rows={3} defaultValue={selectedOrder.admin_note || ''} placeholder="Add the next useful update for this customer…" />
+                      <textarea name="customer_update" rows={3} placeholder="Add an update the customer should see…" />
+                    </label>
+                    <label className="admin-note-field internal">
+                      Internal team note
+                      <textarea name="internal_note" rows={3} placeholder="Visible only to the admin team…" />
                     </label>
                     <div className="order-form-actions">
                       <button className="primary" type="submit" disabled={savingOrderId === selectedOrder.id}>
@@ -476,6 +580,10 @@ export default function AdminPage() {
                       </button>
                     </div>
                   </form>
+                  <section className="admin-order-history">
+                    <div className="order-section-label"><span>ACTIVITY & INTERNAL NOTES</span><strong>{activity.filter((item) => item.order_id === selectedOrder.id).length + internalNotes.filter((item) => item.order_id === selectedOrder.id).length}</strong></div>
+                    {[...activity.filter((item) => item.order_id === selectedOrder.id).map((item) => ({ id: `a${item.id}`, date: item.created_at, title: item.message || item.event_type.replaceAll('_',' '), meta: `${item.actor_role || 'System'}${item.customer_visible ? ' · Customer visible' : ''}` })), ...internalNotes.filter((item) => item.order_id === selectedOrder.id).map((item) => ({ id: `n${item.id}`, date: item.created_at, title: item.body, meta: 'Internal note' }))].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((item) => <article key={item.id}><i /><div><strong>{item.title}</strong><small>{item.meta} · {new Date(item.date).toLocaleString('en-GB')}</small></div></article>)}
+                  </section>
                   {selectedOrder.status !== 'cancelled' && selectedOrder.payment_status === 'unpaid' && ['confirmed', 'preparing', 'ready', 'completed'].includes(selectedOrder.status) && (
                     <p className="order-state-warning"><AlertCircle size={15} /> Payment must be marked paid before this fulfilment stage can be saved.</p>
                   )}

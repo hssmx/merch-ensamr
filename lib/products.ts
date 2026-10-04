@@ -14,6 +14,7 @@ export type StoredProduct = Product & {
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
+  stockTracked: boolean;
 };
 
 type ProductRow = {
@@ -33,6 +34,7 @@ type ProductRow = {
   sort_order: number;
   created_at: string;
   updated_at: string;
+  stock_tracked: boolean;
 };
 
 export type NewProductInput = {
@@ -68,6 +70,7 @@ const productSelect = [
   'sort_order',
   'created_at',
   'updated_at',
+  'stock_tracked',
 ].join(',');
 
 function configured() {
@@ -92,6 +95,7 @@ function mapProduct(row: ProductRow): StoredProduct {
     sortOrder: row.sort_order,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    stockTracked: row.stock_tracked,
   };
 }
 
@@ -103,6 +107,7 @@ function fallbackAsStored(): StoredProduct[] {
     sortOrder: (index + 1) * 10,
     createdAt: '',
     updatedAt: '',
+    stockTracked: false,
   }));
 }
 

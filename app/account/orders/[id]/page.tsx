@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ArrowLeft, Download } from 'lucide-react';
-import { getMyOrder } from '../../../../lib/supabase-rest';
+import { ArrowLeft, Bell, CheckCircle2, Download } from 'lucide-react';
+import { getMyOrder, listOrderActivity } from '../../../../lib/supabase-rest';
 import {
   statusDescriptions,
   statusLabels,
+  type OrderActivity,
   type StoredOrder,
 } from '../../../../lib/order-types';
 import { downloadOrderReceipt } from '../../../receipt-pdf';
@@ -27,12 +28,16 @@ export default function AccountOrderPage() {
   const [order, setOrder] = useState<StoredOrder | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [activity, setActivity] = useState<OrderActivity[]>([]);
 
   useEffect(() => {
     let active = true;
-    void getMyOrder(id)
-      .then((value) => {
-        if (active) setOrder(value);
+    void Promise.all([getMyOrder(id), listOrderActivity(id)])
+      .then(([value, history]) => {
+        if (active) {
+          setOrder(value);
+          setActivity(history);
+        }
       })
       .catch(() => {
         if (active) setLoadError(true);
@@ -149,6 +154,19 @@ export default function AccountOrderPage() {
               received before the order is marked confirmed.
             </p>
           </div>
+
+          <section className="customer-activity">
+            <div className="account-section-head"><span><Bell size={17} /> ORDER TIMELINE</span><small>{activity.length} updates</small></div>
+            {activity.length ? activity.map((item, index) => (
+              <article key={item.id} className={index === 0 ? 'latest' : ''}>
+                <i>{index === 0 ? <CheckCircle2 size={15} /> : null}</i>
+                <div>
+                  <strong>{item.message || statusLabels[(item.to_status || order.status) as keyof typeof statusLabels]}</strong>
+                  <time dateTime={item.created_at}>{new Date(item.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</time>
+                </div>
+              </article>
+            )) : <p>No timeline updates yet.</p>}
+          </section>
         </section>
 
         <aside className="order-receipt-card">
