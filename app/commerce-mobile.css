@@ -489,6 +489,17 @@
     justify-content: center !important;
   }
 
+  .account-dashboard-actions {
+    width: 100% !important;
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .account-dashboard-actions .primary,
+  .account-dashboard-actions .secondary {
+    width: 100% !important;
+  }
+
   .account-orders,
   .admin-orders {
     width: 100% !important;
@@ -646,3 +657,4 @@
     padding-inline: 17px !important;
   }
 }
+
