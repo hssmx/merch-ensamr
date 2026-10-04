@@ -15,6 +15,7 @@ import {
 import {
   consumeAuthRedirect,
   getSession,
+  isCurrentUserAdmin,
   listMyOrders,
   resendSignupConfirmation,
   signIn,
@@ -28,6 +29,7 @@ import { statusLabels } from '../../lib/order-types';
 export default function AccountPage() {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [orders, setOrders] = useState<StoredOrder[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [busy, setBusy] = useState(true);
   const [message, setMessage] = useState('');
@@ -48,7 +50,18 @@ export default function AccountPage() {
 
     const active = callback.session ?? (await getSession());
     setSession(active);
-    setOrders(active ? await listMyOrders() : []);
+
+    if (active) {
+      const [ordersResult, adminResult] = await Promise.allSettled([
+        listMyOrders(),
+        isCurrentUserAdmin(),
+      ]);
+      setOrders(ordersResult.status === 'fulfilled' ? ordersResult.value : []);
+      setIsAdmin(adminResult.status === 'fulfilled' && adminResult.value);
+    } else {
+      setOrders([]);
+      setIsAdmin(false);
+    }
 
     if (
       active &&
@@ -132,6 +145,7 @@ export default function AccountPage() {
     await signOut();
     setSession(null);
     setOrders([]);
+    setIsAdmin(false);
   }
 
   if (busy && !session) {
@@ -306,13 +320,22 @@ export default function AccountPage() {
     <main id="main" className="commerce-flow-page account-page">
       <header className="account-dashboard-head">
         <div>
-          <span className="commerce-kicker">YOUR ACCOUNT</span>
+          <span className="commerce-kicker">
+            {isAdmin ? 'ADMIN ACCOUNT' : 'YOUR ACCOUNT'}
+          </span>
           <h1>Your orders.</h1>
           <p>{session.user.email}</p>
         </div>
-        <button type="button" className="secondary" onClick={logout}>
-          <LogOut size={16} /> Sign out
-        </button>
+        <div className="account-dashboard-actions">
+          {isAdmin && (
+            <Link href="/admin" className="primary">
+              <ShieldCheck size={16} /> Admin workspace
+            </Link>
+          )}
+          <button type="button" className="secondary" onClick={logout}>
+            <LogOut size={16} /> Sign out
+          </button>
+        </div>
       </header>
 
       <div className="account-dashboard-intro">
@@ -373,3 +396,4 @@ export default function AccountPage() {
     </main>
   );
 }
+
