@@ -1786,6 +1786,20 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+.account-dashboard-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.account-dashboard-actions .primary,
+.account-dashboard-actions .secondary {
+  min-height: 46px;
+  justify-content: center;
+  white-space: nowrap;
+}
+
 .account-orders {
   gap: 0;
   border-top: 1px solid var(--commerce-rule);
@@ -2155,3 +2169,4 @@
     grid-column: 2;
   }
 }
+
