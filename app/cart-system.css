@@ -2253,8 +2253,18 @@
 .bulk-select-order { width:100%; border-color:var(--commerce-rule); color:#625b56; }
 .bulk-select-order.active { background:var(--lux-wine); color:white; }
 .admin-note-field.internal textarea { background:#f0ede8; }
-.order-customization { display:grid!important; gap:5px; margin-top:8px; padding:9px; background:#f4eee8; color:#514943!important; line-height:1.4; }
-.order-customization button { display:flex; align-items:center; gap:5px; width:max-content; border:0; padding:4px 0; color:var(--lux-wine); background:none; font:700 8px/1 'Outfit',sans-serif; cursor:pointer; }
+.order-customization { display:grid; gap:0; margin-top:12px; color:#282321; background:#f5f1ec; border:1px solid #d4cbc3; }
+.order-customization header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 15px; color:#fff; background:#272321; }
+.order-customization header span { display:flex; align-items:center; gap:8px; }.order-customization header small { color:#e6bcc3!important; font:800 8px/1 'Outfit',sans-serif; letter-spacing:.12em; }
+.order-customization header>strong { color:#fff; font:600 8px/1 'Outfit',sans-serif; text-transform:uppercase; }
+.order-customization-placements { display:flex; flex-wrap:wrap; gap:6px; padding:13px 15px; border-bottom:1px solid #ded6cf; }
+.order-customization-placements i { padding:6px 8px; color:#7e2637; background:#f1dfe3; font:700 7px/1 'Outfit',sans-serif; font-style:normal; text-transform:uppercase; }
+.order-customization-brief { padding:14px 15px; border-bottom:1px solid #ded6cf; }.order-customization-brief small,.order-customization-assets>small { display:block; margin-bottom:7px; color:#8a7e76!important; font:800 7px/1 'Outfit',sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+.order-customization-brief p { margin:0; color:#332e2a; font-size:10px; line-height:1.6; }
+.order-customization-assets { padding:14px 15px; }.order-customization-assets button { display:flex; width:100%; align-items:center; justify-content:space-between; gap:8px; margin-top:6px; padding:9px 10px; color:#292421; background:#fff; border:1px solid #d8d0c9; cursor:pointer; }
+.order-customization-assets button span { display:flex; min-width:0; align-items:center; gap:7px; }.order-customization-assets button b { overflow:hidden; font:650 8px/1 'Outfit',sans-serif; text-overflow:ellipsis; white-space:nowrap; }.order-customization-assets button em { color:#8a7f77; font:700 7px/1 'Outfit',sans-serif; font-style:normal; text-transform:uppercase; }
+.order-delete-button { margin-left:auto; color:#8f1e31!important; border-color:#cda7ae!important; background:#fff!important; }
+.order-delete-button:hover { color:#fff!important; background:#8f1e31!important; }
 .admin-order-history { border-top:1px solid var(--commerce-rule); }
 
 .inventory-panel,.team-panel { margin-top:4px; }

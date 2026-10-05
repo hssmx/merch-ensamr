@@ -641,6 +641,16 @@ export async function adminBulkUpdateOrders(ids: string[], status: OrderStatus) 
   );
 }
 
+export async function adminDeleteCancelledOrder(id: string) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  return api<boolean>(
+    '/rest/v1/rpc/admin_delete_cancelled_order',
+    { method: 'POST', body: JSON.stringify({ p_order_id: id }) },
+    session.access_token,
+  );
+}
+
 export async function listSavedViews() {
   const session = await getSession();
   if (!session) throw new Error('Sign in first.');

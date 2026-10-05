@@ -14,6 +14,7 @@ import {
   WandSparkles,
   MapPin,
   Images,
+  ChevronDown,
 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import PhotoReel from './photo-reel';
@@ -33,6 +34,7 @@ export default function ProductDetail({ product: p }: { product: Product | Store
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [availability, setAvailability] = useState<ProductInventory[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [customizationOpen, setCustomizationOpen] = useState(false);
 
   useEffect(() => {
     void getSession().then((session) => setSignedIn(Boolean(session)));
@@ -53,7 +55,7 @@ export default function ProductDetail({ product: p }: { product: Product | Store
     try {
       setUploading(true);
       let customization;
-      if(p.customizable){
+      if(p.customizable&&customizationOpen){
         const description=String(data.get('customization_description')||'').trim();
         const placements=data.getAll('customization_placements').map(String);
         const artwork=data.getAll('artwork').filter((value):value is File=>value instanceof File&&value.size>0);
@@ -134,13 +136,15 @@ export default function ProductDetail({ product: p }: { product: Product | Store
               )}
             </fieldset>
 
-            {p.customizable&&<fieldset className="customization-field"><legend><WandSparkles size={16}/> Make it yours</legend>
+            {p.customizable&&<section className={`customization-shell ${customizationOpen?'is-open':''}`}>
+              <button className="customization-trigger" type="button" aria-expanded={customizationOpen} onClick={()=>{setCustomizationOpen(value=>!value);setAdded(false);}}><span className="customization-trigger-icon"><WandSparkles size={19}/></span><span><small>OPTIONAL · CUSTOM DESIGN</small><strong>Want to make this piece yours?</strong><em>Add your artwork, placement and instructions.</em></span><ChevronDown size={19}/></button>
+            {customizationOpen&&<fieldset className="customization-field"><legend><WandSparkles size={16}/> Your custom design</legend>
               <div className="customization-intro"><span>CUSTOM DESIGN</span><strong>Send us the idea.<br/>We’ll handle the print.</strong><p>Use original, high-resolution images whenever possible. The team will confirm the final layout with you before production.</p></div>
               <label className="customization-brief"><span><i>01</i><b>Your design brief</b></span><textarea name="customization_description" rows={5} maxLength={2000} required placeholder="Example: Keep the logo small in cream, centered high on the chest. Add the supplied illustration across the back…"/><small>Be specific about colors, scale, text and anything we should change.</small></label>
               <div className="customization-placements"><span><i>02</i><b>Choose placement</b><em>Select every area that applies</em></span>{(p.customizationPlacements||['Front','Back','Left sleeve','Right sleeve']).map(place=><label key={place}><input type="checkbox" name="customization_placements" value={place}/><span><MapPin size={13}/>{place}</span></label>)}</div>
               <div className="customization-files-heading"><span><i>03</i><b>Add your files</b></span><em>Your files stay private and are only available to the order team.</em></div>
               <div className="customization-uploads"><label><span className="upload-icon"><Images size={22}/></span><strong>Design artwork</strong><span>Logos, illustrations or photos to print</span><small>JPG · PNG · WEBP / up to 6 files, 20 MB each</small><input name="artwork" type="file" accept="image/jpeg,image/png,image/webp" multiple/></label><label><span className="upload-icon"><Upload size={22}/></span><strong>Placement reference</strong><span>Optional mockup showing size or position</span><small>JPG · PNG · WEBP / up to 2 files</small><input name="reference" type="file" accept="image/jpeg,image/png,image/webp" multiple/></label></div>
-            </fieldset>}
+            </fieldset>}</section>}
 
             <div className="quantity-line">
               <label htmlFor="quantity">Quantity</label>

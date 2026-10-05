@@ -21,6 +21,8 @@ import {
   SlidersHorizontal,
   Store,
   Truck,
+  Trash2,
+  Palette,
 } from 'lucide-react';
 import {
   adminBulkUpdateOrders,
@@ -35,6 +37,7 @@ import {
   listStaffProfiles,
   saveAdminView,
   downloadCustomizationFile,
+  adminDeleteCancelledOrder,
 } from '../../lib/supabase-rest';
 import {
   orderStatuses,
@@ -293,6 +296,19 @@ export default function AdminPage() {
     }
   }
 
+  async function deleteCancelledOrder(order: StoredOrder) {
+    if (order.status !== 'cancelled') return;
+    if (!window.confirm(`Permanently delete ${order.order_number}? This cannot be undone.`)) return;
+    setSavingOrderId(order.id); setMessage('');
+    try {
+      await adminDeleteCancelledOrder(order.id);
+      setOrders((current) => current.filter((item) => item.id !== order.id));
+      setSelectedOrderId(null);
+      setMessage(`${order.order_number} was permanently deleted.`);
+    } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not delete order.'); }
+    finally { setSavingOrderId(null); }
+  }
+
   function exportOrders() {
     const header = ['Order','Date','Customer','Email','Phone','Status','Payment','Total MAD'];
     const csv = [header, ...visibleOrders.map((order) => [order.order_number, order.created_at, order.customer_name, order.email, order.phone, order.status, order.payment_status, String(order.total)])]
@@ -541,8 +557,7 @@ export default function AdminPage() {
                     {selectedOrder.items.map((item) => (
                       <div key={`${item.slug}:${item.size}:${item.customization?.description || ''}`}>
                         <span><strong>{item.name}</strong><small>{item.color} · {item.size} · Qty {item.quantity}</small>
-                        {item.customization&&<small className="order-customization"><b>CUSTOM: {item.customization.placements.join(', ')}</b>{item.customization.description}
-                          {[...item.customization.artwork,...item.customization.references].map(file=><button type="button" key={file.path} onClick={()=>void downloadCustomizationFile(file.path,file.name)}><Download size={12}/>{file.name}</button>)}</small>}</span>
+                        {item.customization&&<section className="order-customization"><header><span><Palette size={16}/><small>CUSTOM DESIGN</small></span><strong>{item.customization.placements.length} placement{item.customization.placements.length===1?'':'s'}</strong></header><div className="order-customization-placements">{item.customization.placements.map(place=><i key={place}>{place}</i>)}</div><div className="order-customization-brief"><small>Customer brief</small><p>{item.customization.description}</p></div><div className="order-customization-assets"><small>Production files</small>{[...item.customization.artwork.map(file=>({...file,kind:'Artwork'})),...item.customization.references.map(file=>({...file,kind:'Reference'}))].map(file=><button type="button" key={file.path} onClick={()=>void downloadCustomizationFile(file.path,file.name)}><span><Download size={14}/><b>{file.name}</b></span><em>{file.kind}</em></button>)}</div></section>}</span>
                         <b>{item.lineTotal} MAD</b>
                       </div>
                     ))}
@@ -577,6 +592,7 @@ export default function AdminPage() {
                       <button className="secondary" type="button" onClick={() => downloadOrderReceipt(selectedOrder)}>
                         <Download size={16} /> Receipt
                       </button>
+                      {selectedOrder.status==='cancelled'&&<button className="danger order-delete-button" type="button" disabled={savingOrderId===selectedOrder.id} onClick={()=>void deleteCancelledOrder(selectedOrder)}><Trash2 size={16}/>Delete order</button>}
                     </div>
                   </form>
                   <section className="admin-order-history">
