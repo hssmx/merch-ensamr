@@ -592,9 +592,26 @@ export default function AdminPage() {
                       <button className="secondary" type="button" onClick={() => downloadOrderReceipt(selectedOrder)}>
                         <Download size={16} /> Receipt
                       </button>
-                      {selectedOrder.status==='cancelled'&&<button className="danger order-delete-button" type="button" disabled={savingOrderId===selectedOrder.id} onClick={()=>void deleteCancelledOrder(selectedOrder)}><Trash2 size={16}/>Delete order</button>}
                     </div>
                   </form>
+                  {selectedOrder.status === 'cancelled' && (
+                    <section className="order-danger-zone" aria-labelledby="delete-order-title">
+                      <div className="order-danger-zone-copy">
+                        <span>CANCELLED ORDER</span>
+                        <strong id="delete-order-title">Remove this order permanently</strong>
+                        <p>This removes the order and its history from the desk. This action cannot be undone.</p>
+                      </div>
+                      <button
+                        className="order-delete-button"
+                        type="button"
+                        disabled={savingOrderId === selectedOrder.id}
+                        onClick={() => void deleteCancelledOrder(selectedOrder)}
+                      >
+                        <Trash2 size={16} />
+                        <span>{savingOrderId === selectedOrder.id ? 'Removing…' : 'Delete order'}</span>
+                      </button>
+                    </section>
+                  )}
                   <section className="admin-order-history">
                     <div className="order-section-label"><span>ACTIVITY & INTERNAL NOTES</span><strong>{activity.filter((item) => item.order_id === selectedOrder.id).length + internalNotes.filter((item) => item.order_id === selectedOrder.id).length}</strong></div>
                     {[...activity.filter((item) => item.order_id === selectedOrder.id).map((item) => ({ id: `a${item.id}`, date: item.created_at, title: item.message || item.event_type.replaceAll('_',' '), meta: `${item.actor_role || 'System'}${item.customer_visible ? ' · Customer visible' : ''}` })), ...internalNotes.filter((item) => item.order_id === selectedOrder.id).map((item) => ({ id: `n${item.id}`, date: item.created_at, title: item.body, meta: 'Internal note' }))].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((item) => <article key={item.id}><i /><div><strong>{item.title}</strong><small>{item.meta} · {new Date(item.date).toLocaleString('en-GB')}</small></div></article>)}

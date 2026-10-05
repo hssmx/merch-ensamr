@@ -2263,9 +2263,21 @@
 .order-customization-brief p { margin:0; color:#332e2a; font-size:10px; line-height:1.6; }
 .order-customization-assets { padding:14px 15px; }.order-customization-assets button { display:flex; width:100%; align-items:center; justify-content:space-between; gap:8px; margin-top:6px; padding:9px 10px; color:#292421; background:#fff; border:1px solid #d8d0c9; cursor:pointer; }
 .order-customization-assets button span { display:flex; min-width:0; align-items:center; gap:7px; }.order-customization-assets button b { overflow:hidden; font:650 8px/1 'Outfit',sans-serif; text-overflow:ellipsis; white-space:nowrap; }.order-customization-assets button em { color:#8a7f77; font:700 7px/1 'Outfit',sans-serif; font-style:normal; text-transform:uppercase; }
-.order-delete-button { margin-left:auto; color:#8f1e31!important; border-color:#cda7ae!important; background:#fff!important; }
-.order-delete-button:hover { color:#fff!important; background:#8f1e31!important; }
+.order-danger-zone { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:20px; align-items:center; margin:18px; padding:18px; border:1px solid #d8b7bd; background:#fbf4f5; box-shadow:inset 4px 0 0 #8f1e31; }
+.order-danger-zone-copy { min-width:0; }
+.order-danger-zone-copy>span { display:block; margin-bottom:7px; color:#8f1e31; font:800 7px/1 'Outfit',sans-serif; letter-spacing:.15em; }
+.order-danger-zone-copy>strong { display:block; color:#2d2624; font:650 13px/1.2 'Outfit',sans-serif; }
+.order-danger-zone-copy>p { max-width:430px; margin:6px 0 0; color:#786c68; font-size:9px; line-height:1.5; }
+.order-delete-button { display:inline-flex; min-height:42px; align-items:center; justify-content:center; gap:8px; padding:0 15px; border:1px solid #8f1e31; color:#fff; background:#8f1e31; font:750 8px/1 'Outfit',sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; transition:background .16s ease,color .16s ease,transform .16s ease; }
+.order-delete-button:hover { color:#8f1e31; background:#fff; transform:translateY(-1px); }
+.order-delete-button:focus-visible { outline:3px solid #e1c4c9; outline-offset:2px; }
+.order-delete-button:disabled { cursor:wait; opacity:.6; transform:none; }
 .admin-order-history { border-top:1px solid var(--commerce-rule); }
+
+@media (max-width: 620px) {
+  .order-danger-zone { grid-template-columns:1fr; gap:14px; margin:14px; padding:16px; }
+  .order-delete-button { width:100%; }
+}
 
 .inventory-panel,.team-panel { margin-top:4px; }
 .inventory-product { padding:20px 22px; background:#191817; color:white; }
