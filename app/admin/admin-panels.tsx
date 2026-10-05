@@ -66,10 +66,10 @@ export function InventoryManager({ products, rows, onChanged }: {
       <div className="inventory-table">
         {products.map((product) => <article key={product.id}>
           <div className="inventory-product"><div><span>{product.number}</span><strong>{product.name}</strong><small>Live storefront availability</small></div></div>
-          {product.sizes.map((size) => {
+          <div className="inventory-size-grid">{product.sizes.map((size) => {
             const row = rows.find((item) => item.product_id === product.id && item.size === size);
             const key = `${product.id}:${size}`;
-            return <form key={size} onSubmit={async (event) => {
+            return <form className={`${row?.is_available===false?'is-unavailable':''} ${row?.almost_sold_out?'is-low':''}`} key={size} onSubmit={async (event) => {
               event.preventDefault();
               const data = new FormData(event.currentTarget);
               setBusy(key); setMessage('');
@@ -79,9 +79,9 @@ export function InventoryManager({ products, rows, onChanged }: {
               } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not update stock.'); }
               finally { setBusy(''); }
             }}>
-              <strong>{size}</strong><label className="inventory-toggle"><input name="available" type="checkbox" defaultChecked={row?.is_available ?? true} /> Available</label><label className="inventory-toggle"><input name="almost" type="checkbox" defaultChecked={row?.almost_sold_out ?? false} /> Almost sold out</label><button disabled={busy === key}>{busy === key ? 'Saving…' : 'Save'}</button>
+              <div className="inventory-size-name"><strong>{size}</strong><small>{row?.is_available===false?'Hidden from sale':row?.almost_sold_out?'Customer urgency shown':'Ready to order'}</small></div><label className="inventory-toggle"><span><b>Available</b><small>Customers can select this size</small></span><input name="available" type="checkbox" defaultChecked={row?.is_available ?? true} /><i /></label><label className="inventory-toggle"><span><b>Almost sold out</b><small>Show a low-stock message</small></span><input name="almost" type="checkbox" defaultChecked={row?.almost_sold_out ?? false} /><i /></label><button disabled={busy === key}>{busy === key ? 'Saving…' : 'Save size'}</button>
             </form>;
-          })}
+          })}</div>
         </article>)}
       </div>
     </section>
