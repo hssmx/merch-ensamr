@@ -83,6 +83,7 @@ export default function CartPage() {
                   </small>
                   <h2>{item.name}</h2>
                   <p>{item.unitPrice} MAD each</p>
+                  {item.customization&&<p><strong>Custom:</strong> {item.customization.placements.join(', ')} · {item.customization.description}</p>}
                   <div className="cart-line-actions">
                     <div className="quantity-input">
                       <button

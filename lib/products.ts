@@ -15,6 +15,8 @@ export type StoredProduct = Product & {
   createdAt: string;
   updatedAt: string;
   stockTracked: boolean;
+  customizable: boolean;
+  customizationPlacements: string[];
 };
 
 type ProductRow = {
@@ -35,6 +37,8 @@ type ProductRow = {
   created_at: string;
   updated_at: string;
   stock_tracked: boolean;
+  customizable: boolean;
+  customization_placements: string[];
 };
 
 export type NewProductInput = {
@@ -51,6 +55,11 @@ export type NewProductInput = {
   front: File;
   back: File;
   model: File;
+  customizable: boolean;
+  customizationPlacements: string[];
+};
+export type UpdateProductInput = Omit<NewProductInput, 'front' | 'back' | 'model'> & {
+  front?: File; back?: File; model?: File;
 };
 
 const productSelect = [
@@ -71,6 +80,8 @@ const productSelect = [
   'created_at',
   'updated_at',
   'stock_tracked',
+  'customizable',
+  'customization_placements',
 ].join(',');
 
 function configured() {
@@ -96,6 +107,8 @@ function mapProduct(row: ProductRow): StoredProduct {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     stockTracked: row.stock_tracked,
+    customizable: row.customizable ?? false,
+    customizationPlacements: row.customization_placements ?? ['Front','Back','Left sleeve','Right sleeve'],
   };
 }
 
@@ -108,6 +121,8 @@ function fallbackAsStored(): StoredProduct[] {
     createdAt: '',
     updatedAt: '',
     stockTracked: false,
+    customizable: false,
+    customizationPlacements: ['Front','Back','Left sleeve','Right sleeve'],
   }));
 }
 
@@ -253,9 +268,35 @@ export async function adminCreateProduct(input: NewProductInput) {
       status: input.status,
       sort_order: input.sortOrder,
       created_by: session.user.id,
+      customizable: input.customizable,
+      customization_placements: input.customizationPlacements,
     }),
   });
   const rows = await parseResponse<ProductRow[]>(response);
   if (!rows[0]) throw new Error('The product could not be created.');
+  return mapProduct(rows[0]);
+}
+
+export async function adminUpdateProduct(id: string, input: UpdateProductInput) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  const existing = (await listAdminProducts()).find((product) => product.id === id);
+  if (!existing) throw new Error('Product not found.');
+  const [front, back, model] = await Promise.all([
+    input.front ? uploadProductImage(input.front, input.slug, 'front', session.access_token) : existing.front,
+    input.back ? uploadProductImage(input.back, input.slug, 'back', session.access_token) : existing.back,
+    input.model ? uploadProductImage(input.model, input.slug, 'model', session.access_token) : existing.model,
+  ]);
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+    body: JSON.stringify({ slug: input.slug, name: input.name, price: input.price, color: input.color,
+      description: input.description, print_details: input.printDetails, front_url: front, back_url: back,
+      model_url: model, number: input.number, sizes: input.sizes, status: input.status,
+      sort_order: input.sortOrder, customizable: input.customizable,
+      customization_placements: input.customizationPlacements }),
+  });
+  const rows = await parseResponse<ProductRow[]>(response);
+  if (!rows[0]) throw new Error('The product could not be updated.');
   return mapProduct(rows[0]);
 }

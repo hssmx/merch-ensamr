@@ -45,7 +45,7 @@ type CheckoutInput = {
   fulfillment: 'collection' | 'delivery';
   address?: string;
   notes?: string;
-  items: Array<{ slug: string; size: string; quantity: number }>;
+  items: Array<{ slug: string; size: string; quantity: number; customization?: import('./order-types').ProductCustomization }>;
 };
 
 export function isSupabaseConfigured() {
@@ -568,29 +568,67 @@ export async function listInventory() {
   );
 }
 
+export async function listProductAvailability(productId: string) {
+  return api<ProductInventory[]>(
+    `/rest/v1/product_inventory?product_id=eq.${encodeURIComponent(productId)}&select=product_id,size,is_available,almost_sold_out,updated_at`,
+  );
+}
+
 export async function adminSetInventory(values: {
   product_id: string;
   size: string;
-  stock_on_hand: number;
-  low_stock_threshold: number;
-  stock_tracked: boolean;
+  is_available: boolean;
+  almost_sold_out: boolean;
 }) {
   const session = await getSession();
   if (!session) throw new Error('Sign in first.');
   return api<ProductInventory>(
-    '/rest/v1/rpc/admin_set_inventory',
+    '/rest/v1/rpc/admin_set_size_availability',
     {
       method: 'POST',
       body: JSON.stringify({
         p_product_id: values.product_id,
         p_size: values.size,
-        p_stock_on_hand: values.stock_on_hand,
-        p_low_stock_threshold: values.low_stock_threshold,
-        p_stock_tracked: values.stock_tracked,
+        p_is_available: values.is_available,
+        p_almost_sold_out: values.almost_sold_out,
       }),
     },
     session.access_token,
   );
+}
+
+function customizationExtension(file: File) {
+  const extensions: Record<string,string> = {'image/jpeg':'jpg','image/png':'png','image/webp':'webp'};
+  const extension = extensions[file.type];
+  if (!extension) throw new Error('Customization files must be JPG, PNG or WebP.');
+  if (file.size > 20 * 1024 * 1024) throw new Error('Each customization file must be 20 MB or smaller.');
+  return extension;
+}
+
+export async function uploadCustomizationFiles(files: File[], kind: 'artwork' | 'reference', requestId: string) {
+  const session = await getSession();
+  return Promise.all(files.map(async (file, index) => {
+    const extension = customizationExtension(file);
+    const path = `incoming/${requestId}/${kind}-${index}.${extension}`;
+    const response = await fetch(`${SUPABASE_URL}/storage/v1/object/customization-files/${path}`, {
+      method: 'POST', headers: { apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${session?.access_token || SUPABASE_PUBLISHABLE_KEY}`,
+        'Content-Type': file.type, 'x-upsert': 'false' }, body: file,
+    });
+    if (!response.ok) { const payload = await response.json().catch(() => null); throw new Error(payload?.message || 'Could not upload a customization image.'); }
+    return { path, name: file.name.slice(0, 160) };
+  }));
+}
+
+export async function downloadCustomizationFile(path: string, filename: string) {
+  const session = await getSession();
+  if (!session) throw new Error('Sign in first.');
+  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/customization-files/${path}`, {
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${session.access_token}` },
+  });
+  if (!response.ok) throw new Error('Could not download this file.');
+  const url = URL.createObjectURL(await response.blob()); const anchor = document.createElement('a');
+  anchor.href = url; anchor.download = filename; anchor.click(); URL.revokeObjectURL(url);
 }
 
 export async function adminBulkUpdateOrders(ids: string[], status: OrderStatus) {

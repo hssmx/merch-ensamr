@@ -10,6 +10,8 @@ export type Product = {
   number: string;
   sizes: string[];
   printDetails: string;
+  customizable?: boolean;
+  customizationPlacements?: string[];
 };
 export const products: Product[] = [
   {

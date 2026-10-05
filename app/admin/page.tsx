@@ -34,6 +34,7 @@ import {
   listSavedViews,
   listStaffProfiles,
   saveAdminView,
+  downloadCustomizationFile,
 } from '../../lib/supabase-rest';
 import {
   orderStatuses,
@@ -370,7 +371,7 @@ export default function AdminPage() {
           <PackagePlus size={17} /> Products <span>{products.length}</span>
         </button>}
         {canSeeInventory && <button className={view === 'inventory' ? 'active' : ''} onClick={() => setView('inventory')}>
-          <Boxes size={17} /> Inventory <span>{inventory.filter((row) => row.stock_on_hand - row.reserved <= row.low_stock_threshold).length}</span>
+          <Boxes size={17} /> Inventory <span>{inventory.filter((row) => row.almost_sold_out || !row.is_available).length}</span>
         </button>}
         {role === 'owner' && <button className={view === 'team' ? 'active' : ''} onClick={() => setView('team')}>
           <Users size={17} /> Team <span>{staff.filter((person) => person.role !== 'customer').length}</span>
@@ -380,20 +381,16 @@ export default function AdminPage() {
       {view === 'overview' ? (
         <AdminOverview orders={orders} inventory={inventory} activity={activity} />
       ) : view === 'inventory' ? (
-        <InventoryManager products={products} rows={inventory} onChanged={(row, tracked) => {
+        <InventoryManager products={products} rows={inventory} onChanged={(row) => {
           setInventory((items) => [...items.filter((item) => !(item.product_id === row.product_id && item.size === row.size)), row]);
-          setProducts((items) => items.map((product) => product.id === row.product_id ? { ...product, stockTracked: tracked } : product));
         }} />
       ) : view === 'team' ? (
         <TeamManager people={staff} currentRole={role} onChanged={(profile) => setStaff((items) => items.map((item) => item.id === profile.id ? profile : item))} />
       ) : view === 'products' ? (
         <ProductManager
           products={products}
-          onCreated={(product) =>
-            setProducts((current) =>
-              [...current, product].sort((a, b) => a.sortOrder - b.sortOrder),
-            )
-          }
+          onCreated={(product) => setProducts((current) =>
+            [...current.filter((item) => item.id !== product.id), product].sort((a, b) => a.sortOrder - b.sortOrder))}
         />
       ) : (
         <section className="order-desk">
@@ -542,8 +539,10 @@ export default function AdminPage() {
                       <strong>{selectedOrder.items.reduce((sum, item) => sum + item.quantity, 0)} pcs</strong>
                     </div>
                     {selectedOrder.items.map((item) => (
-                      <div key={`${item.slug}:${item.size}`}>
-                        <span><strong>{item.name}</strong><small>{item.color} · {item.size} · Qty {item.quantity}</small></span>
+                      <div key={`${item.slug}:${item.size}:${item.customization?.description || ''}`}>
+                        <span><strong>{item.name}</strong><small>{item.color} · {item.size} · Qty {item.quantity}</small>
+                        {item.customization&&<small className="order-customization"><b>CUSTOM: {item.customization.placements.join(', ')}</b>{item.customization.description}
+                          {[...item.customization.artwork,...item.customization.references].map(file=><button type="button" key={file.path} onClick={()=>void downloadCustomizationFile(file.path,file.name)}><Download size={12}/>{file.name}</button>)}</small>}</span>
                         <b>{item.lineTotal} MAD</b>
                       </div>
                     ))}

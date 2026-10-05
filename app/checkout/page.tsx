@@ -54,6 +54,7 @@ export default function CheckoutPage() {
           slug: item.slug,
           size: item.size,
           quantity: item.quantity,
+          customization: item.customization,
         })),
       });
       setOrder(created);
@@ -303,6 +304,7 @@ export default function CheckoutPage() {
                   <small>
                     {item.color} · {item.size} · Qty {item.quantity}
                   </small>
+                  {item.customization && <small>Custom · {item.customization.placements.join(', ')}</small>}
                 </div>
                 <b>{item.unitPrice * item.quantity} MAD</b>
               </div>

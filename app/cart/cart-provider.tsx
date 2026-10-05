@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 import type { Product } from '../catalog';
+import type { ProductCustomization } from '../../lib/order-types';
 
 export type CartItem = {
   key: string;
@@ -19,13 +20,14 @@ export type CartItem = {
   quantity: number;
   unitPrice: number;
   image: string;
+  customization?: ProductCustomization;
 };
 
 type CartContextValue = {
   items: CartItem[];
   count: number;
   subtotal: number;
-  addItem: (product: Product, size: string, quantity: number) => void;
+  addItem: (product: Product, size: string, quantity: number, customization?: ProductCustomization) => void;
   setQuantity: (key: string, quantity: number) => void;
   removeItem: (key: string) => void;
   clear: () => void;
@@ -57,8 +59,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, ready]);
 
   const addItem = useCallback(
-    (product: Product, size: string, quantity: number) => {
-      const key = `${product.slug}:${size}`;
+    (product: Product, size: string, quantity: number, customization?: ProductCustomization) => {
+      const key = customization ? `${product.slug}:${size}:${crypto.randomUUID()}` : `${product.slug}:${size}`;
       setItems((current) => {
         const existing = current.find((item) => item.key === key);
         if (existing) {
@@ -81,6 +83,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             image: product.back
               .replace('/cutouts/', '/')
               .replace(/\.svg$/, '.webp'),
+            customization,
           },
         ];
       });

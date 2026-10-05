@@ -2253,6 +2253,8 @@
 .bulk-select-order { width:100%; border-color:var(--commerce-rule); color:#625b56; }
 .bulk-select-order.active { background:var(--lux-wine); color:white; }
 .admin-note-field.internal textarea { background:#f0ede8; }
+.order-customization { display:grid!important; gap:5px; margin-top:8px; padding:9px; background:#f4eee8; color:#514943!important; line-height:1.4; }
+.order-customization button { display:flex; align-items:center; gap:5px; width:max-content; border:0; padding:4px 0; color:var(--lux-wine); background:none; font:700 8px/1 'Outfit',sans-serif; cursor:pointer; }
 .admin-order-history { border-top:1px solid var(--commerce-rule); }
 
 .inventory-panel,.team-panel { margin-top:4px; }
@@ -2262,7 +2264,7 @@
 .inventory-product strong { margin-top:6px; font:650 17px/1.1 'Outfit',sans-serif; }
 .inventory-product small { margin-top:5px; color:#c8c4c0; font-size:9px; }
 .inventory-table article { border-bottom:1px solid var(--commerce-rule); }
-.inventory-table form { display:grid; grid-template-columns:40px repeat(3,minmax(90px,1fr)) 110px 80px 70px; gap:12px; align-items:end; padding:12px 20px; }
+.inventory-table form { display:grid; grid-template-columns:50px minmax(120px,1fr) minmax(150px,1fr) 80px; gap:14px; align-items:center; padding:14px 20px; }
 .inventory-table label { display:grid; gap:5px; font:700 8px/1 'Outfit',sans-serif; text-transform:uppercase; color:#766d66; }
 .inventory-table input { width:100%; min-height:36px; border:1px solid var(--commerce-rule); padding:0 9px; }
 .inventory-table form > span { align-self:center; font:700 9px/1 'Outfit',sans-serif; }

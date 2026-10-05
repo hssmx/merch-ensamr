@@ -24,6 +24,15 @@ export type OrderItem = {
   unitPrice: number;
   lineTotal: number;
   image: string;
+  customization?: ProductCustomization;
+};
+
+export type CustomizationFile = { path: string; name: string };
+export type ProductCustomization = {
+  description: string;
+  placements: string[];
+  artwork: CustomizationFile[];
+  references: CustomizationFile[];
 };
 
 export type StoredOrder = {
@@ -111,6 +120,8 @@ export type ProductInventory = {
   low_stock_threshold: number;
   updated_by: string | null;
   updated_at: string;
+  is_available: boolean;
+  almost_sold_out: boolean;
 };
 
 export type AdminSavedView = {

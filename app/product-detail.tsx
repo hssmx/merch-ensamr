@@ -10,27 +10,33 @@ import {
   Plus,
   ShoppingBag,
   UserRound,
+  Upload,
 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import PhotoReel from './photo-reel';
 import CollectionGrid from './collection-grid';
 import type { Product } from './catalog';
+import type { StoredProduct } from '../lib/products';
+import type { ProductInventory } from '../lib/order-types';
 import { useCart } from './cart/cart-provider';
-import { getSession } from '../lib/supabase-rest';
+import { getSession, listProductAvailability, uploadCustomizationFiles } from '../lib/supabase-rest';
 
-export default function ProductDetail({ product: p }: { product: Product }) {
+export default function ProductDetail({ product: p }: { product: Product | StoredProduct }) {
   const [size, setSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState('');
   const [added, setAdded] = useState(false);
   const { addItem } = useCart();
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [availability, setAvailability] = useState<ProductInventory[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     void getSession().then((session) => setSignedIn(Boolean(session)));
+    if ('id' in p) void listProductAvailability(p.id).then(setAvailability).catch(() => setAvailability([]));
   }, []);
 
-  function addToCart(event: React.SyntheticEvent<HTMLFormElement>) {
+  async function addToCart(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!size) {
       setError('Choose your size to continue.');
@@ -38,9 +44,26 @@ export default function ProductDetail({ product: p }: { product: Product }) {
       return;
     }
 
-    addItem(p, size, quantity);
-    setError('');
-    setAdded(true);
+    const row=availability.find(item=>item.size===size);
+    if(row && !row.is_available){setError('That size is currently unavailable.');return;}
+    const form=event.currentTarget,data=new FormData(form);
+    try {
+      setUploading(true);
+      let customization;
+      if(p.customizable){
+        const description=String(data.get('customization_description')||'').trim();
+        const placements=data.getAll('customization_placements').map(String);
+        const artwork=data.getAll('artwork').filter((value):value is File=>value instanceof File&&value.size>0);
+        const references=data.getAll('reference').filter((value):value is File=>value instanceof File&&value.size>0);
+        if(description.length<3)throw new Error('Describe the customization you want.');
+        if(!placements.length)throw new Error('Choose at least one placement.');
+        if(artwork.length>6||references.length>2)throw new Error('Upload up to 6 artwork images and 2 reference images.');
+        const requestId=crypto.randomUUID();
+        const [uploadedArtwork,uploadedReferences]=await Promise.all([uploadCustomizationFiles(artwork,'artwork',requestId),uploadCustomizationFiles(references,'reference',requestId)]);
+        customization={description,placements,artwork:uploadedArtwork,references:uploadedReferences};
+      }
+      addItem(p,size,quantity,customization);setError('');setAdded(true);
+    }catch(cause){setError(cause instanceof Error?cause.message:'Could not add this customization.');}finally{setUploading(false);}
   }
 
   return (
@@ -91,11 +114,13 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               >
                 {p.sizes.map((option) => (
                   <label
-                    className={size === option ? 'selected' : ''}
+                    className={`${size === option ? 'selected' : ''} ${availability.find(row=>row.size===option)?.is_available===false?'unavailable':''}`}
                     key={option}
                   >
-                    <RadioGroupItem id={`size-${option}`} value={option} />
+                    <RadioGroupItem id={`size-${option}`} value={option} disabled={availability.find(row=>row.size===option)?.is_available===false} />
                     <span>{option}</span>
+                    {availability.find(row=>row.size===option)?.is_available===false&&<small>Unavailable</small>}
+                    {availability.find(row=>row.size===option)?.almost_sold_out&&<small className="almost-sold-out">Almost sold out</small>}
                   </label>
                 ))}
               </RadioGroup>
@@ -105,6 +130,12 @@ export default function ProductDetail({ product: p }: { product: Product }) {
                 </p>
               )}
             </fieldset>
+
+            {p.customizable&&<fieldset className="customization-field"><legend>Personalize your design</legend><p>Tell us exactly what you want. Original, high-resolution images give the best print result.</p>
+              <label>Your instructions<textarea name="customization_description" rows={5} maxLength={2000} required placeholder="Describe colors, text, scale and any changes…"/></label>
+              <div className="customization-placements"><span>Where should it go?</span>{(p.customizationPlacements||['Front','Back','Left sleeve','Right sleeve']).map(place=><label key={place}><input type="checkbox" name="customization_placements" value={place}/><span>{place}</span></label>)}</div>
+              <div className="customization-uploads"><label><Upload size={20}/><strong>Artwork files</strong><span>Up to 6 JPG, PNG or WebP images · 20 MB each</span><input name="artwork" type="file" accept="image/jpeg,image/png,image/webp" multiple/></label><label><Upload size={20}/><strong>Placement reference</strong><span>Optional: show us where/how it should appear</span><input name="reference" type="file" accept="image/jpeg,image/png,image/webp" multiple/></label></div>
+            </fieldset>}
 
             <div className="quantity-line">
               <label htmlFor="quantity">Quantity</label>
@@ -157,8 +188,8 @@ export default function ProductDetail({ product: p }: { product: Product }) {
               <strong>{p.price * quantity} MAD</strong>
             </div>
 
-            <button type="submit" className="primary order-button">
-              <span>Add to cart</span>
+            <button type="submit" className="primary order-button" disabled={uploading}>
+              <span>{uploading?'Uploading artwork…':'Add to cart'}</span>
               <ShoppingBag size={19} />
             </button>
 
